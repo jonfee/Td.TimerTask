@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Td.Task.Framework", "Td.Task.Framework\Td.Task.Framework.csproj", "{CA9CDDE7-9F71-46D7-B17C-F15F0F167576}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "TestApplication\TestApplication.csproj", "{BD1B6DD6-10F7-4670-BDCA-AED8FAB9555E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KylinService", "KylinService\KylinService.csproj", "{99DC6CDA-3278-4307-A47A-6261E0BC71CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA9CDDE7-9F71-46D7-B17C-F15F0F167576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA9CDDE7-9F71-46D7-B17C-F15F0F167576}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA9CDDE7-9F71-46D7-B17C-F15F0F167576}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA9CDDE7-9F71-46D7-B17C-F15F0F167576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD1B6DD6-10F7-4670-BDCA-AED8FAB9555E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD1B6DD6-10F7-4670-BDCA-AED8FAB9555E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD1B6DD6-10F7-4670-BDCA-AED8FAB9555E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD1B6DD6-10F7-4670-BDCA-AED8FAB9555E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99DC6CDA-3278-4307-A47A-6261E0BC71CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99DC6CDA-3278-4307-A47A-6261E0BC71CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99DC6CDA-3278-4307-A47A-6261E0BC71CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99DC6CDA-3278-4307-A47A-6261E0BC71CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
