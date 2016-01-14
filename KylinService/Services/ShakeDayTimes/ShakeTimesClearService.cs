@@ -19,14 +19,14 @@ namespace KylinService.Services.ShakeDayTimes
 
         protected override void OnStart(params object[] parameters)
         {
-            string beforeMessage = string.Format("{0} 计划正在执行中…… ***** {1}", ServiceName, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            string beforeMessage = string.Format("{0} 计划正在执行中……", ServiceName);
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, beforeMessage);
 
             var schedule = new ShakeTimesClearScheduler(this.CurrentForm, this.WriteDelegate);
 
             schedule.Start();
 
-            string endMessage = string.Format("{0} 计划执行完成！ ***** {1}", ServiceName, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            string endMessage = string.Format("{0} 计划执行完成！", ServiceName);
 
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, endMessage);
         }

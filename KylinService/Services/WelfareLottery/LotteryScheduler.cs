@@ -70,7 +70,7 @@ namespace KylinService.Services.WelfareLottery
 
                 if (DateTime.Now >= lastWelfare.ExpiryEndTime) throw new Exception("福利已失效，不能被开奖！");
 
-                if (lastWelfare.Status != (int)SysEnums.WelfareStatus.SuccessProgresse) throw new Exception("福利不被允许开奖！");
+                if (lastWelfare.Status != (int)SysEnums.WelfareStatus.SuccessProgresse) throw new Exception("无效的开奖请求，福利不被允许开奖！");
 
                 if (lastWelfare.Enabled == false) throw new Exception("福利已被下架，不能开奖！");
 
@@ -107,7 +107,16 @@ namespace KylinService.Services.WelfareLottery
 
                 bool success = WelfareProvider.WriteLotteryResult(Welfare.PhaseID, winnerPartCodes);
 
-                if (!success) throw new Exception("开奖失败！");
+                if (success)
+                {
+                    string sucMessage = string.Format("〖福利：{0}〗已开奖，本次共有 {1} 名参与人员中奖！", Welfare.WelfareName, winnerPartCodes.Count());
+
+                    DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, sucMessage);
+                }
+                else
+                {
+                    throw new Exception("开奖失败！");
+                }
 
                 #endregion
             }

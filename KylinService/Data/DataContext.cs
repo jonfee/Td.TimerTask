@@ -57,6 +57,13 @@ namespace KylinService.Data
                 entity.Property(p => p.ConsumerCode).ValueGeneratedNever();
                 entity.HasKey(p => p.ConsumerCode);
             });
+
+            //商城订单
+            modelBuilder.Entity<Mall_Order>(entity =>
+            {
+                entity.Property(p => p.OrderID).ValueGeneratedNever();
+                entity.HasKey(p => p.OrderID);
+            });
         }
 
         #region DbSet
@@ -90,6 +97,11 @@ namespace KylinService.Data
         /// 用户福利
         /// </summary>
         public DbSet<User_Welfare> User_Welfare { get { return Set<User_Welfare>(); } }
+
+        /// <summary>
+        /// 商城订单
+        /// </summary>
+        public DbSet<Mall_Order> Mall_Order { get { return Set<Mall_Order>(); } }
 
         #endregion
     }

@@ -7,6 +7,7 @@ using System.Linq;
 using System;
 using System.Threading;
 using KylinService.Manager;
+using KylinService.Services.MallOrderLate;
 
 namespace KylinService
 {
@@ -149,7 +150,7 @@ namespace KylinService
 
             //找到显示服务名称的Label
             var lbServName = Find<Label>(parent, _serTname, scheduleTypeName);
-            string msg = string.Format("{0} 服务已启动！************ {1}", lbServName.Text, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            string msg = string.Format("{0} 服务已启动！", lbServName.Text);
             WriteMessage(msg);
 
             //找到运行时间显示控件
@@ -181,6 +182,15 @@ namespace KylinService
                 case ScheduleType.AppointOrderLate:
                     break;
                 case ScheduleType.MallOrderLate:
+                    var mallOrderLateConfig = MallOrderLateConfigManager.Config;
+                    if (null == mallOrderLateConfig)
+                    {
+                        MessageBox.Show("未检测到自动处理商城订单的配置项");
+                    }
+                    else
+                    {
+                        TaskSchedule.StartSchedule(scheduleTypeName, new Services.MallOrderLate.MallOrderService(mallOrderLateConfig, this, writeDelegate), scheduleTypeName, null);
+                    }
                     break;
                 case ScheduleType.ShakeDayTimesClear:
                     TaskSchedule.StartSchedule(scheduleTypeName, new Services.ShakeDayTimes.ShakeTimesClearService(this, writeDelegate), scheduleTypeName, null);
@@ -217,7 +227,7 @@ namespace KylinService
 
             //找到显示服务名称的Label
             var lbServName = Find<Label>(parent, _serTname, scheduleTypeName);
-            string msg = string.Format("{0} 服务已停止！************ {1}", lbServName.Text, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            string msg = string.Format("{0} 服务已停止！", lbServName.Text);
             WriteMessage(msg);
 
             ClockerManager.Instance.Stop(scheduleTypeName);
@@ -261,6 +271,7 @@ namespace KylinService
         /// <param name="message"></param>
         private void WriteMessage(string message)
         {
+            message += DateTime.Now.ToString("  ***** yyyy-MM-dd HH:mm:ss *****");
             this.richMessage.AppendText(message);
             this.richMessage.AppendText("\n");
             this.richMessage.Focus();

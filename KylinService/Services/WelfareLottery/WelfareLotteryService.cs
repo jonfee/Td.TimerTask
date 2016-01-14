@@ -25,7 +25,7 @@ namespace KylinService.Services.WelfareLottery
         protected override void OnStart(params object[] parameters)
         {
 
-            string beforeMessage = string.Format("{0} 限时福利数据统计中…… ***** {1}", ServiceName, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            string beforeMessage = string.Format("{0} 限时福利数据统计中……", ServiceName);
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, beforeMessage);
 
             //获取当日待开奖的福利活动

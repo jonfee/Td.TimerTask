@@ -137,7 +137,16 @@
     <Compile Include="Core\Configs.cs" />
     <Compile Include="Core\DelegateTool.cs" />
     <Compile Include="Core\EnumExtensions.cs" />
+    <Compile Include="Data\Entity\Mall_Order.cs" />
     <Compile Include="Data\Entity\User_Welfare.cs" />
+    <Compile Include="Data\Model\MallOrderModel.cs" />
+    <Compile Include="Data\Provider\MallOrderProvider.cs" />
+    <Compile Include="Services\MallOrderLate\MallOrderLateConfigManager.cs" />
+    <Compile Include="Services\MallOrderLate\MallOrderLateScheduler.cs" />
+    <Compile Include="Services\MallOrderLate\MallOrderLateSchedulerManager.cs" />
+    <Compile Include="Services\MallOrderLate\MallOrderService.cs" />
+    <Compile Include="Services\MallOrderLate\MallOrderTimeCalculator.cs" />
+    <Compile Include="Services\MallOrderLate\OrderLateConfig.cs" />
     <Compile Include="Services\WelfareLottery\ConsumerCodeGenerater.cs" />
     <Compile Include="Services\WelfareLottery\LotteryContext.cs" />
     <Compile Include="Core\SysData.cs" />
@@ -169,6 +178,8 @@
     <Compile Include="Services\WelfareLottery\LotteryScheduler.cs" />
     <Compile Include="Services\WelfareLottery\WelfareLotterySchedulerManager.cs" />
     <Compile Include="Services\WelfareLottery\WelfareLotteryService.cs" />
+    <Compile Include="SysEnums\MallOrderStatus.cs" />
+    <Compile Include="SysEnums\MallOrderType.cs" />
     <Compile Include="SysEnums\ScheduleType.cs" />
     <Compile Include="SysEnums\WelfareStatus.cs" />
     <Compile Include="SysEnums\WelfareType.cs" />

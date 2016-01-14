@@ -38,14 +38,14 @@ namespace KylinService.Services
 
         protected override void OnStart(params object[] parameters)
         {
-            string message = string.Format("{0} 计划已启动，但没有加载任何处理程序！", ServiceName, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            string message = string.Format("{0} 计划已启动，但没有加载任何处理程序！", ServiceName);
 
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, message);
         }
 
         protected override void OnStop()
         {
-            string message = string.Format("{0} 计划已停止！********** {1}", ServiceName, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            string message = string.Format("{0} 计划已停止！", ServiceName);
 
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, message);
         }
