@@ -82,6 +82,20 @@ namespace Td.Task.Framework
         }
 
         /// <summary>
+        /// 停止某个计划任务
+        /// </summary>
+        /// <param name="scheduleName"></param>
+        public static void Stop(string scheduleName)
+        {
+            if (Tasks.ContainsKey(scheduleName))
+            {
+                var task = Tasks[scheduleName] as ITask;
+
+                task.Stop();
+            }
+        }
+
+        /// <summary>
 		/// 停止所有的计划任务
 		/// </summary>
 		public static void StopAllTask()

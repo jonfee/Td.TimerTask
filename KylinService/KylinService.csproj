@@ -137,6 +137,10 @@
     <Compile Include="Core\Configs.cs" />
     <Compile Include="Core\DelegateTool.cs" />
     <Compile Include="Core\EnumExtensions.cs" />
+    <Compile Include="Core\Loger\BaseLoger.cs" />
+    <Compile Include="Core\Loger\ErrorLoger.cs" />
+    <Compile Include="Core\Loger\ExceptionLoger.cs" />
+    <Compile Include="Core\Loger\ServerLoger.cs" />
     <Compile Include="Data\Entity\Mall_Order.cs" />
     <Compile Include="Data\Entity\User_Welfare.cs" />
     <Compile Include="Data\Model\MallOrderModel.cs" />
@@ -211,7 +215,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Td.Task.Framework\Td.Task.Framework.csproj">
       <Project>{ca9cdde7-9f71-46d7-b17c-f15f0f167576}</Project>

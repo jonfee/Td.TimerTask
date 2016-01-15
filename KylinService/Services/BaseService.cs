@@ -32,13 +32,18 @@ namespace KylinService.Services
         protected Form CurrentForm { get; set; }
 
         /// <summary>
+        /// 服务类型
+        /// </summary>
+        public string ServiceType { get; set; }
+
+        /// <summary>
         /// 服务名称
         /// </summary>
-        protected string ServiceName { get; set; }
+        protected string ServiceName { get { return SysData.GetServiceName(ServiceType); } }
 
         protected override void OnStart(params object[] parameters)
         {
-            string message = string.Format("{0} 计划已启动，但没有加载任何处理程序！", ServiceName);
+            string message = string.Format("{0} 服务已启动！", ServiceName);
 
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, message);
         }

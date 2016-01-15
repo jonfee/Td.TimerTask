@@ -8,6 +8,9 @@ using System;
 using System.Threading;
 using KylinService.Manager;
 using KylinService.Services.MallOrderLate;
+using KylinService.Core.Loger;
+using KylinService.Services.ShakeDayTimes;
+using KylinService.Services.WelfareLottery;
 
 namespace KylinService
 {
@@ -119,11 +122,15 @@ namespace KylinService
         /// <param name="e"></param>
         public void BtnStart_Click(object sender, EventArgs e)
         {
-            #region 界面及服务计时
+            #region 获取当前正在操作的服务类型
 
             var btn = (Button)sender;
 
             var scheduleTypeName = (btn.Tag ?? string.Empty).ToString();
+
+            #endregion
+
+            #region 检测是否有定时计划的策略配置
 
             //所有计划策略名
             var refNames = TimerStrategyManager.StrategyConfig.Config.Select(p => p.RefName).ToArray();
@@ -134,48 +141,15 @@ namespace KylinService
                 return;
             }
 
-            //禁用启动按钮
-            btn.Enabled = false;
-
-            //父控件
-            var parent = btn.Parent;
-
-            //找到停止按钮并启用交互
-            var btnStop = Find<Button>(parent, _serTstopbtn, scheduleTypeName);
-            btnStop.Enabled = true;
-
-            //找到状态Label，并更新状态为：运行中
-            var lbStatus = Find<Label>(parent, _serTstatus, scheduleTypeName);
-            lbStatus.Text = "运行中";
-
-            //找到显示服务名称的Label
-            var lbServName = Find<Label>(parent, _serTname, scheduleTypeName);
-            string msg = string.Format("{0} 服务已启动！", lbServName.Text);
-            WriteMessage(msg);
-
-            //找到运行时间显示控件
-            var lbTime = Find<Label>(parent, _serTtime, scheduleTypeName);
-
-            //服务计时
-            var clocker = new Clocker(scheduleTypeName, (obj) =>
-              {
-                  DateTime startTime = DateTime.Parse(obj.ToString());
-
-                  var timespan = DateTime.Now - startTime;
-
-                  var strTime = string.Format("{0}天 {1}小时 {2}分 {3}秒", timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds);
-
-                  this.Invoke((EventHandler)delegate
-                  {
-                      lbTime.Text = strTime;
-                  });
-              });
-
-            ClockerManager.Instance.Add(clocker);
             #endregion
+
+            #region 启动服务
 
             //当前服务的计划类型
             ScheduleType schedule = (ScheduleType)System.Enum.Parse(typeof(ScheduleType), scheduleTypeName);
+
+            //是否已启动
+            bool isOpened = false;
 
             switch (schedule)
             {
@@ -189,16 +163,71 @@ namespace KylinService
                     }
                     else
                     {
-                        TaskSchedule.StartSchedule(scheduleTypeName, new Services.MallOrderLate.MallOrderService(mallOrderLateConfig, this, writeDelegate), scheduleTypeName, null);
+                        TaskSchedule.StartSchedule(schedule.ToString(), new MallOrderService(mallOrderLateConfig, this, writeDelegate), schedule.ToString(), null);
+                        isOpened = true;
                     }
                     break;
                 case ScheduleType.ShakeDayTimesClear:
-                    TaskSchedule.StartSchedule(scheduleTypeName, new Services.ShakeDayTimes.ShakeTimesClearService(this, writeDelegate), scheduleTypeName, null);
+                    TaskSchedule.StartSchedule(schedule.ToString(), new ShakeTimesClearService(this, writeDelegate), schedule.ToString(), null);
+                    isOpened = true;
                     break;
                 case ScheduleType.WelfareLottery:
-                    TaskSchedule.StartSchedule(scheduleTypeName, new Services.WelfareLottery.WelfareLotteryService(this, writeDelegate), scheduleTypeName, null);
+                    TaskSchedule.StartSchedule(schedule.ToString(), new WelfareLotteryService(this, writeDelegate), schedule.ToString(), null);
+                    isOpened = true;
                     break;
             }
+
+            #endregion
+
+            #region 
+
+            if (isOpened)
+            {
+                //禁用启动按钮
+                btn.Enabled = false;
+
+                //父控件
+                var parent = btn.Parent;
+
+                //找到停止按钮并启用交互
+                var btnStop = Find<Button>(parent, _serTstopbtn, scheduleTypeName);
+                btnStop.Enabled = true;
+
+                //找到状态Label，并更新状态为：运行中
+                var lbStatus = Find<Label>(parent, _serTstatus, scheduleTypeName);
+                lbStatus.Text = "运行中";
+
+                //服务已启动
+                var servName = SysData.GetServiceName(scheduleTypeName);
+
+                //找到运行时间显示控件
+                var lbTime = Find<Label>(parent, _serTtime, scheduleTypeName);
+
+                //服务计时
+                var clocker = new Clocker(scheduleTypeName, (obj) =>
+                {
+                    DateTime startTime = DateTime.Parse(obj.ToString());
+
+                    var timespan = DateTime.Now - startTime;
+
+                    var strTime = string.Format("{0}天 {1}小时 {2}分 {3}秒", timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds);
+
+                    this.Invoke((EventHandler)delegate
+                    {
+                        lbTime.Text = strTime;
+                    });
+                });
+
+                ClockerManager.Instance.Add(clocker);
+
+                string message = string.Format("{0} 服务已启动！", servName);
+                WriteMessage(message);
+
+                //记录启动日志
+                var loger = new ServerLoger(servName);
+                loger.Write("已启动！");
+            }
+            #endregion
         }
 
         /// <summary>
@@ -211,6 +240,13 @@ namespace KylinService
             var btn = (Button)sender;
 
             var scheduleTypeName = (btn.Tag ?? string.Empty).ToString();
+
+            #region 停止服务
+
+            //当前服务的计划类型
+            ScheduleType schedule = (ScheduleType)System.Enum.Parse(typeof(ScheduleType), scheduleTypeName);
+
+            TaskSchedule.Stop(schedule.ToString());
 
             btn.Enabled = false;
 
@@ -225,12 +261,16 @@ namespace KylinService
             var lbStatus = Find<Label>(parent, _serTstatus, scheduleTypeName);
             lbStatus.Text = "已停止";
 
-            //找到显示服务名称的Label
-            var lbServName = Find<Label>(parent, _serTname, scheduleTypeName);
-            string msg = string.Format("{0} 服务已停止！", lbServName.Text);
-            WriteMessage(msg);
+            //服务已启动
+            var servName = SysData.GetServiceName(scheduleTypeName);
 
             ClockerManager.Instance.Stop(scheduleTypeName);
+
+            //记录停止日志
+            var loger = new ServerLoger(servName);
+            loger.Write("已停止！");
+
+            #endregion
         }
 
         /// <summary>

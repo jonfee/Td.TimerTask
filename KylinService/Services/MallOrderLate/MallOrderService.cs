@@ -28,7 +28,8 @@ namespace KylinService.Services.MallOrderLate
         /// <param name="writeDelegate"></param>
         public MallOrderService(OrderLateConfig config, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(form, writeDelegate)
         {
-            this.ServiceName = SysData.GetServiceName((int)ScheduleType.MallOrderLate);
+            this.ServiceType = ScheduleType.MallOrderLate.ToString();
+
             this.Config = config;
         }
 
