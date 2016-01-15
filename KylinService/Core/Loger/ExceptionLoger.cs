@@ -19,12 +19,12 @@ namespace KylinService.Core.Loger
         {
             StringBuilder sbContent = new StringBuilder();
 
-            sbContent.Append("\r\n________________________________________________________________________________________________________________\r\n");
+            sbContent.Append("________________________________________________________________________________________________________________\r\n\r\n");
             sbContent.Append("日期：" + System.DateTime.Now.ToString() + "\r\n");
             sbContent.Append("标题：" + title + "\r\n");
             sbContent.Append("异常信息：" + ex.Message + "\r\n");
             sbContent.Append("异常内容：" + ex.StackTrace + "\r\n");
-            sbContent.Append("\r\n________________________________________________________________________________________________________________\r\n");
+            sbContent.Append("________________________________________________________________________________________________________________\r\n");
 
             base.LogWrite(sbContent);
         }

@@ -1,4 +1,5 @@
 ﻿using KylinService.Core;
+using KylinService.Core.Loger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,13 +47,21 @@ namespace KylinService.Services
             string message = string.Format("{0} 服务已启动！", ServiceName);
 
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, message);
+
+            //记录启动日志
+            var loger = new ServerLoger(ServiceName);
+            loger.Write("服务已启动！");
         }
 
         protected override void OnStop()
         {
-            string message = string.Format("{0} 计划已停止！", ServiceName);
+            string message = string.Format("{0} 服务已停止！", ServiceName);
 
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, message);
+
+            //记录启动日志
+            var loger = new ServerLoger(ServiceName);
+            loger.Write("服务已停止！");
         }
 
         protected override void OnThrowException(Exception ex)
@@ -60,6 +69,10 @@ namespace KylinService.Services
             string message = string.Format("出错啦！！！原因：{0}", ex.Message);
 
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, message);
+
+            //写入异常日志
+            var loger = new ExceptionLoger();
+            loger.Write(ServiceName, ex);
         }
     }
 }

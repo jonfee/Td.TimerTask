@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -36,6 +37,13 @@ namespace KylinService.Core.Loger
         {
             try
             {
+                string lastFolderPath = appFilePath.Remove(appFilePath.LastIndexOf(@"\"));
+
+                if (!Directory.Exists(lastFolderPath))
+                {
+                    Directory.CreateDirectory(lastFolderPath);
+                }
+
                 if (!File.Exists(appFilePath))
                 {
                     File.Create(appFilePath).Close();
@@ -48,7 +56,10 @@ namespace KylinService.Core.Loger
                     sw.Close();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }

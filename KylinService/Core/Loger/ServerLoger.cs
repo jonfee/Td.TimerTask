@@ -19,11 +19,11 @@ namespace KylinService.Core.Loger
         {
             StringBuilder sbContent = new StringBuilder();
 
-            sbContent.Append("\r\n________________________________________________________________________________________________________________\r\n");
+            sbContent.Append("________________________________________________________________________________________________________________\r\n\r\n");
             sbContent.Append("日期：" + System.DateTime.Now.ToString() + "\r\n");
             sbContent.Append("服务名称：" + serviceName + "\r\n");
             sbContent.Append("操作信息：" + message + "\r\n");
-            sbContent.Append("\r\n________________________________________________________________________________________________________________\r\n");
+            sbContent.Append("________________________________________________________________________________________________________________\r\n");
 
             base.LogWrite(sbContent);
         }

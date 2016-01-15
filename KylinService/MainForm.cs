@@ -225,7 +225,7 @@ namespace KylinService
 
                 //记录启动日志
                 var loger = new ServerLoger(servName);
-                loger.Write("已启动！");
+                loger.Write("服务已启动！");
             }
             #endregion
         }
@@ -268,7 +268,7 @@ namespace KylinService
 
             //记录停止日志
             var loger = new ServerLoger(servName);
-            loger.Write("已停止！");
+            loger.Write("服务已停止！");
 
             #endregion
         }
