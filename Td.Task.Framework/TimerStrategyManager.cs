@@ -16,7 +16,7 @@ namespace Td.Task.Framework
         /// <summary>
         /// 定时任务策略配置
         /// </summary>
-        public static TimerStrategyConfig StrategyConfig { get; set; }
+        public static TimerStrategyConfig StrategyConfig { get; private set; }
 
         static TimerStrategyManager()
         {

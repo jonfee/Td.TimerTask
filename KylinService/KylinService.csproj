@@ -141,10 +141,22 @@
     <Compile Include="Core\Loger\ErrorLoger.cs" />
     <Compile Include="Core\Loger\ExceptionLoger.cs" />
     <Compile Include="Core\Loger\ServerLoger.cs" />
+    <Compile Include="Data\Entity\KylinService_Business.cs" />
+    <Compile Include="Data\Entity\KylinService_Order.cs" />
     <Compile Include="Data\Entity\Mall_Order.cs" />
     <Compile Include="Data\Entity\User_Welfare.cs" />
+    <Compile Include="Data\Model\AppointOrderModel.cs" />
     <Compile Include="Data\Model\MallOrderModel.cs" />
+    <Compile Include="Data\Provider\AppointOrderProvider.cs" />
     <Compile Include="Data\Provider\MallOrderProvider.cs" />
+    <Compile Include="Services\Appoint\AppointConfig.cs" />
+    <Compile Include="Services\Appoint\AppointConfigManager.cs" />
+    <Compile Include="Services\Appoint\AppointOrderLateSchedulerManager.cs" />
+    <Compile Include="Services\Appoint\AppointOrderPaymentLateScheduler.cs" />
+    <Compile Include="Services\Appoint\AppointOrderTimeCalculator.cs" />
+    <Compile Include="Services\Appoint\AppointOrderUserFinishLateScheduler.cs" />
+    <Compile Include="Services\Appoint\AppointService.cs" />
+    <Compile Include="Services\Appoint\BaseAppointOrderLateScheduler.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateConfigManager.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateScheduler.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateSchedulerManager.cs" />
@@ -182,11 +194,17 @@
     <Compile Include="Services\WelfareLottery\LotteryScheduler.cs" />
     <Compile Include="Services\WelfareLottery\WelfareLotterySchedulerManager.cs" />
     <Compile Include="Services\WelfareLottery\WelfareLotteryService.cs" />
+    <Compile Include="SysEnums\AppointBusinessType.cs" />
+    <Compile Include="SysEnums\AppointLateType.cs" />
+    <Compile Include="SysEnums\AppointPaymentType.cs" />
+    <Compile Include="SysEnums\AppointQuoteWays.cs" />
     <Compile Include="SysEnums\MallOrderStatus.cs" />
     <Compile Include="SysEnums\MallOrderType.cs" />
     <Compile Include="SysEnums\ScheduleType.cs" />
+    <Compile Include="SysEnums\ShangMenOrderStatus.cs" />
     <Compile Include="SysEnums\WelfareStatus.cs" />
     <Compile Include="SysEnums\WelfareType.cs" />
+    <Compile Include="SysEnums\YuYueOrderStatus.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -64,6 +64,20 @@ namespace KylinService.Data
                 entity.Property(p => p.OrderID).ValueGeneratedNever();
                 entity.HasKey(p => p.OrderID);
             });
+
+            //系统业务
+            modelBuilder.Entity<KylinService_Business>(entity =>
+            {
+                entity.Property(p => p.BusinessID).ValueGeneratedNever();
+                entity.HasKey(p => p.BusinessID);
+            });
+
+            //业务订单
+            modelBuilder.Entity<KylinService_Order>(entity =>
+            {
+                entity.Property(p => p.OrderID).ValueGeneratedNever();
+                entity.HasKey(p => p.OrderID);
+            });
         }
 
         #region DbSet
@@ -102,6 +116,16 @@ namespace KylinService.Data
         /// 商城订单
         /// </summary>
         public DbSet<Mall_Order> Mall_Order { get { return Set<Mall_Order>(); } }
+
+        /// <summary>
+        /// 系统业务
+        /// </summary>
+        public DbSet<KylinService_Business> KylinService_Business { get { return Set<KylinService_Business>(); } }
+
+        /// <summary>
+        /// 业务订单
+        /// </summary>
+        public DbSet<KylinService_Order> KylinService_Order { get { return Set<KylinService_Order>(); } }
 
         #endregion
     }

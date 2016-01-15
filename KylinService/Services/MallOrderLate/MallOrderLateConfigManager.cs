@@ -16,7 +16,7 @@ namespace KylinService.Services.MallOrderLate
         /// <summary>
         /// 配置项
         /// </summary>
-        public static OrderLateConfig Config { get; set; }
+        public static OrderLateConfig Config { get; private set; }
 
         static MallOrderLateConfigManager()
         {

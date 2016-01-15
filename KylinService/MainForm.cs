@@ -11,6 +11,7 @@ using KylinService.Services.MallOrderLate;
 using KylinService.Core.Loger;
 using KylinService.Services.ShakeDayTimes;
 using KylinService.Services.WelfareLottery;
+using KylinService.Services.Appoint;
 
 namespace KylinService
 {
@@ -154,6 +155,16 @@ namespace KylinService
             switch (schedule)
             {
                 case ScheduleType.AppointOrderLate:
+                    var appointOrderLateConfig = AppointConfigManager.Config;
+                    if (null == appointOrderLateConfig)
+                    {
+                        MessageBox.Show("未检测到自动处理上门预约订单的配置项");
+                    }
+                    else
+                    {
+                        TaskSchedule.StartSchedule(schedule.ToString(), new AppointService(appointOrderLateConfig, this, writeDelegate), schedule.ToString(), null);
+                        isOpened = true;
+                    }
                     break;
                 case ScheduleType.MallOrderLate:
                     var mallOrderLateConfig = MallOrderLateConfigManager.Config;
