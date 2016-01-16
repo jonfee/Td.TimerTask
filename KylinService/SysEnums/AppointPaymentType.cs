@@ -6,7 +6,7 @@
     public enum AppointPaymentType
     {
         /// <summary>
-        /// 线上付款
+        /// 线下付款
         /// </summary>
         OffLine = 1,
         /// <summary>

@@ -1,9 +1,5 @@
 ﻿using KylinService.Data.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KylinService.Services.MallOrderLate
 {
@@ -17,15 +13,15 @@ namespace KylinService.Services.MallOrderLate
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public static DateTime GetTimeoutTime(MallOrderModel order, OrderLateConfig config)
+        public static DateTime GetTimeoutTime(MallOrderModel order, OrderLateConfig config, SysEnums.MallOrderLateType lateType)
         {
             DateTime timeout = DateTime.Now.Date;
 
             if (null != order)
             {
-                switch ((SysEnums.MallOrderStatus)order.OrderStatus)
+                switch (lateType)
                 {
-                    case SysEnums.MallOrderStatus.NoPay:
+                    case SysEnums.MallOrderLateType.LateNoPayment:
                         if (order.OrderType == (int)SysEnums.MallOrderType.ShakeBuy && order.NeedPayTime.HasValue)
                         {
                             timeout = order.NeedPayTime.Value.AddHours(config.WaitPaymentHours);
@@ -35,7 +31,7 @@ namespace KylinService.Services.MallOrderLate
                             timeout = order.CreateTime.AddHours(config.WaitPaymentHours);
                         }
                         break;
-                    case SysEnums.MallOrderStatus.WaitReceiptGoods:
+                    case SysEnums.MallOrderLateType.LateUserFinish:
                         timeout = order.ShipTime.Value.AddDays(config.WaitReceiptGoodsDays);
                         break;
                 }

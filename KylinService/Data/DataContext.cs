@@ -1,10 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Entity;
 using Microsoft.Data.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace KylinService.Data
 {
@@ -22,6 +18,13 @@ namespace KylinService.Data
             {
                 entity.Property(p => p.UserID).ValueGeneratedNever();
                 entity.HasKey(p => p.UserID);
+            });
+
+            //用户交易记录
+            modelBuilder.Entity<User_TradeRecords>(entity =>
+            {
+                entity.Property(p => p.TradeID).ValueGeneratedNever();
+                entity.HasKey(p => p.TradeID);
             });
 
             //用户摇一摇信息
@@ -78,6 +81,35 @@ namespace KylinService.Data
                 entity.Property(p => p.OrderID).ValueGeneratedNever();
                 entity.HasKey(p => p.OrderID);
             });
+
+            //商家账户
+            modelBuilder.Entity<Merchant_Account>(entity =>
+            {
+                entity.Property(p => p.MerchantID).ValueGeneratedNever();
+                entity.HasKey(p => p.MerchantID);
+            });
+
+            //商家交易记录
+            modelBuilder.Entity<Merchant_TradeRecords>(entity =>
+            {
+                entity.Property(p => p.TradeID).ValueGeneratedNever();
+                entity.HasKey(p => p.TradeID);
+            });
+
+            //服务人员账号
+            modelBuilder.Entity<Worker_Account>(entity =>
+            {
+                entity.Property(p => p.WorkerID).ValueGeneratedNever();
+                entity.HasKey(p => p.WorkerID);
+            });
+
+            //服务人员交易记录
+            modelBuilder.Entity<Worker_TradeRecords>(entity =>
+            {
+                entity.Property(p => p.TradeID).ValueGeneratedNever();
+                entity.HasKey(p => p.TradeID);
+            });
+            
         }
 
         #region DbSet
@@ -86,6 +118,11 @@ namespace KylinService.Data
         /// 用户账户
         /// </summary>
         public DbSet<User_Account> User_Account { get { return Set<User_Account>(); } }
+
+        /// <summary>
+        /// 用户交易记录
+        /// </summary>
+        public DbSet<User_TradeRecords> User_TradeRecords { get { return Set<User_TradeRecords>(); } }
 
         /// <summary>
         /// 用户摇一摇信息
@@ -126,6 +163,26 @@ namespace KylinService.Data
         /// 业务订单
         /// </summary>
         public DbSet<KylinService_Order> KylinService_Order { get { return Set<KylinService_Order>(); } }
+
+        /// <summary>
+        /// 商家交易记录
+        /// </summary>
+        public DbSet<Merchant_TradeRecords> Merchant_TradeRecords { get { return Set<Merchant_TradeRecords>(); } }
+
+        /// <summary>
+        /// 商家账户信息
+        /// </summary>
+        public DbSet<Merchant_Account> Merchant_Account { get { return Set<Merchant_Account>(); } }
+
+        /// <summary>
+        /// 服务职员账户
+        /// </summary>
+        public DbSet<Worker_Account> Worker_Account { get { return Set<Worker_Account>(); } }
+
+        /// <summary>
+        /// 服务职员交易记录
+        /// </summary>
+        public DbSet<Worker_TradeRecords> Worker_TradeRecords { get { return Set<Worker_TradeRecords>(); } }
 
         #endregion
     }

@@ -37,11 +37,14 @@ namespace KylinService.Services.Appoint
             //获取今天将超时确认服务完成的订单
             var lateUserFinishList = AppointOrderProvider.GetUserFinishLateListForTodayWillTimeout(Config.EndServiceWaitUserDays);
 
+            var orderIDs = lateNoPayList.Select(p => p.OrderID).Concat(lateUserFinishList.Select(p => p.OrderID)).ToArray();
+
+            //校正任务列表
+            AppointOrderLateSchedulerManager.CheckScheduler(orderIDs);
+
             //将超时支付的订单写入计划任务
             if (null != lateNoPayList && lateNoPayList.Count > 0)
-            {
-                AppointOrderLateSchedulerManager.CheckScheduler(lateNoPayList.Select(p => p.OrderID).ToArray());
-
+            {   
                 foreach (var order in lateNoPayList)
                 {
                     if (null != order)
@@ -54,8 +57,6 @@ namespace KylinService.Services.Appoint
             //将超时未确认服务完成的订单写入计划任务
             if (null != lateUserFinishList && lateUserFinishList.Count > 0)
             {
-                AppointOrderLateSchedulerManager.CheckScheduler(lateUserFinishList.Select(p => p.OrderID).ToArray());
-
                 foreach (var order in lateUserFinishList)
                 {
                     if (null != order)
@@ -78,9 +79,7 @@ namespace KylinService.Services.Appoint
 
                 var order = schedule.Order;
 
-                var timeout = DateTime.Now;
-
-                var dueTime = timeout - DateTime.Now;
+                var timeout = DateTime.Now.Date;
 
                 string tips = string.Empty;
 
@@ -94,6 +93,8 @@ namespace KylinService.Services.Appoint
                     timeout = AppointOrderTimeCalculator.GetTimeoutTime(order, Config, AppointLateType.LateUserFinish);
                     tips = "自动确认服务完成";
                 }
+
+                var dueTime = timeout - DateTime.Now;
 
                 string welPut = string.Format("【订单（{0}）：{1}】将在{2}小时{3}分{4}秒后{5}", order.OrderCode, order.BusinessName, dueTime.Hours, dueTime.Minutes, dueTime.Seconds, tips);
 

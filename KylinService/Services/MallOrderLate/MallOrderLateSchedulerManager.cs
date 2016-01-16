@@ -1,5 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Model;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Windows.Forms;
@@ -21,27 +22,41 @@ namespace KylinService.Services.MallOrderLate
         /// <param name="order"></param>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public static void StartScheduler(OrderLateConfig config, MallOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
+        public static void StartScheduler(SysEnums.MallOrderLateType lateType, OrderLateConfig config, MallOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
         {
             if (Schedulers.ContainsKey(order.OrderID))
             {
-                var oldSchedule = Schedulers[order.OrderID] as MallOrderLateScheduler;
+                var schedule = Schedulers[order.OrderID] as BaseMallOrderLateScheduler;
 
-                var oldTimeout = MallOrderTimeCalculator.GetTimeoutTime(oldSchedule.Order, config);
+                var oldTimeout = MallOrderTimeCalculator.GetTimeoutTime(schedule.Order, config, lateType);
+                var newTimeout = MallOrderTimeCalculator.GetTimeoutTime(order, config, lateType);
 
-                var newTimeout = MallOrderTimeCalculator.GetTimeoutTime(order, config);
+                switch (lateType)
+                {
+                    case SysEnums.MallOrderLateType.LateNoPayment:
+                        schedule = new MallOrderPaymentLateScheduler(config, order, form, writeDelegate);
+                        break;
+                    case SysEnums.MallOrderLateType.LateUserFinish:
+                        schedule = new MallOrderPaymentLateScheduler(config, order, form, writeDelegate);
+                        break;
+                }
 
                 if (oldTimeout != newTimeout)
                 {
-                    oldSchedule = new MallOrderLateScheduler(config,order, form, writeDelegate);
-                    Schedulers[order.OrderID] = oldSchedule;
+                    Schedulers[order.OrderID] = schedule;
                 }
             }
             else
             {
-                var schedule = new MallOrderLateScheduler(config, order, form, writeDelegate);
-
-                Schedulers.Add(order.OrderID, schedule);
+                switch (lateType)
+                {
+                    case SysEnums.MallOrderLateType.LateNoPayment:
+                        Schedulers.Add(order.OrderID, new MallOrderPaymentLateScheduler(config, order, form, writeDelegate));
+                        break;
+                    case SysEnums.MallOrderLateType.LateUserFinish:
+                        Schedulers.Add(order.OrderID, new MallOrderPaymentLateScheduler(config, order, form, writeDelegate));
+                        break;
+                }
             }
         }
 

@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -137,6 +138,7 @@
     <Compile Include="Core\Configs.cs" />
     <Compile Include="Core\DelegateTool.cs" />
     <Compile Include="Core\EnumExtensions.cs" />
+    <Compile Include="Core\IDCreater.cs" />
     <Compile Include="Core\Loger\BaseLoger.cs" />
     <Compile Include="Core\Loger\ErrorLoger.cs" />
     <Compile Include="Core\Loger\ExceptionLoger.cs" />
@@ -144,7 +146,12 @@
     <Compile Include="Data\Entity\KylinService_Business.cs" />
     <Compile Include="Data\Entity\KylinService_Order.cs" />
     <Compile Include="Data\Entity\Mall_Order.cs" />
+    <Compile Include="Data\Entity\Merchant_Account.cs" />
+    <Compile Include="Data\Entity\Merchant_TradeRecords.cs" />
+    <Compile Include="Data\Entity\User_TradeRecords.cs" />
     <Compile Include="Data\Entity\User_Welfare.cs" />
+    <Compile Include="Data\Entity\Worker_Account.cs" />
+    <Compile Include="Data\Entity\Worker_TradeRecords.cs" />
     <Compile Include="Data\Model\AppointOrderModel.cs" />
     <Compile Include="Data\Model\MallOrderModel.cs" />
     <Compile Include="Data\Provider\AppointOrderProvider.cs" />
@@ -157,9 +164,11 @@
     <Compile Include="Services\Appoint\AppointOrderUserFinishLateScheduler.cs" />
     <Compile Include="Services\Appoint\AppointService.cs" />
     <Compile Include="Services\Appoint\BaseAppointOrderLateScheduler.cs" />
+    <Compile Include="Services\MallOrderLate\BaseMallOrderLateScheduler.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateConfigManager.cs" />
-    <Compile Include="Services\MallOrderLate\MallOrderLateScheduler.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateSchedulerManager.cs" />
+    <Compile Include="Services\MallOrderLate\MallOrderLateUserFinishScheduler.cs" />
+    <Compile Include="Services\MallOrderLate\MallOrderPaymentLateScheduler.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderService.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderTimeCalculator.cs" />
     <Compile Include="Services\MallOrderLate\OrderLateConfig.cs" />
@@ -195,15 +204,21 @@
     <Compile Include="Services\WelfareLottery\WelfareLotterySchedulerManager.cs" />
     <Compile Include="Services\WelfareLottery\WelfareLotteryService.cs" />
     <Compile Include="SysEnums\AppointBusinessType.cs" />
+    <Compile Include="SysEnums\AppointServerType.cs" />
+    <Compile Include="SysEnums\BusinessPayerType.cs" />
+    <Compile Include="SysEnums\MallOrderLateType.cs" />
     <Compile Include="SysEnums\AppointLateType.cs" />
     <Compile Include="SysEnums\AppointPaymentType.cs" />
     <Compile Include="SysEnums\AppointQuoteWays.cs" />
     <Compile Include="SysEnums\MallOrderStatus.cs" />
     <Compile Include="SysEnums\MallOrderType.cs" />
+    <Compile Include="SysEnums\MerchantTradType.cs" />
     <Compile Include="SysEnums\ScheduleType.cs" />
     <Compile Include="SysEnums\ShangMenOrderStatus.cs" />
+    <Compile Include="SysEnums\UserTradType.cs" />
     <Compile Include="SysEnums\WelfareStatus.cs" />
     <Compile Include="SysEnums\WelfareType.cs" />
+    <Compile Include="SysEnums\WorkerTradType.cs" />
     <Compile Include="SysEnums\YuYueOrderStatus.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -216,6 +231,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

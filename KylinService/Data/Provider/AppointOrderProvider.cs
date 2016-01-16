@@ -1,4 +1,5 @@
-﻿using KylinService.Data.Model;
+﻿using KylinService.Core;
+using KylinService.Data.Model;
 using KylinService.Services.Appoint;
 using KylinService.SysEnums;
 using System;
@@ -191,7 +192,141 @@ namespace KylinService.Data.Provider
         /// <returns></returns>
         public static bool AutoFinishByUser(long orderID)
         {
-            return false;
+            using (var db = new DataContext())
+            {
+                var order = db.KylinService_Order.SingleOrDefault(p => p.OrderID == orderID);
+
+                #region 计算本次完成订单需要结算的金额
+
+                decimal money = 0;
+
+                //线下支付，但下单时有预约金
+                if (order.PaymentType == (int)AppointPaymentType.OffLine)
+                {
+                    if (order.PrepaidAmount > 0) money = order.PrepaidAmount;
+                }
+                else if (order.PaiedTime.HasValue)
+                {
+                    money = order.ActualOrderAmount;
+                }
+                else
+                {
+                    throw new Exception("当前订单数据异常（线上支付方式但未检测到付款信息），不能自动确定服务完成！");
+                }
+
+                #endregion
+
+                #region 结算
+
+                money = Math.Abs(money);
+
+                //如果有款项需要结算
+                if (money > 0)
+                {
+                    var business = db.KylinService_Business.SingleOrDefault(p => p.BusinessID == order.BusinessID);
+
+                    //本订单是否应由下单方支付给服务方，否则为服务方支付给下单方
+                    var payToServer = business.PayerType == (int)SysEnums.BusinessPayerType.Server;
+
+                    var user = db.User_Account.SingleOrDefault(p => p.UserID == order.UserID);
+
+                    if (payToServer)
+                    {
+                        if (user.FreezeMoney < money) throw new Exception("程序猿大哥摊上大事了，用户冻结资金怎么不够本次订单结算时扣款呢？！");
+                        user.FreezeMoney -= money;
+                    }
+                    else
+                    {
+                        user.Balance += money;
+
+                        //交易记录
+                        db.User_TradeRecords.Add(new Entity.User_TradeRecords
+                        {
+                            Amount = money,
+                            CreateTime = DateTime.Now,
+                            PaymentType = order.PaymentType,
+                            TradeID = IDCreater.Instance.GetID(),
+                            TradeInfo = string.Format("{0}服务中获利所得[订单编号：{1}]", business.Name, order.OrderCode),
+                            TradeNo = string.Empty,
+                            TradeType = (int)UserTradType.SaleGet,
+                            UserID = user.UserID
+                        });
+                    }
+
+                    if (order.ServerType == (int)AppointServerType.Merchant)
+                    {
+                        var merchant = db.Merchant_Account.SingleOrDefault(p => p.MerchantID == order.MerchantID);
+                        if (payToServer)//下单方支付给商家
+                        {
+                            merchant.Balance += money;
+                            db.Merchant_TradeRecords.Add(new Entity.Merchant_TradeRecords
+                            {
+                                Amount = money,
+                                CreateTime = DateTime.Now,
+                                PaymentType = order.PaymentType,
+                                TradeID = IDCreater.Instance.GetID(),
+                                TradeInfo = string.Format("{0}服务中获利所得[订单编号：{1}]", business.Name, order.OrderCode),
+                                TradeNo = string.Empty,
+                                TradeType = (int)MerchantTradType.SaleService,
+                                MerchantID = merchant.MerchantID
+                            });
+                        }
+                        else//商家支付给下单方
+                        {
+                            merchant.FreezeMoney -= money;
+                        }
+                    }
+                    else if (order.ServerType == (int)AppointServerType.Worker)
+                    {
+                        var worker = db.Worker_Account.SingleOrDefault(p => p.WorkerID == order.WorkerID);
+                        if (payToServer)//下单方支付给服务人员
+                        {
+                            worker.Balance += money;
+                            db.Worker_TradeRecords.Add(new Entity.Worker_TradeRecords
+                            {
+                                Amount = money,
+                                CreateTime = DateTime.Now,
+                                PaymentType = order.PaymentType,
+                                TradeID = IDCreater.Instance.GetID(),
+                                TradeInfo = string.Format("{0}服务中获利所得[订单编号：{1}]", business.Name, order.OrderCode),
+                                TradeNo = string.Empty,
+                                TradeType = (int)WorkerTradType.SaleService,
+                                WorkerID = worker.WorkerID
+                            });
+                        }
+                        else//服务人员支付给下单方
+                        {
+                            worker.FreezeMoney -= money;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("当前订单数据异常（不明确的接单方类型），不能自动确定服务完成！");
+                    }
+                }
+
+                #endregion
+
+                #region 更新訂單信息
+
+                if (order.BusinessType == (int)AppointBusinessType.ShangMen)
+                {
+                    order.Status = (int)ShangMenOrderStatus.UserFinish;
+                }
+                else if (order.BusinessType == (int)AppointBusinessType.YuYue)
+                {
+                    order.Status = (int)YuYueOrderStatus.UserFinish;
+                }
+                else
+                {
+                    throw new Exception("当前订单数据异常（不明确的订单类型），不能自动确定服务完成！");
+                }
+                order.UserFinishTime = DateTime.Now;
+
+                #endregion
+
+                return db.SaveChanges() > 0;
+            }
         }
     }
 }

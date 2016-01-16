@@ -22,6 +22,8 @@ namespace KylinService.Services.Appoint
                 //计算自动取消订单时间的时间差
                 TimeSpan dueTime = baseTime - DateTime.Now;
 
+                if (dueTime < new TimeSpan(0)) return;
+
                 LateTimer = new System.Threading.Timer((obj) =>
                 {
                     //计划执行
@@ -43,11 +45,11 @@ namespace KylinService.Services.Appoint
 
             if (null == lastOrder) throw new Exception("订单信息已不存在！");
 
+            if (!CheckAutoOk(lastOrder)) throw new Exception("订单状态已变更，不能自动确认服务完成！");
+
             var lastTimeout = AppointOrderTimeCalculator.GetTimeoutTime(lastOrder, Config, SysEnums.AppointLateType.LateUserFinish);
 
             if (DateTime.Now < lastTimeout) throw new Exception("服务完成确认期限未到，不能自动确认服务完成！");
-
-            if (!CheckAutoOk(lastOrder)) throw new Exception("订单状态已变更，不能自动确认服务完成！");
 
             //自动确认服务完成
             bool success = AppointOrderProvider.AutoFinishByUser(Order.OrderID);

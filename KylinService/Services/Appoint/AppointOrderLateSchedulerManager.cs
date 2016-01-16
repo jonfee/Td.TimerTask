@@ -27,28 +27,24 @@ namespace KylinService.Services.Appoint
         {
             if (Schedulers.ContainsKey(order.OrderID))
             {
-                var oldSchedule = Schedulers[order.OrderID] as BaseAppointOrderLateScheduler;
+                var schedule = Schedulers[order.OrderID] as BaseAppointOrderLateScheduler;
 
-                var oldTimeout = DateTime.Now.Date;
-                var newTimeout = DateTime.Now.Date;
+                var oldTimeout = AppointOrderTimeCalculator.GetTimeoutTime(schedule.Order, config, lateType);
+                var newTimeout = AppointOrderTimeCalculator.GetTimeoutTime(order, config, lateType);
 
                 switch (lateType)
                 {
                     case SysEnums.AppointLateType.LateNoPayment:
-                        oldTimeout = AppointOrderTimeCalculator.GetTimeoutTime(oldSchedule.Order, config, SysEnums.AppointLateType.LateNoPayment);
-                        newTimeout = AppointOrderTimeCalculator.GetTimeoutTime(order, config,SysEnums.AppointLateType.LateNoPayment);
-                        oldSchedule = new AppointOrderPaymentLateScheduler(config, order, form, writeDelegate);
+                        schedule = new AppointOrderPaymentLateScheduler(config, order, form, writeDelegate);
                         break;
                     case SysEnums.AppointLateType.LateUserFinish:
-                        oldTimeout = AppointOrderTimeCalculator.GetTimeoutTime(oldSchedule.Order, config, SysEnums.AppointLateType.LateUserFinish);
-                        newTimeout = AppointOrderTimeCalculator.GetTimeoutTime(order, config,SysEnums.AppointLateType.LateUserFinish);
-                        oldSchedule = new AppointOrderUserFinishLateScheduler(config, order, form, writeDelegate);
+                        schedule = new AppointOrderUserFinishLateScheduler(config, order, form, writeDelegate);
                         break;
                 }
 
                 if (oldTimeout != newTimeout)
                 {
-                    Schedulers[order.OrderID] = oldSchedule;
+                    Schedulers[order.OrderID] = schedule;
                 }
             }
             else
@@ -56,12 +52,10 @@ namespace KylinService.Services.Appoint
                 switch (lateType)
                 {
                     case SysEnums.AppointLateType.LateNoPayment:
-                       var nopayScheduler = new AppointOrderPaymentLateScheduler(config, order, form, writeDelegate);
-                        Schedulers.Add(order.OrderID, nopayScheduler);
+                        Schedulers.Add(order.OrderID, new AppointOrderPaymentLateScheduler(config, order, form, writeDelegate));
                         break;
                     case SysEnums.AppointLateType.LateUserFinish:
-                        var userfinishScheduler = new AppointOrderPaymentLateScheduler(config, order, form, writeDelegate);
-                        Schedulers.Add(order.OrderID, userfinishScheduler);
+                        Schedulers.Add(order.OrderID, new AppointOrderPaymentLateScheduler(config, order, form, writeDelegate));
                         break;
                 }
             }
