@@ -24,8 +24,6 @@ namespace KylinService.Services.WelfareLottery
         /// <param name="parameters"></param>
         protected override void OnStart(params object[] parameters)
         {
-            base.OnStart();
-
             string beforeMessage = string.Format("{0} 限时福利数据统计中……", ServiceName);
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, beforeMessage);
 
