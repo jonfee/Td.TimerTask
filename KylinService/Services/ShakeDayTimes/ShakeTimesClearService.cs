@@ -19,8 +19,6 @@ namespace KylinService.Services.ShakeDayTimes
 
         protected override void OnStart(params object[] parameters)
         {
-            base.OnStart();
-
             string beforeMessage = string.Format("{0} 计划正在执行中……", ServiceName);
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, beforeMessage);
 

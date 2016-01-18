@@ -4,6 +4,7 @@ using KylinService.SysEnums;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace KylinService.Services.WelfareLottery
@@ -47,9 +48,11 @@ namespace KylinService.Services.WelfareLottery
             //获取福利开奖的任务计划集合
             ICollection scheduleList = WelfareLotterySchedulerManager.Schedulers.Values;
 
+            StringBuilder sbMessage = new StringBuilder();
+
             //输出待开奖数量及福利情况
             string message = string.Format("限时福利数据统计完成，今日共有 {0} 个福利等待开奖！分别是：", scheduleList.Count);
-            DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
+            sbMessage.AppendLine(message);
 
             foreach (var val in scheduleList)
             {
@@ -59,10 +62,12 @@ namespace KylinService.Services.WelfareLottery
 
                 var dueTime = welfare.LotteryTime - DateTime.Now;
 
-                string welPut = string.Format("【福利活动：{0}】将在{1}小时{2}分{3}秒后开奖", welfare.WelfareName, dueTime.Hours, dueTime.Minutes, dueTime.Seconds);
+                string welPut = string.Format("【福利活动：{0}】将在{1}小时{2}分{3}秒后[{4}]开奖", welfare.WelfareName, dueTime.Hours, dueTime.Minutes, dueTime.Seconds, welfare.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"));
 
-                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, welPut);
+                sbMessage.AppendLine(welPut);
             }
+
+            DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, sbMessage.ToString());
         }
     }
 }

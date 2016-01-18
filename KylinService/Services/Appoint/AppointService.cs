@@ -4,6 +4,7 @@ using KylinService.SysEnums;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace KylinService.Services.Appoint
@@ -44,7 +45,7 @@ namespace KylinService.Services.Appoint
 
             //将超时支付的订单写入计划任务
             if (null != lateNoPayList && lateNoPayList.Count > 0)
-            {   
+            {
                 foreach (var order in lateNoPayList)
                 {
                     if (null != order)
@@ -69,9 +70,11 @@ namespace KylinService.Services.Appoint
             //获取上門預約的任务计划集合
             ICollection scheduleList = AppointOrderLateSchedulerManager.Schedulers.Values;
 
+            StringBuilder sbMessage = new StringBuilder();
+
             //输出待自动处理的数量及订单情况
             string message = string.Format("上门预约订单数据统计完成，今日共有 {0} 个订单等待处理！分别是：", scheduleList.Count);
-            DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
+            sbMessage.AppendLine(message);
 
             foreach (var val in scheduleList)
             {
@@ -96,10 +99,12 @@ namespace KylinService.Services.Appoint
 
                 var dueTime = timeout - DateTime.Now;
 
-                string welPut = string.Format("【订单（{0}）：{1}】将在{2}小时{3}分{4}秒后{5}", order.OrderCode, order.BusinessName, dueTime.Hours, dueTime.Minutes, dueTime.Seconds, tips);
+                string welPut = string.Format("【订单（{0}）：{1}】将在{2}小时{3}分{4}秒后[{5}]{6}", order.OrderCode, order.BusinessName, dueTime.Hours, dueTime.Minutes, dueTime.Seconds, timeout.ToString("yyyy/MM/dd HH:mm:ss"), tips);
 
-                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, welPut);
+                sbMessage.AppendLine(welPut);
             }
+
+            DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, sbMessage.ToString());
         }
     }
 }

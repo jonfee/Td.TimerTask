@@ -80,9 +80,11 @@ namespace KylinService.Services.MallOrderLate
             //获取福利开奖的任务计划集合
             ICollection scheduleList = MallOrderLateSchedulerManager.Schedulers.Values;
 
+            StringBuilder sbMessage = new StringBuilder();
+
             //输出待开奖数量及福利情况
             string message = string.Format("商城订单数据统计完成，今日共有 {0} 个订单等待处理！分别是：", scheduleList.Count);
-            DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
+            sbMessage.AppendLine(message);
 
             foreach (var val in scheduleList)
             {
@@ -104,13 +106,15 @@ namespace KylinService.Services.MallOrderLate
                     timeout = MallOrderTimeCalculator.GetTimeoutTime(order, Config, MallOrderLateType.LateUserFinish);
                     tips = "自动确认收货";
                 }
-                
+
                 var dueTime = timeout - DateTime.Now;
 
-                string welPut = string.Format("【订单（{0}）：{1}】将在{2}小时{3}分{4}秒后开奖", order.OrderCode, order.ProductInfo, dueTime.Hours, dueTime.Minutes, dueTime.Seconds);
+                string welPut = string.Format("【订单（{0}）：{1}】将在{2}小时{3}分{4}秒后[{5}]{6}", order.OrderCode, order.ProductInfo, dueTime.Hours, dueTime.Minutes, dueTime.Seconds, timeout.ToString("yyyy/MM/dd HH:mm:ss"), tips);
 
-                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, welPut);
+                sbMessage.AppendLine(welPut);
             }
+
+            DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, sbMessage.ToString());
         }
     }
 }
