@@ -47,15 +47,15 @@ namespace KylinService.Services.WelfareLottery
         {
             if (null == phaseIds || Schedulers.Keys.Count < 1) return;
 
-            var scheduleIDs = Schedulers.Keys;
+            var akeys = new ArrayList(Schedulers.Keys);
 
-            foreach (var key in scheduleIDs)
+            for (int i = 0; i < akeys.Count; i++)
             {
-                var id = (long)key;
+                var id = (long)akeys[i];
 
                 if (!phaseIds.Contains(id))
                 {
-                    Schedulers.Remove(key);
+                    Schedulers.Remove(id);
                 }
             }
         }

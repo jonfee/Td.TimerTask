@@ -25,7 +25,7 @@ namespace KylinService.Data.Provider
                 var query = from p in db.Welfare_Phases
                             join w in db.Merchant_Welfare
                             on p.WelfareID equals w.WelfareID
-                            where p.Enabled == true && p.LotteryTime >= DateTime.Now && p.LotteryTime < lastTime
+                            where p.Enabled == true && p.LotteryTime > DateTime.Now && p.LotteryTime < lastTime
                             select new WelfareModel
                             {
                                 Enabled = p.Enabled,
