@@ -22,7 +22,7 @@ namespace KylinService.Services.Appoint
                 //计算自动取消订单时间的时间差
                 TimeSpan dueTime = baseTime - DateTime.Now;
 
-                if (dueTime < new TimeSpan(0)) return;
+                dueTime = dueTime.CheckPositive();
 
                 LateTimer = new System.Threading.Timer((obj) =>
                 {

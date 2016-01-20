@@ -160,6 +160,7 @@
     <Compile Include="Core\Loger\ErrorLoger.cs" />
     <Compile Include="Core\Loger\ExceptionLoger.cs" />
     <Compile Include="Core\Loger\ServerLoger.cs" />
+    <Compile Include="Core\Tools.cs" />
     <Compile Include="Data\Entity\KylinService_Business.cs" />
     <Compile Include="Data\Entity\KylinService_Order.cs" />
     <Compile Include="Data\Entity\Mall_Order.cs" />

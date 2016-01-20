@@ -24,7 +24,7 @@ namespace KylinService.Services.MallOrderLate
                     case SysEnums.MallOrderLateType.LateNoPayment:
                         if (order.OrderType == (int)SysEnums.MallOrderType.ShakeBuy && order.NeedPayTime.HasValue)
                         {
-                            timeout = order.NeedPayTime.Value.AddHours(config.WaitPaymentHours);
+                            timeout = order.NeedPayTime.Value;
                         }
                         else
                         {

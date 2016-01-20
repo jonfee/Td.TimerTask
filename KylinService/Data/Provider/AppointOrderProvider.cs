@@ -29,7 +29,7 @@ namespace KylinService.Data.Provider
                             (o.BusinessType == (int)AppointBusinessType.ShangMen && o.Status == (int)ShangMenOrderStatus.WorkerFinish)//上门服务且状态为服务人员已完成服务
                             || (o.BusinessType == (int)AppointBusinessType.YuYue && o.Status == (int)YuYueOrderStatus.WorkerFinish)//预约服务且状态为商家已完成服务
                             )
-                            && o.WorkerFinishTime.HasValue && o.WorkerFinishTime.Value.AddDays(lateDays) <= DateTime.Now
+                            && o.WorkerFinishTime.HasValue && o.WorkerFinishTime.Value.AddDays(lateDays).Date == DateTime.Now.Date && o.WorkerFinishTime.Value.AddDays(lateDays) >= DateTime.Now
                             select new AppointOrderModel
                             {
                                 ActualOrderAmount = o.ActualOrderAmount,
@@ -74,20 +74,20 @@ namespace KylinService.Data.Provider
                             where
                             (
                                 (
-                                    b.QuoteWays == (int)AppointQuoteWays.AtSubmit && o.CreateTime.AddMinutes(lateMinutes) <= DateTime.Now && //下单时计价 
+                                    b.QuoteWays == (int)AppointQuoteWays.AtSubmit && o.CreateTime.AddMinutes(lateMinutes).Date == DateTime.Now.Date && o.CreateTime.AddMinutes(lateMinutes) >= DateTime.Now && //下单时计价 
                                     (
                                         (o.BusinessType == (int)AppointBusinessType.ShangMen && o.Status == (int)ShangMenOrderStatus.WaitReceiving)//上门订单等待商家接单
                                         || (o.BusinessType == (int)AppointBusinessType.YuYue && o.Status == (int)YuYueOrderStatus.WaitReceiving)//预约订单与状态匹配
                                     )
-                                )//下单时计价，但已超时
+                                )//下单时计价，今天超时
                                 ||
                                 (
-                                    b.QuoteWays == (int)AppointQuoteWays.AtDoorComeOn && o.ConfirmTime.HasValue && o.ConfirmTime.Value.AddMinutes(lateMinutes) <= DateTime.Now &&
+                                    b.QuoteWays == (int)AppointQuoteWays.AtDoorComeOn && o.ConfirmTime.HasValue && o.ConfirmTime.Value.AddMinutes(lateMinutes).Date == DateTime.Now.Date && o.ConfirmTime.Value.AddMinutes(lateMinutes) >= DateTime.Now &&
                                     (
                                         (o.BusinessType == (int)AppointBusinessType.ShangMen && o.Status == (int)ShangMenOrderStatus.ConfirmStudio)//上门订单与状态匹配
                                         || (o.BusinessType == (int)AppointBusinessType.YuYue && o.Status == (int)YuYueOrderStatus.ConfirmStudio)//预约订单与状态匹配
                                     )
-                                )//上门时计价，且用户已确定服务方案，但已超时
+                                )//上门时计价，且用户已确定服务方案，今天超时
                             )
                             && o.PaiedTime.HasValue == false
                             select new AppointOrderModel

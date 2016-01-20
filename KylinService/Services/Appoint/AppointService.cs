@@ -99,6 +99,8 @@ namespace KylinService.Services.Appoint
 
                 var dueTime = timeout - DateTime.Now;
 
+                dueTime = dueTime.CheckPositive();
+
                 string welPut = string.Format("【订单（{0}）：{1}】将在{2}小时{3}分{4}秒后[{5}]{6}", order.OrderCode, order.BusinessName, dueTime.Hours, dueTime.Minutes, dueTime.Seconds, timeout.ToString("yyyy/MM/dd HH:mm:ss"), tips);
 
                 sbMessage.AppendLine(welPut);

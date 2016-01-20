@@ -38,6 +38,8 @@ namespace KylinService.Services.WelfareLottery
                 //计算离开奖时间的时间差
                 TimeSpan dueTime = Welfare.LotteryTime - DateTime.Now;
 
+                dueTime = dueTime.CheckPositive();
+
                 LotteryTimer = new System.Threading.Timer((obj) =>
                   {
                       //计划执行（开奖）

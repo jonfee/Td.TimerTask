@@ -10,22 +10,11 @@ namespace TestApplication
     {
         static void Main(string[] args)
         {
-            List<DateTime> OnTimes = new List<DateTime>();
+            TimeSpan dutTime = DateTime.Now.AddMinutes(-100) - DateTime.Now;
 
-            OnTimes.Add(new DateTime(4, 1, 11, 13, 30, 30));
-            OnTimes.Add(new DateTime(4, 1, 12, 13, 30, 30));
-            OnTimes.Add(new DateTime(4, 2, 11, 13, 30, 30));
-            OnTimes.Add(new DateTime(4, 2, 12, 13, 30, 30));
-            OnTimes.Add(new DateTime(4, 1, 12, 13, 30, 30));
-            OnTimes.Add(new DateTime(4, 2, 11, 13, 30, 30));
+            Tools.CheckPositive(ref dutTime);
 
-            OnTimes = Td.Task.Framework.TimerStrategyManager.SortAndDistinct(OnTimes);
-            OnTimes.TrimExcess();
-
-            foreach(var item in OnTimes)
-            {
-                Console.WriteLine(item.ToString("yyyy-MM-dd HH:mm:ss"));
-            }
+            Console.WriteLine(dutTime.Ticks);
 
             Console.ReadLine();
         }
