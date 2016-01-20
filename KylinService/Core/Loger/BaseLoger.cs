@@ -26,6 +26,8 @@ namespace KylinService.Core.Loger
         /// <param name="content"></param>
         protected void LogWrite(StringBuilder content)
         {
+            if (null == content) content = new StringBuilder();
+
             LogWrite(content.ToString());
         }
 

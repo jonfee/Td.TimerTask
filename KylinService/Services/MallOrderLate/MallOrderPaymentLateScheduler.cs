@@ -58,18 +58,18 @@ namespace KylinService.Services.MallOrderLate
 
                 if (cancelSuccess)
                 {
-                    message = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统已自动取消订单！", Order.OrderCode, Order.ProductInfo);
+                    message = string.Format("〖订单（{0}）：{1}〗因超时未付款，系统已自动取消订单！", Order.OrderCode, Order.ProductInfo);
                 }
                 else
                 {
-                    message = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", Order.OrderCode, Order.ProductInfo);
+                    message = string.Format("〖订单（{0}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", Order.OrderCode, Order.ProductInfo);
                 }
 
                 DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
             }
             catch (Exception ex)
             {
-                string errMsg = string.Format("〖订单（{0}}）：{1}〗自动取消订单失败，原因：{2}", Order.OrderCode, Order.ProductInfo, ex.Message);
+                string errMsg = string.Format("〖订单（{0}）：{1}〗自动取消订单失败，原因：{2}", Order.OrderCode, Order.ProductInfo, ex.Message);
                 DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, errMsg);
             }
         }

@@ -76,7 +76,7 @@ namespace KylinService.Services.WelfareLottery
 
                 if (DateTime.Now < lastWelfare.LotteryTime) throw new Exception("开奖时间未到，不能提前开奖！");
 
-                if (lastWelfare.PartNumber < 1) throw new Exception("没有报名参与的人员，不能开奖！");
+                //if (lastWelfare.PartNumber < 1) throw new Exception("没有报名参与的人员，不能开奖！");
 
                 #endregion
 

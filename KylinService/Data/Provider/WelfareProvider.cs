@@ -109,48 +109,56 @@ namespace KylinService.Data.Provider
 
                 var welfare = db.Merchant_Welfare.SingleOrDefault(p => p.WelfareID == phases.WelfareID);
 
-                var winners = db.Welfare_PartUser.Where(p => p.PhasesID == phasesID && partCodes.Contains(p.PartCode)).ToList();
-
                 //是否应立即自动领取
                 bool IsNowAward = welfare.WelfareType == (int)SysEnums.WelfareType.Coupon;
 
-                winners.ForEach((item) =>
+                //中奖人员集合
+                var winners = new List<Welfare_PartUser>();
+
+                #region 存在参与人员，才会有中奖名单
+                if (null != partCodes && partCodes.Length > 0)
                 {
-                    #region 更新中奖用户的参与信息
+                    winners = db.Welfare_PartUser.Where(p => p.PhasesID == phasesID && partCodes.Contains(p.PartCode)).ToList();
 
-                    item.IsWin = true;
-                    if (IsNowAward)
+                    winners.ForEach((item) =>
                     {
-                        item.IsAward = true;
-                        item.AwardTime = DateTime.Now;
-                    }
-                    #endregion
+                        #region 更新中奖用户的参与信息
 
-                    #region 将中奖的福利放入用户名下
-                    var userWelfare = new User_Welfare
-                    {
-                        AwardTime = IsNowAward ? item.AwardTime : null,
-                        ConsumerCode = ConsumerCodeGenerater.Instance.GetConsumerCode(),//消费码
-                        CreateTime = DateTime.Now,
-                        ExpiryEndTime = welfare.ExpiryEndTime,
-                        ExpiryStartTime = welfare.ExpiryStartTime,
-                        IsAward = IsNowAward,
-                        IsDelete = false,
-                        IsUsed = false,
-                        MerchantID = welfare.MerchantID,
-                        MerchantName = welfare.MerchantName,
-                        Name = welfare.Name,
-                        PartCode = item.PartCode,
-                        Picture = welfare.Picture,
-                        Tag = welfare.Tag,
-                        UserID = item.UserID,
-                        UseTime = null,
-                        WelfareID = welfare.WelfareID,
-                        WelfareType = welfare.WelfareType
-                    };
-                    db.User_Welfare.Add(userWelfare);
-                    #endregion
-                });
+                        item.IsWin = true;
+                        if (IsNowAward)
+                        {
+                            item.IsAward = true;
+                            item.AwardTime = DateTime.Now;
+                        }
+                        #endregion
+
+                        #region 将中奖的福利放入用户名下
+                        var userWelfare = new User_Welfare
+                        {
+                            AwardTime = IsNowAward ? item.AwardTime : null,
+                            ConsumerCode = ConsumerCodeGenerater.Instance.GetConsumerCode(),//消费码
+                            CreateTime = DateTime.Now,
+                            ExpiryEndTime = welfare.ExpiryEndTime,
+                            ExpiryStartTime = welfare.ExpiryStartTime,
+                            IsAward = IsNowAward,
+                            IsDelete = false,
+                            IsUsed = false,
+                            MerchantID = welfare.MerchantID,
+                            MerchantName = welfare.MerchantName,
+                            Name = welfare.Name,
+                            PartCode = item.PartCode,
+                            Picture = welfare.Picture,
+                            Tag = welfare.Tag,
+                            UserID = item.UserID,
+                            UseTime = null,
+                            WelfareID = welfare.WelfareID,
+                            WelfareType = welfare.WelfareType
+                        };
+                        db.User_Welfare.Add(userWelfare);
+                        #endregion
+                    });
+                }
+                #endregion
 
                 #region 更新福利信息
 

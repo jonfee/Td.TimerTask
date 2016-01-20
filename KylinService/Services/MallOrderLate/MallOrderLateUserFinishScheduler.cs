@@ -59,18 +59,18 @@ namespace KylinService.Services.MallOrderLate
 
                 if (receiptSuccess)
                 {
-                    message = string.Format("〖订单（{0}}）：{1}〗因超时未确认收货，系统已自动收货确认处理！", Order.OrderCode, Order.ProductInfo);
+                    message = string.Format("〖订单（{0}）：{1}〗因超时未确认收货，系统已自动收货确认处理！", Order.OrderCode, Order.ProductInfo);
                 }
                 else
                 {
-                    message = string.Format("〖订单（{0}}）：{1}〗因超时未确认收货，系统自动收货确认处理时操作失败！", Order.OrderCode, Order.ProductInfo);
+                    message = string.Format("〖订单（{0}）：{1}〗因超时未确认收货，系统自动收货确认处理时操作失败！", Order.OrderCode, Order.ProductInfo);
                 }
 
                 DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
             }
             catch (Exception ex)
             {
-                string errMsg = string.Format("〖订单（{0}}）：{1}〗自动完成收货失败，原因：{2}", Order.OrderCode, Order.ProductInfo, ex.Message);
+                string errMsg = string.Format("〖订单（{0}）：{1}〗自动完成收货失败，原因：{2}", Order.OrderCode, Order.ProductInfo, ex.Message);
                 DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, errMsg);
             }
         }
