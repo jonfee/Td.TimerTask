@@ -37,7 +37,7 @@ namespace KylinService.Services.MallOrderLate
                         schedule = new MallOrderPaymentLateScheduler(config, order, form, writeDelegate);
                         break;
                     case SysEnums.MallOrderLateType.LateUserFinish:
-                        schedule = new MallOrderPaymentLateScheduler(config, order, form, writeDelegate);
+                        schedule = new MallOrderLateUserFinishScheduler(config, order, form, writeDelegate);
                         break;
                 }
 
@@ -54,7 +54,7 @@ namespace KylinService.Services.MallOrderLate
                         Schedulers.Add(order.OrderID, new MallOrderPaymentLateScheduler(config, order, form, writeDelegate));
                         break;
                     case SysEnums.MallOrderLateType.LateUserFinish:
-                        Schedulers.Add(order.OrderID, new MallOrderPaymentLateScheduler(config, order, form, writeDelegate));
+                        Schedulers.Add(order.OrderID, new MallOrderLateUserFinishScheduler(config, order, form, writeDelegate));
                         break;
                 }
             }

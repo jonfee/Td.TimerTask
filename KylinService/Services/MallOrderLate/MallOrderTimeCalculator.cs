@@ -32,7 +32,10 @@ namespace KylinService.Services.MallOrderLate
                         }
                         break;
                     case SysEnums.MallOrderLateType.LateUserFinish:
-                        timeout = order.ShipTime.Value.AddDays(config.WaitReceiptGoodsDays);
+                        if (order.ShipTime.HasValue)
+                        {
+                            timeout = order.ShipTime.Value.AddDays(config.WaitReceiptGoodsDays);
+                        }
                         break;
                 }
             }

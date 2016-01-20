@@ -62,8 +62,6 @@ namespace KylinService.Services.WelfareLottery
 
             var lastWelfare = WelfareProvider.GetWelfare(Welfare.PhaseID);
 
-            string error = string.Empty;
-
             try
             {
                 #region //验证开奖的有效性

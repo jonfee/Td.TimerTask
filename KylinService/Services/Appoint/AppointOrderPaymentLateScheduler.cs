@@ -44,31 +44,39 @@ namespace KylinService.Services.Appoint
         {
             if (null == Order) return;
 
-            var lastOrder = AppointOrderProvider.GetAppointOrder(Order.OrderID);
+            try {
 
-            if (null == lastOrder) throw new Exception("订单信息已不存在！");
+                var lastOrder = AppointOrderProvider.GetAppointOrder(Order.OrderID);
 
-            if (!CheckAutoOk(lastOrder)) throw new Exception("订单状态已变更，不能自动取消订单！");
+                if (null == lastOrder) throw new Exception("订单信息已不存在！");
 
-            var lastTimeout = AppointOrderTimeCalculator.GetTimeoutTime(lastOrder, Config, SysEnums.AppointLateType.LateNoPayment);
+                if (!CheckAutoOk(lastOrder)) throw new Exception("订单状态已变更，不能自动取消订单！");
 
-            if (DateTime.Now < lastTimeout) throw new Exception("支付期限未到，不能自动取消订单！");
+                var lastTimeout = AppointOrderTimeCalculator.GetTimeoutTime(lastOrder, Config, SysEnums.AppointLateType.LateNoPayment);
 
-            //自动取消订单
-            bool success = AppointOrderProvider.AutoCancelOrder(Order.OrderID);
+                if (DateTime.Now < lastTimeout) throw new Exception("支付期限未到，不能自动取消订单！");
 
-            string message = string.Empty;
+                //自动取消订单
+                bool success = AppointOrderProvider.AutoCancelOrder(Order.OrderID);
 
-            if (success)
-            {
-                message = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统已自动取消订单！", Order.OrderCode, Order.BusinessName);
+                string message = string.Empty;
+
+                if (success)
+                {
+                    message = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统已自动取消订单！", Order.OrderCode, Order.BusinessName);
+                }
+                else
+                {
+                    message = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", Order.OrderCode, Order.BusinessName);
+                }
+
+                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
             }
-            else
+            catch (Exception ex)
             {
-                message = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", Order.OrderCode, Order.BusinessName);
+                string errMsg = string.Format("〖订单（{0}}）：{1}〗自动取消订单失败，原因：{2}", Order.OrderCode, Order.BusinessName, ex.Message);
+                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, errMsg);
             }
-
-            DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
         }
 
         /// <summary>

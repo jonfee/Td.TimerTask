@@ -40,31 +40,39 @@ namespace KylinService.Services.MallOrderLate
         {
             if (null == Order) return;
 
-            var lastOrder = MallOrderProvider.GetOrder(Order.OrderID);
-
-            if (null == lastOrder) throw new Exception("订单信息已不存在！");
-
-            if (!CheckAutoOk(lastOrder)) throw new Exception("订单状态已发生变更，不能自动完成收货！");
-
-            var lastTimeout = MallOrderTimeCalculator.GetTimeoutTime(Order, Config, SysEnums.MallOrderLateType.LateUserFinish);
-
-            if (DateTime.Now < lastTimeout) throw new Exception("确认收货期限未到，不能自动完成收货！");
-
-            //自动收货确认
-            bool receiptSuccess = MallOrderProvider.AutoReceiptGoods(Order.OrderID);
-
-            string message = string.Empty;
-
-            if (receiptSuccess)
+            try
             {
-                message = string.Format("〖订单（{0}}）：{1}〗因超时未确认收货，系统已自动收货确认处理！", Order.OrderCode, Order.ProductInfo);
-            }
-            else
-            {
-                message = string.Format("〖订单（{0}}）：{1}〗因超时未确认收货，系统自动收货确认处理时操作失败！", Order.OrderCode, Order.ProductInfo);
-            }
+                var lastOrder = MallOrderProvider.GetOrder(Order.OrderID);
 
-            DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
+                if (null == lastOrder) throw new Exception("订单信息已不存在！");
+
+                if (!CheckAutoOk(lastOrder)) throw new Exception("订单状态已发生变更，不能自动完成收货！");
+
+                var lastTimeout = MallOrderTimeCalculator.GetTimeoutTime(Order, Config, SysEnums.MallOrderLateType.LateUserFinish);
+
+                if (DateTime.Now < lastTimeout) throw new Exception("确认收货期限未到，不能自动完成收货！");
+
+                //自动收货确认
+                bool receiptSuccess = MallOrderProvider.AutoReceiptGoods(Order.OrderID);
+
+                string message = string.Empty;
+
+                if (receiptSuccess)
+                {
+                    message = string.Format("〖订单（{0}}）：{1}〗因超时未确认收货，系统已自动收货确认处理！", Order.OrderCode, Order.ProductInfo);
+                }
+                else
+                {
+                    message = string.Format("〖订单（{0}}）：{1}〗因超时未确认收货，系统自动收货确认处理时操作失败！", Order.OrderCode, Order.ProductInfo);
+                }
+
+                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
+            }
+            catch (Exception ex)
+            {
+                string errMsg = string.Format("〖订单（{0}}）：{1}〗自动完成收货失败，原因：{2}", Order.OrderCode, Order.ProductInfo, ex.Message);
+                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, errMsg);
+            }
         }
 
         /// <summary>

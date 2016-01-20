@@ -55,7 +55,7 @@ namespace KylinService.Services.Appoint
                         Schedulers.Add(order.OrderID, new AppointOrderPaymentLateScheduler(config, order, form, writeDelegate));
                         break;
                     case SysEnums.AppointLateType.LateUserFinish:
-                        Schedulers.Add(order.OrderID, new AppointOrderPaymentLateScheduler(config, order, form, writeDelegate));
+                        Schedulers.Add(order.OrderID, new AppointOrderUserFinishLateScheduler(config, order, form, writeDelegate));
                         break;
                 }
             }

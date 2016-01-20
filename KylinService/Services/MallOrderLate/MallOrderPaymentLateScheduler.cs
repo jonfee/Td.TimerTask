@@ -40,30 +40,37 @@ namespace KylinService.Services.MallOrderLate
         {
             if (null == Order) return;
 
-            var lastOrder = MallOrderProvider.GetOrder(Order.OrderID);
+            try {
+                var lastOrder = MallOrderProvider.GetOrder(Order.OrderID);
 
-            if (null == lastOrder) throw new Exception("订单信息已不存在！");
+                if (null == lastOrder) throw new Exception("订单信息已不存在！");
 
-            if (!CheckAutoOk(lastOrder)) throw new Exception("当前订单状态发生变更，不能自动取消订单");
+                if (!CheckAutoOk(lastOrder)) throw new Exception("当前订单状态发生变更，不能自动取消订单");
 
-            var lastTimeout = MallOrderTimeCalculator.GetTimeoutTime(Order, Config, SysEnums.MallOrderLateType.LateNoPayment);
+                var lastTimeout = MallOrderTimeCalculator.GetTimeoutTime(Order, Config, SysEnums.MallOrderLateType.LateNoPayment);
 
-            if (DateTime.Now < lastTimeout) throw new Exception("支付期限未到，不能自动取消订单！");
+                if (DateTime.Now < lastTimeout) throw new Exception("支付期限未到，不能自动取消订单！");
 
-            //自动取消订单
-            bool cancelSuccess = MallOrderProvider.AutoCancelOrder(Order.OrderID);
+                //自动取消订单
+                bool cancelSuccess = MallOrderProvider.AutoCancelOrder(Order.OrderID);
 
-            if (cancelSuccess)
-            {
-                string cancelSuccMessage = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统已自动取消订单！", Order.OrderCode, Order.ProductInfo);
+                string message = string.Empty;
 
-                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, cancelSuccMessage);
+                if (cancelSuccess)
+                {
+                    message = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统已自动取消订单！", Order.OrderCode, Order.ProductInfo);
+                }
+                else
+                {
+                    message = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", Order.OrderCode, Order.ProductInfo);
+                }
+
+                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
             }
-            else
+            catch (Exception ex)
             {
-                string cancelFailMessage = string.Format("〖订单（{0}}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", Order.OrderCode, Order.ProductInfo);
-
-                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, cancelFailMessage);
+                string errMsg = string.Format("〖订单（{0}}）：{1}〗自动取消订单失败，原因：{2}", Order.OrderCode, Order.ProductInfo, ex.Message);
+                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, errMsg);
             }
         }
 
