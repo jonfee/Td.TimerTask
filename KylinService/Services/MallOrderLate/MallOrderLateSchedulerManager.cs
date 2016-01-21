@@ -1,8 +1,5 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Model;
-using System;
-using System.Collections;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace KylinService.Services.MallOrderLate
@@ -10,10 +7,32 @@ namespace KylinService.Services.MallOrderLate
     /// <summary>
     /// 订单处理任务计划管理
     /// </summary>
-    public class MallOrderLateSchedulerManager
+    public class MallOrderLateSchedulerManager:BaseSchedulerManager
     {
-        //任务计划集合
-        public static Hashtable Schedulers = Hashtable.Synchronized(new Hashtable());
+        private static MallOrderLateSchedulerManager _instance;
+
+        private readonly static object myLock = new object();
+
+        public static MallOrderLateSchedulerManager Instance
+        {
+            get
+            {
+                if (null == _instance)
+                {
+                    lock (myLock)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new MallOrderLateSchedulerManager();
+                        }
+                    }
+                }
+
+                return _instance;
+            }
+        }
+
+        private MallOrderLateSchedulerManager() { }
 
         /// <summary>
         /// 开始一个订单处理任务计划
@@ -22,7 +41,7 @@ namespace KylinService.Services.MallOrderLate
         /// <param name="order"></param>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public static void StartScheduler(SysEnums.MallOrderLateType lateType, OrderLateConfig config, MallOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
+        public void StartScheduler(SysEnums.MallOrderLateType lateType, OrderLateConfig config, MallOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
         {
             if (Schedulers.ContainsKey(order.OrderID))
             {
@@ -56,27 +75,6 @@ namespace KylinService.Services.MallOrderLate
                     case SysEnums.MallOrderLateType.LateUserFinish:
                         Schedulers.Add(order.OrderID, new MallOrderLateUserFinishScheduler(config, order, form, writeDelegate));
                         break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 校正任务计划列表，将无效的计划移除
-        /// </summary>
-        /// <param name="orderIds"></param>
-        public static void CheckScheduler(long[] orderIds)
-        {
-            if (null == orderIds || Schedulers.Keys.Count < 1) return;
-
-            var akeys = new ArrayList(Schedulers.Keys);
-
-            for (int i = 0; i < akeys.Count; i++)
-            {
-                var id = (long)akeys[i];
-
-                if (!orderIds.Contains(id))
-                {
-                    Schedulers.Remove(id);
                 }
             }
         }

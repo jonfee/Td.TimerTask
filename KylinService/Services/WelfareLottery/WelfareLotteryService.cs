@@ -34,15 +34,19 @@ namespace KylinService.Services.WelfareLottery
             //写入开奖计划任务
             if (null != list && list.Count > 0)
             {
-                WelfareLotterySchedulerManager.CheckScheduler(list.Select(p => p.PhaseID).ToArray());
+                WelfareLotterySchedulerManager.Instance.CheckScheduler(list.Select(p => p.PhaseID).ToArray());
 
                 foreach (var welfare in list)
                 {
                     if (null != welfare)
                     {
-                        WelfareLotterySchedulerManager.StartScheduler(welfare, this.CurrentForm, this.WriteDelegate);
+                        WelfareLotterySchedulerManager.Instance.StartScheduler(welfare, this.CurrentForm, this.WriteDelegate);
                     }
                 }
+            }
+            else
+            {
+                WelfareLotterySchedulerManager.Instance.Clear();
             }
 
             //获取福利开奖的任务计划集合

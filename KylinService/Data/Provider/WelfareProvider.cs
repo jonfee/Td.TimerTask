@@ -110,7 +110,7 @@ namespace KylinService.Data.Provider
                 var welfare = db.Merchant_Welfare.SingleOrDefault(p => p.WelfareID == phases.WelfareID);
 
                 //是否应立即自动领取
-                bool IsNowAward = welfare.WelfareType == (int)SysEnums.WelfareType.Coupon;
+                bool isNowAward = welfare.WelfareType == (int)SysEnums.WelfareType.Coupon;
 
                 //中奖人员集合
                 var winners = new List<Welfare_PartUser>();
@@ -125,7 +125,7 @@ namespace KylinService.Data.Provider
                         #region 更新中奖用户的参与信息
 
                         item.IsWin = true;
-                        if (IsNowAward)
+                        if (isNowAward)
                         {
                             item.IsAward = true;
                             item.AwardTime = DateTime.Now;
@@ -135,12 +135,12 @@ namespace KylinService.Data.Provider
                         #region 将中奖的福利放入用户名下
                         var userWelfare = new User_Welfare
                         {
-                            AwardTime = IsNowAward ? item.AwardTime : null,
+                            AwardTime = isNowAward ? item.AwardTime : null,
                             ConsumerCode = ConsumerCodeGenerater.Instance.GetConsumerCode(),//消费码
                             CreateTime = DateTime.Now,
                             ExpiryEndTime = welfare.ExpiryEndTime,
                             ExpiryStartTime = welfare.ExpiryStartTime,
-                            IsAward = IsNowAward,
+                            IsAward = isNowAward,
                             IsDelete = false,
                             IsUsed = false,
                             MerchantID = welfare.MerchantID,
@@ -157,6 +157,8 @@ namespace KylinService.Data.Provider
                         db.User_Welfare.Add(userWelfare);
                         #endregion
                     });
+
+                    if (null != winners && winners.Count > 0) db.Welfare_PartUser.AttachRange(winners);
                 }
                 #endregion
 
@@ -165,7 +167,7 @@ namespace KylinService.Data.Provider
                 //中奖人数
                 phases.WinNumber = winners.Count;
                 //领取人数
-                if (IsNowAward)
+                if (isNowAward)
                 {
                     phases.AcceptNumber = winners.Count;
                 }
@@ -178,7 +180,7 @@ namespace KylinService.Data.Provider
                 //总中奖人数
                 welfare.WinNumber += winners.Count;
                 //总领取人数
-                if (IsNowAward)
+                if (isNowAward)
                 {
                     welfare.DrawNumber += winners.Count;
                 }

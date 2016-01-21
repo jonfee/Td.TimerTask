@@ -50,31 +50,38 @@ namespace KylinService.Services.MallOrderLate
 
             var orderIDs = nopayList.Union(noconfirmReceiptGoodsList).Select(p => p.OrderID).ToArray();
 
-            //校正计划列表
-            MallOrderLateSchedulerManager.CheckScheduler(orderIDs);
-
-            //超时未支付的订单写入计划任务
-            if (null != nopayList && nopayList.Count > 0)
+            if (null != orderIDs && orderIDs.Length > 0)
             {
-                foreach (var order in nopayList)
+                //校正计划列表
+                MallOrderLateSchedulerManager.Instance.CheckScheduler(orderIDs);
+
+                //超时未支付的订单写入计划任务
+                if (null != nopayList && nopayList.Count > 0)
                 {
-                    if (null != order)
+                    foreach (var order in nopayList)
                     {
-                        MallOrderLateSchedulerManager.StartScheduler(SysEnums.MallOrderLateType.LateNoPayment, this.Config, order, this.CurrentForm, this.WriteDelegate);
+                        if (null != order)
+                        {
+                            MallOrderLateSchedulerManager.Instance.StartScheduler(SysEnums.MallOrderLateType.LateNoPayment, this.Config, order, this.CurrentForm, this.WriteDelegate);
+                        }
+                    }
+                }
+
+                //超时未确认收货的订单写入计划任务
+                if (null != noconfirmReceiptGoodsList && noconfirmReceiptGoodsList.Count > 0)
+                {
+                    foreach (var order in noconfirmReceiptGoodsList)
+                    {
+                        if (null != order)
+                        {
+                            MallOrderLateSchedulerManager.Instance.StartScheduler(SysEnums.MallOrderLateType.LateUserFinish, this.Config, order, this.CurrentForm, this.WriteDelegate);
+                        }
                     }
                 }
             }
-
-            //超时未确认收货的订单写入计划任务
-            if (null != noconfirmReceiptGoodsList && noconfirmReceiptGoodsList.Count > 0)
+            else
             {
-                foreach (var order in noconfirmReceiptGoodsList)
-                {
-                    if (null != order)
-                    {
-                        MallOrderLateSchedulerManager.StartScheduler(SysEnums.MallOrderLateType.LateUserFinish, this.Config, order, this.CurrentForm, this.WriteDelegate);
-                    }
-                }
+                MallOrderLateSchedulerManager.Instance.Clear();
             }
 
             //获取福利开奖的任务计划集合
@@ -83,7 +90,7 @@ namespace KylinService.Services.MallOrderLate
             StringBuilder sbMessage = new StringBuilder();
 
             //输出待开奖数量及福利情况
-            string message = string.Format("商城订单数据统计完成，今日共有 {0} 个订单等待处理！分别是：", scheduleList.Count);
+            string message = string.Format("商城订单数据统计完成，今日共有 {0} 个订单等待处理！{1}", scheduleList.Count, scheduleList.Count > 0 ? "分别是：" : "");
             sbMessage.AppendLine(message);
 
             foreach (var val in scheduleList)

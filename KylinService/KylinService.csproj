@@ -182,6 +182,7 @@
     <Compile Include="Services\Appoint\AppointOrderUserFinishLateScheduler.cs" />
     <Compile Include="Services\Appoint\AppointService.cs" />
     <Compile Include="Services\Appoint\BaseAppointOrderLateScheduler.cs" />
+    <Compile Include="Services\BaseSchedulerManager.cs" />
     <Compile Include="Services\MallOrderLate\BaseMallOrderLateScheduler.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateConfigManager.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateSchedulerManager.cs" />

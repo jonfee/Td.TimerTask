@@ -10,10 +10,32 @@ namespace KylinService.Services.Appoint
     /// <summary>
     /// 上门预约订单逾期处理任务计划管理
     /// </summary>
-    public class AppointOrderLateSchedulerManager
+    public class AppointOrderLateSchedulerManager : BaseSchedulerManager
     {
-        //任务计划集合
-        public static Hashtable Schedulers = Hashtable.Synchronized(new Hashtable());
+        private static AppointOrderLateSchedulerManager _instance;
+
+        private readonly static object myLock = new object();
+
+        public static AppointOrderLateSchedulerManager Instance
+        {
+            get
+            {
+                if (null == _instance)
+                {
+                    lock (myLock)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new AppointOrderLateSchedulerManager();
+                        }
+                    }
+                }
+
+                return _instance;
+            }
+        }
+
+        private AppointOrderLateSchedulerManager() { }
 
         /// <summary>
         /// 开始一个订单处理任务计划
@@ -23,7 +45,7 @@ namespace KylinService.Services.Appoint
         /// <param name="order"></param>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public static void StartScheduler(SysEnums.AppointLateType lateType, AppointConfig config, AppointOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
+        public void StartScheduler(SysEnums.AppointLateType lateType, AppointConfig config, AppointOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
         {
             if (Schedulers.ContainsKey(order.OrderID))
             {
@@ -57,27 +79,6 @@ namespace KylinService.Services.Appoint
                     case SysEnums.AppointLateType.LateUserFinish:
                         Schedulers.Add(order.OrderID, new AppointOrderUserFinishLateScheduler(config, order, form, writeDelegate));
                         break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 校正任务计划列表，将无效的计划移除
-        /// </summary>
-        /// <param name="orderIds"></param>
-        public static void CheckScheduler(long[] orderIds)
-        {
-            if (null == orderIds || Schedulers.Keys.Count < 1) return;
-
-            var akeys = new ArrayList(Schedulers.Keys);
-
-            for (int i = 0; i < akeys.Count; i++)
-            {
-                var id = (long)akeys[i];
-
-                if (!orderIds.Contains(id))
-                {
-                    Schedulers.Remove(id);
                 }
             }
         }

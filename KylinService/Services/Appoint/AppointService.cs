@@ -40,31 +40,38 @@ namespace KylinService.Services.Appoint
 
             var orderIDs = lateNoPayList.Select(p => p.OrderID).Concat(lateUserFinishList.Select(p => p.OrderID)).ToArray();
 
-            //校正任务列表
-            AppointOrderLateSchedulerManager.CheckScheduler(orderIDs);
-
-            //将超时支付的订单写入计划任务
-            if (null != lateNoPayList && lateNoPayList.Count > 0)
+            if (null != orderIDs && orderIDs.Length > 0)
             {
-                foreach (var order in lateNoPayList)
+                //校正任务列表
+                AppointOrderLateSchedulerManager.Instance.CheckScheduler(orderIDs);
+
+                //将超时支付的订单写入计划任务
+                if (null != lateNoPayList && lateNoPayList.Count > 0)
                 {
-                    if (null != order)
+                    foreach (var order in lateNoPayList)
                     {
-                        AppointOrderLateSchedulerManager.StartScheduler(AppointLateType.LateNoPayment, this.Config, order, this.CurrentForm, this.WriteDelegate);
+                        if (null != order)
+                        {
+                            AppointOrderLateSchedulerManager.Instance.StartScheduler(AppointLateType.LateNoPayment, this.Config, order, this.CurrentForm, this.WriteDelegate);
+                        }
+                    }
+                }
+
+                //将超时未确认服务完成的订单写入计划任务
+                if (null != lateUserFinishList && lateUserFinishList.Count > 0)
+                {
+                    foreach (var order in lateUserFinishList)
+                    {
+                        if (null != order)
+                        {
+                            AppointOrderLateSchedulerManager.Instance.StartScheduler(AppointLateType.LateUserFinish, this.Config, order, this.CurrentForm, this.WriteDelegate);
+                        }
                     }
                 }
             }
-
-            //将超时未确认服务完成的订单写入计划任务
-            if (null != lateUserFinishList && lateUserFinishList.Count > 0)
+            else
             {
-                foreach (var order in lateUserFinishList)
-                {
-                    if (null != order)
-                    {
-                        AppointOrderLateSchedulerManager.StartScheduler(AppointLateType.LateUserFinish, this.Config, order, this.CurrentForm, this.WriteDelegate);
-                    }
-                }
+                AppointOrderLateSchedulerManager.Instance.Clear();
             }
 
             //获取上門預約的任务计划集合
@@ -73,7 +80,7 @@ namespace KylinService.Services.Appoint
             StringBuilder sbMessage = new StringBuilder();
 
             //输出待自动处理的数量及订单情况
-            string message = string.Format("上门预约订单数据统计完成，今日共有 {0} 个订单等待处理！分别是：", scheduleList.Count);
+            string message = string.Format("上门预约订单数据统计完成，今日共有 {0} 个订单等待处理！{1}", scheduleList.Count, scheduleList.Count > 0 ? "分别是：" : "");
             sbMessage.AppendLine(message);
 
             foreach (var val in scheduleList)
