@@ -53,9 +53,7 @@ namespace KylinService.Services.WelfareLottery
 
                     for (var i = 0; i < _lotteryNumber; i++)
                     {
-                        int maxIndex = tempCodes.Count() - 1;
-
-                        int index = new Random(Guid.NewGuid().GetHashCode()).Next(0, maxIndex);
+                        int index = new Random(Guid.NewGuid().GetHashCode()).Next(0, tempCodes.Count());
 
                         lotteryCodeArr[i] = tempCodes.ElementAt(index);
 

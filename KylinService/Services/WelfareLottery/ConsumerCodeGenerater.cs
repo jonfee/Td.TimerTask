@@ -19,7 +19,13 @@ namespace KylinService.Services.WelfareLottery
         /// <summary>
         /// 默认初始标识号
         /// </summary>
-        private static long _initTagNo = 1008;
+        private static long _initTagNo
+        {
+            get
+            {
+                return new Random(Guid.NewGuid().GetHashCode()).Next(100001, 199999);
+            }
+        }
 
         /// <summary>
         /// 当前标识号
