@@ -26,7 +26,7 @@ namespace KylinService.Services
         /// <summary>
         /// 定义一个线程
         /// </summary>
-        public Thread CurrentThread;
+        public Thread CurrentThread { get; private set; }
 
         /// <summary>
         /// 执行程序
