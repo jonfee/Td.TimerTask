@@ -58,6 +58,8 @@ namespace KylinService.Services.WelfareLottery
                         lotteryCodeArr[i] = tempCodes.ElementAt(index);
 
                         tempCodes.RemoveAt(index);
+
+                        tempCodes.TrimExcess();
                     }
                 }
 

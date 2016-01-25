@@ -25,7 +25,7 @@ namespace KylinService.Services.MallOrderLate
 
                 LateTimer = new System.Threading.Timer((obj) =>
                 {
-                    //计划执行（开奖）
+                    //计划执行
                     this.Start();
 
                     LateTimer.Change(Timeout.Infinite, Timeout.Infinite);
