@@ -47,12 +47,11 @@ namespace KylinService.Services.WelfareLottery
                   {
                       //计划执行（开奖）
                       this.Start();
-
-                      LotteryTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                      
                       LotteryTimer.Dispose();
                       LotteryTimer = null;
 
-                  }, null, dueTime, dueTime);
+                  }, null, (int)Math.Ceiling(dueTime.TotalMilliseconds), Timeout.Infinite);
             }
         }
 

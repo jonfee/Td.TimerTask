@@ -28,12 +28,11 @@ namespace KylinService.Services.Appoint
                 {
                     //计划执行
                     this.Start();
-
-                    LateTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                    
                     LateTimer.Dispose();
                     LateTimer = null;
 
-                }, null, dueTime, dueTime);
+                }, null, (int)Math.Ceiling(dueTime.TotalMilliseconds), Timeout.Infinite);
             }
         }
 
