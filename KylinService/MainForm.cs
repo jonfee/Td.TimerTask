@@ -12,6 +12,8 @@ using KylinService.Core.Loger;
 using KylinService.Services.ShakeDayTimes;
 using KylinService.Services.WelfareLottery;
 using KylinService.Services.Appoint;
+using Td.Cache.Redis;
+using KylinService.Redis;
 
 namespace KylinService
 {
@@ -22,6 +24,9 @@ namespace KylinService
             InitializeComponent();
 
             Init();
+
+            //Redis注册
+            RedisInjection.UseRedis(RedisConfigManager.Config.ConnectString);
         }
 
         private string _serTname = "lbServer_";     //服务类型名称展示控件标识

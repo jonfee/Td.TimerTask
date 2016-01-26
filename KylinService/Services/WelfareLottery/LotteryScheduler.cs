@@ -2,6 +2,8 @@
 using KylinService.Data.Entity;
 using KylinService.Data.Model;
 using KylinService.Data.Provider;
+using KylinService.Redis;
+using KylinService.Redis.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Td.Cache.Redis;
 
 namespace KylinService.Services.WelfareLottery
 {
@@ -60,10 +63,12 @@ namespace KylinService.Services.WelfareLottery
         {
             if (null == Welfare) return;
 
-            var lastWelfare = WelfareProvider.GetWelfare(Welfare.PhaseID);
+            WelfareWinnerContent pushContent = null;
 
             try
             {
+                var lastWelfare = WelfareProvider.GetWelfare(Welfare.PhaseID);
+
                 #region //验证开奖的有效性
 
                 if (null == lastWelfare) throw new Exception("福利信息已不存在！");
@@ -105,9 +110,9 @@ namespace KylinService.Services.WelfareLottery
 
                 #region //写入中奖结果
 
-                bool success = WelfareProvider.WriteLotteryResult(Welfare.PhaseID, winnerPartCodes);
+                pushContent = WelfareProvider.WriteLotteryResult(Welfare.PhaseID, winnerPartCodes);
 
-                if (success)
+                if (null != pushContent)
                 {
                     string sucMessage = string.Format("〖福利：{0}〗已开奖，本次共有 {1} 名参与人员中奖！", Welfare.WelfareName, winnerPartCodes.Count());
 
@@ -123,6 +128,25 @@ namespace KylinService.Services.WelfareLottery
             catch (Exception ex)
             {
                 DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, ex.Message);
+            }
+
+            if (null != pushContent)
+            {
+                try
+                {
+                    var keyDb = RedisConfigManager.GetSaveKeyDbConfig(SysEnums.RedisSaveType.WelfareLottery);
+
+                    if (null != keyDb)
+                    {
+                        var db = RedisManager.Redis.GetDatabase(keyDb.DBindex);
+
+                        db.ListRightPush(keyDb.Key, pushContent);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, ex.Message);
+                }
             }
         }
     }

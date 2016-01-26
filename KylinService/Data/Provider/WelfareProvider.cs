@@ -1,5 +1,6 @@
 ﻿using KylinService.Data.Entity;
 using KylinService.Data.Model;
+using KylinService.Redis.Models;
 using KylinService.Services.WelfareLottery;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,7 @@ namespace KylinService.Data.Provider
         /// </summary>
         /// <param name="phasesID"></param>
         /// <param name="partCodes"></param>
-        public static bool WriteLotteryResult(long phasesID, string[] partCodes)
+        public static WelfareWinnerContent WriteLotteryResult(long phasesID, string[] partCodes)
         {
             using (var db = new DataContext())
             {
@@ -192,7 +193,24 @@ namespace KylinService.Data.Provider
 
                 #endregion
 
-                return db.SaveChanges() > 0;
+                if (db.SaveChanges() > 0)
+                {
+                    return new WelfareWinnerContent
+                    {
+                        LolleryTime = phases.LotteryTime,
+                        MerchantID = welfare.MerchantID,
+                        MerchantName = welfare.MerchantName,
+                        UserIDs = winners.Select(p => p.UserID).ToArray(),
+                        WelfareID = phases.WelfareID,
+                        WelfareName = welfare.Name,
+                        WelfarePhaseID = phases.PhasesID,
+                        WelfareType = phases.WelfareType
+                    };
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }
