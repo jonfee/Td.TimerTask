@@ -1,5 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Model;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace KylinService.Services.MallOrderLate
@@ -46,6 +47,8 @@ namespace KylinService.Services.MallOrderLate
             if (Schedulers.ContainsKey(order.OrderID))
             {
                 var schedule = Schedulers[order.OrderID] as BaseMallOrderLateScheduler;
+                schedule.LateTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                schedule.LateTimer.Dispose();
 
                 var oldTimeout = MallOrderTimeCalculator.GetTimeoutTime(schedule.Order, config, lateType);
                 var newTimeout = MallOrderTimeCalculator.GetTimeoutTime(order, config, lateType);

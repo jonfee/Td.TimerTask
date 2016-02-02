@@ -3,6 +3,7 @@ using KylinService.Data.Model;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace KylinService.Services.Appoint
@@ -50,6 +51,8 @@ namespace KylinService.Services.Appoint
             if (Schedulers.ContainsKey(order.OrderID))
             {
                 var schedule = Schedulers[order.OrderID] as BaseAppointOrderLateScheduler;
+                schedule.LateTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                schedule.LateTimer.Dispose();
 
                 var oldTimeout = AppointOrderTimeCalculator.GetTimeoutTime(schedule.Order, config, lateType);
                 var newTimeout = AppointOrderTimeCalculator.GetTimeoutTime(order, config, lateType);

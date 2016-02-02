@@ -1,5 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Model;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace KylinService.Services.WelfareLottery
@@ -48,6 +49,8 @@ namespace KylinService.Services.WelfareLottery
 
                 if (welfare.LotteryTime != oldSchedule.Welfare.LotteryTime)
                 {
+                    oldSchedule.LotteryTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                    oldSchedule.LotteryTimer.Dispose();
                     oldSchedule = new LotteryScheduler(welfare, form, writeDelegate);
                     Schedulers[welfare.PhaseID] = oldSchedule;
                 }

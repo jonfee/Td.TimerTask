@@ -47,7 +47,7 @@ namespace KylinService.Services.WelfareLottery
                   {
                       //计划执行（开奖）
                       this.Start();
-                      
+
                       LotteryTimer.Dispose();
                       LotteryTimer = null;
 
@@ -79,6 +79,8 @@ namespace KylinService.Services.WelfareLottery
                 if (lastWelfare.Enabled == false) throw new Exception("福利已被下架，不能开奖！");
 
                 if (DateTime.Now < lastWelfare.LotteryTime) throw new Exception("开奖时间未到，不能提前开奖！");
+
+                if (lastWelfare.WinNumber > 0) throw new Exception("福利活动不能重复开奖！");
 
                 //if (lastWelfare.PartNumber < 1) throw new Exception("没有报名参与的人员，不能开奖！");
 
