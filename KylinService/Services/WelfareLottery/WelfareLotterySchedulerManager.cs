@@ -43,23 +43,23 @@ namespace KylinService.Services.WelfareLottery
         /// <param name="writeDelegate"></param>
         public void StartScheduler(WelfareModel welfare, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
         {
-            if (Schedulers.ContainsKey(welfare.PhaseID))
+            if (Schedulers.ContainsKey(welfare.WelfareID))
             {
-                var oldSchedule = Schedulers[welfare.PhaseID] as LotteryScheduler;
+                var oldSchedule = Schedulers[welfare.WelfareID] as LotteryScheduler;
 
                 if (welfare.LotteryTime != oldSchedule.Welfare.LotteryTime)
                 {
                     oldSchedule.LotteryTimer.Change(Timeout.Infinite, Timeout.Infinite);
                     oldSchedule.LotteryTimer.Dispose();
                     oldSchedule = new LotteryScheduler(welfare, form, writeDelegate);
-                    Schedulers[welfare.PhaseID] = oldSchedule;
+                    Schedulers[welfare.WelfareID] = oldSchedule;
                 }
             }
             else
             {
                 var schedule = new LotteryScheduler(welfare, form, writeDelegate);
 
-                Schedulers.Add(welfare.PhaseID, schedule);
+                Schedulers.Add(welfare.WelfareID, schedule);
             }
         }
     }

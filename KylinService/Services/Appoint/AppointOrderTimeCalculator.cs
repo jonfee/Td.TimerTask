@@ -1,6 +1,7 @@
 ﻿using KylinService.Data.Model;
 using KylinService.SysEnums;
 using System;
+using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Services.Appoint
 {
@@ -23,11 +24,11 @@ namespace KylinService.Services.Appoint
                 switch (lateType)
                 {
                     case AppointLateType.LateNoPayment:
-                        if (order.QuoteWays == (int)AppointQuoteWays.AtSubmit)
+                        if (order.QuoteWays == (int)BusinessServiceQuote.WhenOrder)
                         {
                             timeout = order.CreateTime.AddMinutes(config.PaymentWaitMinutes);
                         }
-                        else if (order.QuoteWays == (int)AppointQuoteWays.AtDoorComeOn && order.ConfirmTime.HasValue)
+                        else if (order.QuoteWays == (int)BusinessServiceQuote.WhenMeeting)
                         {
                             timeout = order.ConfirmTime.Value.AddMinutes(config.PaymentWaitMinutes);
                         }

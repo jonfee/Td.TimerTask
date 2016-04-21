@@ -9,26 +9,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KylinService.Services.MallOrderLate
+namespace KylinService.Services.MerchantOrderLate
 {
     /// <summary>
-    /// 商城订单处理服务
+    /// 商家订单处理服务
     /// </summary>
-    public class MallOrderService : BaseService
+    public class MerchantOrderService : BaseService
     {
         /// <summary>
         /// 配置
         /// </summary>
-        private B2COrderLateConfig Config;
+        private MerchantOrderLateConfig Config;
 
         /// <summary>
         /// 订单
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public MallOrderService(B2COrderLateConfig config, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(form, writeDelegate)
-        {
-            this.ServiceType = ScheduleType.MallOrderLate.ToString();
+        public MerchantOrderService(MerchantOrderLateConfig config, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(form, writeDelegate)
+        { 
+            this.ServiceType = ScheduleType.MerchantOrderLate.ToString();
 
             this.Config = config;
         }
@@ -43,17 +43,17 @@ namespace KylinService.Services.MallOrderLate
             DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, beforeMessage);
 
             //获取今天超时未支付的订单
-            var nopayList = MallOrderProvider.GetNoPaymentListForTodayWillTimeout(Config.WaitPaymentMinutes);
+            var nopayList = MerchantOrderProvider.GetNoPaymentListForTodayWillTimeout(Config.WaitPaymentMinutes);
 
             //获取今天超时未确认收货的订单
-            var noconfirmReceiptGoodsList = MallOrderProvider.GetNoConfirmReceiptGoodsListForTodayWillTimeout(Config.WaitReceiptGoodsDays);
+            var noconfirmReceiptGoodsList = MerchantOrderProvider.GetNoConfirmReceiptGoodsListForTodayWillTimeout(Config.WaitReceiptGoodsDays);
 
             var orderIDs = nopayList.Union(noconfirmReceiptGoodsList).Select(p => p.OrderID).ToArray();
 
             if (null != orderIDs && orderIDs.Length > 0)
             {
                 //校正计划列表
-                MallOrderLateSchedulerManager.Instance.CheckScheduler(orderIDs);
+                MerchantOrderLateSchedulerManager.Instance.CheckScheduler(orderIDs);
 
                 //超时未支付的订单写入计划任务
                 if (null != nopayList && nopayList.Count > 0)
@@ -62,7 +62,7 @@ namespace KylinService.Services.MallOrderLate
                     {
                         if (null != order)
                         {
-                            MallOrderLateSchedulerManager.Instance.StartScheduler(SysEnums.MallOrderLateType.LateNoPayment, this.Config, order, this.CurrentForm, this.WriteDelegate);
+                            MerchantOrderLateSchedulerManager.Instance.StartScheduler(SysEnums.MerchantOrderLateType.LateNoPayment, this.Config, order, this.CurrentForm, this.WriteDelegate);
                         }
                     }
                 }
@@ -74,18 +74,18 @@ namespace KylinService.Services.MallOrderLate
                     {
                         if (null != order)
                         {
-                            MallOrderLateSchedulerManager.Instance.StartScheduler(SysEnums.MallOrderLateType.LateUserFinish, this.Config, order, this.CurrentForm, this.WriteDelegate);
+                            MerchantOrderLateSchedulerManager.Instance.StartScheduler(SysEnums.MerchantOrderLateType.LateUserFinish, this.Config, order, this.CurrentForm, this.WriteDelegate);
                         }
                     }
                 }
             }
             else
             {
-                MallOrderLateSchedulerManager.Instance.Clear();
+                MerchantOrderLateSchedulerManager.Instance.Clear();
             }
 
             //获取福利开奖的任务计划集合
-            ICollection scheduleList = MallOrderLateSchedulerManager.Schedulers.Values;
+            ICollection scheduleList = MerchantOrderLateSchedulerManager.Schedulers.Values;
 
             StringBuilder sbMessage = new StringBuilder();
 
@@ -95,7 +95,7 @@ namespace KylinService.Services.MallOrderLate
 
             foreach (var val in scheduleList)
             {
-                var schedule = val as BaseMallOrderLateScheduler;
+                var schedule = val as BaseMerchantOrderLateScheduler;
 
                 var order = schedule.Order;
 
@@ -103,14 +103,14 @@ namespace KylinService.Services.MallOrderLate
 
                 var tips = string.Empty;
 
-                if (schedule is MallOrderPaymentLateScheduler)
+                if (schedule is MerchantOrderPaymentLateScheduler)
                 {
-                    timeout = MallOrderTimeCalculator.GetTimeoutTime(order, Config, MallOrderLateType.LateNoPayment);
+                    timeout = MerchantOrderTimeCalculator.GetTimeoutTime(order, Config, MerchantOrderLateType.LateNoPayment);
                     tips = "自动取消";
                 }
-                else if (schedule is MallOrderLateUserFinishScheduler)
+                else if (schedule is MerchantOrderLateUserFinishScheduler)
                 {
-                    timeout = MallOrderTimeCalculator.GetTimeoutTime(order, Config, MallOrderLateType.LateUserFinish);
+                    timeout = MerchantOrderTimeCalculator.GetTimeoutTime(order, Config, MerchantOrderLateType.LateUserFinish);
                     tips = "自动确认收货";
                 }
 
@@ -118,7 +118,7 @@ namespace KylinService.Services.MallOrderLate
 
                 dueTime = dueTime.CheckPositive();
 
-                string welPut = string.Format("【订单（{0}）：{1}】将在{2}小时{3}分{4}秒后[{5}]{6}", order.OrderCode, order.ProductInfo, dueTime.Hours, dueTime.Minutes, dueTime.Seconds, timeout.ToString("yyyy/MM/dd HH:mm:ss"), tips);
+                string welPut = string.Format("【订单（{0}】将在{1}小时{2}分{3}秒后[{4}]{5}", order.OrderCode,  dueTime.Hours, dueTime.Minutes, dueTime.Seconds, timeout.ToString("yyyy/MM/dd HH:mm:ss"), tips);
 
                 sbMessage.AppendLine(welPut);
             }

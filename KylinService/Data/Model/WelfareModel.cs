@@ -13,11 +13,6 @@ namespace KylinService.Data.Model
         public long WelfareID { get; set; }
 
         /// <summary>
-        /// 福利活动ID
-        /// </summary>
-        public long PhaseID { get; set; }
-
-        /// <summary>
         /// 福利类型
         /// </summary>
         public int WelfareType { get; set; }
@@ -61,11 +56,6 @@ namespace KylinService.Data.Model
         /// 是否已被删除
         /// </summary>
         public bool IsDelete { get; set; }
-
-        /// <summary>
-        /// 是否启用（即上架）
-        /// </summary>
-        public bool Enabled { get; set; }
 
         /// <summary>
         /// 有效期（起）

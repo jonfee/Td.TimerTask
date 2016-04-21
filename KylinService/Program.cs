@@ -16,6 +16,9 @@ namespace KylinService
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            Startup.Init();
+
             Application.Run(new MainForm());
         }
     }

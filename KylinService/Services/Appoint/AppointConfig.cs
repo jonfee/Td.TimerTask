@@ -14,5 +14,10 @@
         /// 服务人员结束服务后用户可确认的时间天数
         /// </summary>
         public int EndServiceWaitUserDays { get; set; }
+
+        /// <summary>
+        /// 用户可评价时间的天数
+        /// </summary>
+        public int EvaluateWaitDyas { get; set; }
     }
 }

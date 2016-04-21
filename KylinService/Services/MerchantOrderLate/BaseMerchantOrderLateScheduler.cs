@@ -2,29 +2,29 @@
 using KylinService.Data.Model;
 using System.Windows.Forms;
 
-namespace KylinService.Services.MallOrderLate
+namespace KylinService.Services.MerchantOrderLate
 {
     /// <summary>
-    /// 商城订单超时自动处理任务计划基类
+    /// 附近购订单超时自动处理任务计划基类
     /// </summary>
-    public class BaseMallOrderLateScheduler : IScheduler
+    public class BaseMerchantOrderLateScheduler : IScheduler
     {
         /// <summary>
         /// 商城订单
         /// </summary>
-        public MallOrderModel Order { get; private set; }
+        public MerchantOrderModel Order { get; private set; }
 
         /// <summary>
         /// 逾期配置
         /// </summary>
-        public B2COrderLateConfig Config { get; private set; }
+        public MerchantOrderLateConfig Config { get; private set; }
 
         /// <summary>
         /// 定时器
         /// </summary>
         public System.Threading.Timer LateTimer { get; protected set; }
 
-        public BaseMallOrderLateScheduler(B2COrderLateConfig config, MallOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(form, writeDelegate)
+        public BaseMerchantOrderLateScheduler(MerchantOrderLateConfig config, MerchantOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(form, writeDelegate)
         {
             this.Order = order;
 

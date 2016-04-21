@@ -1,19 +1,16 @@
-﻿using KylinService.Services;
-using KylinService.SysEnums;
-using System.Windows.Forms;
-using Td.Task.Framework;
-using KylinService.Core;
-using System.Linq;
-using System;
-using System.Threading;
-using KylinService.Manager;
-using KylinService.Services.MallOrderLate;
+﻿using KylinService.Core;
 using KylinService.Core.Loger;
+using KylinService.Manager;
+using KylinService.Services.Appoint;
+using KylinService.Services.MallOrderLate;
+using KylinService.Services.MerchantOrderLate;
 using KylinService.Services.ShakeDayTimes;
 using KylinService.Services.WelfareLottery;
-using KylinService.Services.Appoint;
-using Td.Cache.Redis;
-using KylinService.Redis;
+using KylinService.SysEnums;
+using System;
+using System.Linq;
+using System.Windows.Forms;
+using Td.Task.Framework;
 
 namespace KylinService
 {
@@ -23,10 +20,7 @@ namespace KylinService
         {
             InitializeComponent();
 
-            Init();
-
-            //Redis注册
-            RedisInjection.UseRedis(RedisConfigManager.Config.ConnectString);
+            Init();           
         }
 
         private string _serTname = "lbServer_";     //服务类型名称展示控件标识
@@ -160,26 +154,35 @@ namespace KylinService
             switch (schedule)
             {
                 case ScheduleType.AppointOrderLate:
-                    var appointOrderLateConfig = AppointConfigManager.Config;
-                    if (null == appointOrderLateConfig)
+                    if (null == Startup.AppointConfig)
                     {
                         MessageBox.Show("未检测到自动处理上门预约订单的配置项");
                     }
                     else
                     {
-                        TaskSchedule.StartSchedule(schedule.ToString(), new AppointService(appointOrderLateConfig, this, writeDelegate), schedule.ToString(), null);
+                        TaskSchedule.StartSchedule(schedule.ToString(), new AppointService(Startup.AppointConfig, this, writeDelegate), schedule.ToString(), null);
                         isOpened = true;
                     }
                     break;
                 case ScheduleType.MallOrderLate:
-                    var mallOrderLateConfig = MallOrderLateConfigManager.Config;
-                    if (null == mallOrderLateConfig)
+                    if (null == Startup.B2COrderConfig)
                     {
-                        MessageBox.Show("未检测到自动处理商城订单的配置项");
+                        MessageBox.Show("未检测到自动处理精品汇商城订单的配置项");
                     }
                     else
                     {
-                        TaskSchedule.StartSchedule(schedule.ToString(), new MallOrderService(mallOrderLateConfig, this, writeDelegate), schedule.ToString(), null);
+                        TaskSchedule.StartSchedule(schedule.ToString(), new MallOrderService(Startup.B2COrderConfig, this, writeDelegate), schedule.ToString(), null);
+                        isOpened = true;
+                    }
+                    break;
+                case ScheduleType.MerchantOrderLate:
+                    if (null == Startup.MerchantOrderConfig)
+                    {
+                        MessageBox.Show("未检测到自动处理附近购商城订单的配置项");
+                    }
+                    else
+                    {
+                        TaskSchedule.StartSchedule(schedule.ToString(), new MerchantOrderService(Startup.MerchantOrderConfig, this, writeDelegate), schedule.ToString(), null);
                         isOpened = true;
                     }
                     break;

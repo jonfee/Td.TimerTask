@@ -1,9 +1,9 @@
 ﻿namespace KylinService.SysEnums
 {
     /// <summary>
-    /// 商城订单超时类型
+    /// 商家订单超时类型
     /// </summary>
-    public enum MallOrderLateType
+    public enum MerchantOrderLateType
     {
         /// <summary>
         /// 超时未支付

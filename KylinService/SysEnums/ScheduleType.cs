@@ -14,10 +14,15 @@ namespace KylinService.SysEnums
         [Description("限时福利开奖服务")]
         WelfareLottery,
         /// <summary>
-        /// 商城订单逾期处理
+        /// 精品汇订单逾期处理
         /// </summary>
-        [Description("商城订单逾期处理服务")]
+        [Description("精品汇订单逾期处理服务")]
         MallOrderLate,
+        /// <summary>
+        /// 附近购订单逾期处理
+        /// </summary>
+        [Description("附近购订单逾期处理")]
+        MerchantOrderLate,
         /// <summary>
         /// 上门预约服务订单逾期处理
         /// </summary>

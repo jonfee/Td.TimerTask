@@ -1,17 +1,14 @@
 ﻿using KylinService.Core;
-using KylinService.Data.Entity;
 using KylinService.Data.Model;
 using KylinService.Data.Provider;
 using KylinService.Redis;
 using KylinService.Redis.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Td.Cache.Redis;
+using Td.Kylin.EnumLibrary;
+using Td.Kylin.Redis;
 
 namespace KylinService.Services.WelfareLottery
 {
@@ -34,7 +31,7 @@ namespace KylinService.Services.WelfareLottery
         {
             this.Welfare = welfare;
 
-            this.Key = null != this.Welfare ? this.Welfare.PhaseID.ToString() : string.Empty;
+            this.Key = null != this.Welfare ? this.Welfare.WelfareID.ToString() : string.Empty;
 
             if (!string.IsNullOrWhiteSpace(Key) && Welfare.LotteryTime > DateTime.Now)
             {
@@ -66,7 +63,7 @@ namespace KylinService.Services.WelfareLottery
 
             try
             {
-                var lastWelfare = WelfareProvider.GetWelfare(Welfare.PhaseID);
+                var lastWelfare = WelfareProvider.GetWelfare(Welfare.WelfareID);
 
                 #region //验证开奖的有效性
 
@@ -74,9 +71,9 @@ namespace KylinService.Services.WelfareLottery
 
                 if (DateTime.Now >= lastWelfare.ExpiryEndTime) throw new Exception("福利已失效，不能被开奖！");
 
-                if (lastWelfare.Status != (int)SysEnums.WelfareStatus.SuccessProgresse) throw new Exception("无效的开奖请求，福利不被允许开奖！");
+                if (lastWelfare.Status != (int)WelfareStatus.InProgress) throw new Exception("无效的开奖请求，福利不被允许开奖！");
 
-                if (lastWelfare.Enabled == false) throw new Exception("福利已被下架，不能开奖！");
+                if (lastWelfare.IsDelete == true) throw new Exception("福利已被下架，不能开奖！");
 
                 if (DateTime.Now < lastWelfare.LotteryTime) throw new Exception("开奖时间未到，不能提前开奖！");
 
@@ -87,7 +84,7 @@ namespace KylinService.Services.WelfareLottery
                 #endregion
 
                 #region //获取活动的所有参与编号
-                string[] partCodes = WelfareProvider.GetAllPartCode(Welfare.PhaseID);
+                string[] partCodes = WelfareProvider.GetAllPartCode(Welfare.WelfareID);
                 #endregion
 
                 #region //开奖并得到中奖编号集合
@@ -111,7 +108,7 @@ namespace KylinService.Services.WelfareLottery
 
                 #region //写入中奖结果
 
-                pushContent = WelfareProvider.WriteLotteryResult(Welfare.PhaseID, winnerPartCodes);
+                pushContent = WelfareProvider.WriteLotteryResult(Welfare.WelfareID, winnerPartCodes);
 
                 if (null != pushContent)
                 {

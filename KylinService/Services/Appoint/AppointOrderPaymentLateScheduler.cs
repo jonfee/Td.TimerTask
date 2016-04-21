@@ -5,6 +5,7 @@ using KylinService.SysEnums;
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Services.Appoint
 {
@@ -87,18 +88,18 @@ namespace KylinService.Services.Appoint
         {
             if (order.PaiedTime.HasValue) return false;
 
-            if (order.QuoteWays == (int)AppointQuoteWays.AtSubmit)
+            if (order.QuoteWays == (int)BusinessServiceQuote.WhenOrder)
             {
-                if (order.BusinessType == (int)AppointBusinessType.ShangMen && order.Status == (int)ShangMenOrderStatus.WaitReceiving)//上门订单等待商家接单
+                if (order.BusinessType == (int)BusinessServiceType.Visiting && order.Status == (int)VisitingServiceOrderStatus.WaitingMerchantReceive)//上门订单等待商家接单
                     return true;
-                else if (order.BusinessType == (int)AppointBusinessType.YuYue && order.Status == (int)YuYueOrderStatus.WaitReceiving)//预约订单与状态匹配
+                else if (order.BusinessType == (int)BusinessServiceType.Reservation && order.Status == (int)ReservationServiceOrderStatus.WaitingMerchantReceive)//预约订单与状态匹配
                     return true;
             }
-            else if (order.QuoteWays == (int)AppointQuoteWays.AtDoorComeOn)
+            else if (order.QuoteWays == (int)BusinessServiceQuote.WhenMeeting)
             {
-                if (order.BusinessType == (int)AppointBusinessType.ShangMen && order.Status == (int)ShangMenOrderStatus.ConfirmStudio)//上门订单与状态匹配
+                if (order.BusinessType == (int)BusinessServiceType.Visiting && order.Status == (int)VisitingServiceOrderStatus.UserConfirmQuote)//上门订单与状态匹配
                     return true;
-                else if (order.BusinessType == (int)AppointBusinessType.YuYue && order.Status == (int)YuYueOrderStatus.ConfirmStudio)//预约订单与状态匹配
+                else if (order.BusinessType == (int)BusinessServiceType.Reservation && order.Status == (int)ReservationServiceOrderStatus.UserConfirmSolution)//预约订单与状态匹配
                     return true;
             }
 

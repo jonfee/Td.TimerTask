@@ -1,12 +1,10 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Model;
-using KylinService.Services.Appoint;
-using KylinService.SysEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Td.Kylin.Entity;
+using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Data.Provider
 {
@@ -26,8 +24,8 @@ namespace KylinService.Data.Provider
                             on o.BusinessID equals b.BusinessID
                             where
                             (
-                            (o.BusinessType == (int)AppointBusinessType.ShangMen && o.Status == (int)ShangMenOrderStatus.WorkerFinish)//上门服务且状态为服务人员已完成服务
-                            || (o.BusinessType == (int)AppointBusinessType.YuYue && o.Status == (int)YuYueOrderStatus.WorkerFinish)//预约服务且状态为商家已完成服务
+                            (o.BusinessType == (int)BusinessServiceType.Visiting && o.Status == (int)VisitingServiceOrderStatus.WorkerServiceDone)//上门服务且状态为服务人员已完成服务
+                            || (o.BusinessType == (int)BusinessServiceType.Reservation && o.Status == (int)ReservationServiceOrderStatus.MerchantServiceDone)//预约服务且状态为商家已完成服务
                             )
                             && o.WorkerFinishTime.HasValue && o.WorkerFinishTime.Value.AddDays(lateDays) < DateTime.Now.Date.AddDays(1)//&& o.WorkerFinishTime.Value.AddDays(lateDays).Date == DateTime.Now.Date
                             select new AppointOrderModel
@@ -74,19 +72,19 @@ namespace KylinService.Data.Provider
                             where
                             (
                                 (
-                                    b.QuoteWays == (int)AppointQuoteWays.AtSubmit && o.CreateTime.AddMinutes(lateMinutes) < DateTime.Now.Date.AddDays(1) && //下单时计价  && o.CreateTime.AddMinutes(lateMinutes).Date == DateTime.Now.Date
+                                    b.QuoteWays == (int)BusinessServiceQuote.WhenOrder && o.CreateTime.AddMinutes(lateMinutes) < DateTime.Now.Date.AddDays(1) && //下单时计价  && o.CreateTime.AddMinutes(lateMinutes).Date == DateTime.Now.Date
                                     (
-                                        (o.BusinessType == (int)AppointBusinessType.ShangMen && o.Status == (int)ShangMenOrderStatus.WaitReceiving)//上门订单等待商家接单
-                                        || (o.BusinessType == (int)AppointBusinessType.YuYue && o.Status == (int)YuYueOrderStatus.WaitReceiving)//预约订单与状态匹配
+                                        (o.BusinessType == (int)BusinessServiceType.Visiting && o.Status == (int)VisitingServiceOrderStatus.WaitingMerchantReceive)//上门订单等待商家接单
+                                        || (o.BusinessType == (int)BusinessServiceType.Reservation && o.Status == (int)ReservationServiceOrderStatus.WaitingMerchantReceive)//预约订单与状态匹配
                                     )
                                 )//下单时计价，今天超时
                                 ||
                                 (
-                                    b.QuoteWays == (int)AppointQuoteWays.AtDoorComeOn && o.ConfirmTime.HasValue && o.ConfirmTime.Value.AddMinutes(lateMinutes) < DateTime.Now.Date.AddDays(1)//&& o.ConfirmTime.Value.AddMinutes(lateMinutes).Date == DateTime.Now.Date 
+                                    b.QuoteWays == (int)BusinessServiceQuote.WhenMeeting && o.ConfirmTime.HasValue && o.ConfirmTime.Value.AddMinutes(lateMinutes) < DateTime.Now.Date.AddDays(1)//&& o.ConfirmTime.Value.AddMinutes(lateMinutes).Date == DateTime.Now.Date 
                                     &&
                                     (
-                                        (o.BusinessType == (int)AppointBusinessType.ShangMen && o.Status == (int)ShangMenOrderStatus.ConfirmStudio)//上门订单与状态匹配
-                                        || (o.BusinessType == (int)AppointBusinessType.YuYue && o.Status == (int)YuYueOrderStatus.ConfirmStudio)//预约订单与状态匹配
+                                        (o.BusinessType == (int)BusinessServiceType.Visiting && o.Status == (int)VisitingServiceOrderStatus.UserConfirmQuote)//上门订单与状态匹配
+                                        || (o.BusinessType == (int)BusinessServiceType.Reservation && o.Status == (int)ReservationServiceOrderStatus.UserConfirmSolution)//预约订单与状态匹配
                                     )
                                 )//上门时计价，且用户已确定服务方案，今天超时
                             )
@@ -172,13 +170,13 @@ namespace KylinService.Data.Provider
             {
                 var order = db.KylinService_Order.SingleOrDefault(p => p.OrderID == orderID);
 
-                if (order.BusinessType == (int)AppointBusinessType.ShangMen)
+                if (order.BusinessType == (int)BusinessServiceType.Visiting)
                 {
-                    order.Status = (int)ShangMenOrderStatus.Cancel;
+                    order.Status = (int)VisitingServiceOrderStatus.Cancel;
                 }
                 else
                 {
-                    order.Status = (int)YuYueOrderStatus.Cancel;
+                    order.Status = (int)ReservationServiceOrderStatus.Cancel;
                 }
                 order.CancelTime = DateTime.Now;
 
@@ -202,7 +200,7 @@ namespace KylinService.Data.Provider
                 decimal money = 0;
 
                 //线下支付，但下单时有预约金
-                if (order.PaymentType == (int)AppointPaymentType.OffLine)
+                if (order.PaymentType == (int)BusinessServiceOrderPayment.OffLine)
                 {
                     if (order.PrepaidAmount > 0) money = order.PrepaidAmount;
                 }
@@ -227,7 +225,7 @@ namespace KylinService.Data.Provider
                     var business = db.KylinService_Business.SingleOrDefault(p => p.BusinessID == order.BusinessID);
 
                     //本订单是否应由下单方支付给服务方，否则为服务方支付给下单方
-                    var payToServer = business.PayerType == (int)SysEnums.BusinessPayerType.Server;
+                    var payToServer = business.PayerType == (int)BusinessServicePayer.Servicer;
 
                     var user = db.User_Account.SingleOrDefault(p => p.UserID == order.UserID);
 
@@ -241,7 +239,7 @@ namespace KylinService.Data.Provider
                         user.Balance += money;
 
                         //交易记录
-                        db.User_TradeRecords.Add(new Entity.User_TradeRecords
+                        db.User_TradeRecords.Add(new User_TradeRecords
                         {
                             Amount = money,
                             CreateTime = DateTime.Now,
@@ -249,18 +247,18 @@ namespace KylinService.Data.Provider
                             TradeID = IDCreater.Instance.GetID(),
                             TradeInfo = string.Format("{0}服务中获利所得[订单编号：{1}]", business.Name, order.OrderCode),
                             TradeNo = string.Empty,
-                            TradeType = (int)UserTradType.SaleGet,
+                            TradeType = (int)UserTransType.Proceeds,
                             UserID = user.UserID
                         });
                     }
 
-                    if (order.ServerType == (int)AppointServerType.Merchant)
+                    if (order.ServerType == (int)BusinessOrderServiceProvider.Merchant)
                     {
                         var merchant = db.Merchant_Account.SingleOrDefault(p => p.MerchantID == order.MerchantID);
                         if (payToServer)//下单方支付给商家
                         {
                             merchant.Balance += money;
-                            db.Merchant_TradeRecords.Add(new Entity.Merchant_TradeRecords
+                            db.Merchant_TradeRecords.Add(new Merchant_TradeRecords
                             {
                                 Amount = money,
                                 CreateTime = DateTime.Now,
@@ -268,7 +266,7 @@ namespace KylinService.Data.Provider
                                 TradeID = IDCreater.Instance.GetID(),
                                 TradeInfo = string.Format("{0}服务中获利所得[订单编号：{1}]", business.Name, order.OrderCode),
                                 TradeNo = string.Empty,
-                                TradeType = (int)MerchantTradType.SaleService,
+                                TradeType = (int)MerchantTransType.ServiceSales,
                                 MerchantID = merchant.MerchantID
                             });
                         }
@@ -277,13 +275,13 @@ namespace KylinService.Data.Provider
                             merchant.FreezeMoney -= money;
                         }
                     }
-                    else if (order.ServerType == (int)AppointServerType.Worker)
+                    else if (order.ServerType == (int)BusinessOrderServiceProvider.Person)
                     {
                         var worker = db.Worker_Account.SingleOrDefault(p => p.WorkerID == order.WorkerID);
                         if (payToServer)//下单方支付给服务人员
                         {
                             worker.Balance += money;
-                            db.Worker_TradeRecords.Add(new Entity.Worker_TradeRecords
+                            db.Worker_TradeRecords.Add(new Worker_TradeRecords
                             {
                                 Amount = money,
                                 CreateTime = DateTime.Now,
@@ -291,8 +289,8 @@ namespace KylinService.Data.Provider
                                 TradeID = IDCreater.Instance.GetID(),
                                 TradeInfo = string.Format("{0}服务中获利所得[订单编号：{1}]", business.Name, order.OrderCode),
                                 TradeNo = string.Empty,
-                                TradeType = (int)WorkerTradType.SaleService,
-                                WorkerID = worker.WorkerID
+                                TradeType = (int)WorkerTransType.ServiceSales,
+                                UserID = worker.WorkerID
                             });
                         }
                         else//服务人员支付给下单方
@@ -310,13 +308,13 @@ namespace KylinService.Data.Provider
 
                 #region 更新訂單信息
 
-                if (order.BusinessType == (int)AppointBusinessType.ShangMen)
+                if (order.BusinessType == (int)BusinessServiceType.Visiting)
                 {
-                    order.Status = (int)ShangMenOrderStatus.UserFinish;
+                    order.Status = (int)VisitingServiceOrderStatus.UserServiceConfirmDone;
                 }
-                else if (order.BusinessType == (int)AppointBusinessType.YuYue)
+                else if (order.BusinessType == (int)BusinessServiceType.Reservation)
                 {
-                    order.Status = (int)YuYueOrderStatus.UserFinish;
+                    order.Status = (int)ReservationServiceOrderStatus.UserServiceConfirmDone;
                 }
                 else
                 {

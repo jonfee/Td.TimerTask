@@ -72,6 +72,10 @@
       <HintPath>..\packages\EntityFramework.Relational.Design.7.0.0-rc1-final\lib\net451\EntityFramework.Relational.Design.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework7.Npgsql, Version=3.1.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework7.Npgsql.3.1.0-rc1-3\lib\net451\EntityFramework7.Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Http.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Http.Abstractions.1.0.0-rc1-final\lib\net451\Microsoft.AspNet.Http.Abstractions.dll</HintPath>
       <Private>True</Private>
@@ -132,6 +136,10 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Npgsql, Version=3.1.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Npgsql.3.1.0-alpha6\lib\net452\Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Remotion.Linq, Version=2.0.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.0.1\lib\net45\Remotion.Linq.dll</HintPath>
       <Private>True</Private>
@@ -171,13 +179,24 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Td.Cache.Redis, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Cache.Redis.1.0.1-alpha\lib\Td.Cache.Redis.dll</HintPath>
+    <Reference Include="Td.Kylin.DataCache, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.DataCache.1.0.2-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Td.Kylin.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.Entity.1.0.0-rc1-22\lib\net46\Td.Kylin.Entity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.20.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.20-beta\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Td.Kylin.Redis, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.Redis.1.0.5-alpha\lib\net46\Td.Kylin.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Configs.cs" />
     <Compile Include="Core\DelegateTool.cs" />
     <Compile Include="Core\EnumExtensions.cs" />
     <Compile Include="Core\IDCreater.cs" />
@@ -186,25 +205,17 @@
     <Compile Include="Core\Loger\ExceptionLoger.cs" />
     <Compile Include="Core\Loger\ServerLoger.cs" />
     <Compile Include="Core\Tools.cs" />
-    <Compile Include="Data\Entity\KylinService_Business.cs" />
-    <Compile Include="Data\Entity\KylinService_Order.cs" />
-    <Compile Include="Data\Entity\Mall_Order.cs" />
-    <Compile Include="Data\Entity\Merchant_Account.cs" />
-    <Compile Include="Data\Entity\Merchant_TradeRecords.cs" />
-    <Compile Include="Data\Entity\User_TradeRecords.cs" />
-    <Compile Include="Data\Entity\User_Welfare.cs" />
-    <Compile Include="Data\Entity\Worker_Account.cs" />
-    <Compile Include="Data\Entity\Worker_TradeRecords.cs" />
     <Compile Include="Data\Model\AppointOrderModel.cs" />
     <Compile Include="Data\Model\MallOrderModel.cs" />
+    <Compile Include="Data\Model\MerchantOrderModel.cs" />
     <Compile Include="Data\Provider\AppointOrderProvider.cs" />
+    <Compile Include="Data\Provider\MerchantOrderProvider.cs" />
     <Compile Include="Data\Provider\MallOrderProvider.cs" />
     <Compile Include="Redis\KeysConfig.cs" />
     <Compile Include="Redis\Models\WelfareWinnerContent.cs" />
     <Compile Include="Redis\RedisConfig.cs" />
     <Compile Include="Redis\RedisConfigManager.cs" />
     <Compile Include="Services\Appoint\AppointConfig.cs" />
-    <Compile Include="Services\Appoint\AppointConfigManager.cs" />
     <Compile Include="Services\Appoint\AppointOrderLateSchedulerManager.cs" />
     <Compile Include="Services\Appoint\AppointOrderPaymentLateScheduler.cs" />
     <Compile Include="Services\Appoint\AppointOrderTimeCalculator.cs" />
@@ -212,24 +223,24 @@
     <Compile Include="Services\Appoint\AppointService.cs" />
     <Compile Include="Services\Appoint\BaseAppointOrderLateScheduler.cs" />
     <Compile Include="Services\BaseSchedulerManager.cs" />
+    <Compile Include="Services\MerchantOrderLate\BaseMerchantOrderLateScheduler.cs" />
     <Compile Include="Services\MallOrderLate\BaseMallOrderLateScheduler.cs" />
-    <Compile Include="Services\MallOrderLate\MallOrderLateConfigManager.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateSchedulerManager.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderLateUserFinishScheduler.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderPaymentLateScheduler.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderService.cs" />
     <Compile Include="Services\MallOrderLate\MallOrderTimeCalculator.cs" />
-    <Compile Include="Services\MallOrderLate\OrderLateConfig.cs" />
+    <Compile Include="Services\MallOrderLate\B2COrderLateConfig.cs" />
+    <Compile Include="Services\MerchantOrderLate\MerchantOrderLateUserFinishScheduler.cs" />
+    <Compile Include="Services\MerchantOrderLate\MerchantOrderPaymentLateScheduler.cs" />
+    <Compile Include="Services\MerchantOrderLate\MerchantOrderService.cs" />
+    <Compile Include="Services\MerchantOrderLate\MerchantOrderLateSchedulerManager.cs" />
+    <Compile Include="Services\MerchantOrderLate\MerchantOrderTimeCalculator.cs" />
+    <Compile Include="Services\MerchantOrderLate\MerchantOrderLateConfig.cs" />
     <Compile Include="Services\WelfareLottery\ConsumerCodeGenerater.cs" />
     <Compile Include="Services\WelfareLottery\LotteryContext.cs" />
     <Compile Include="Core\SysData.cs" />
     <Compile Include="Data\DataContext.cs" />
-    <Compile Include="Data\Entity\Merchant_Welfare.cs" />
-    <Compile Include="Data\Entity\User_Account.cs" />
-    <Compile Include="Data\Entity\User_ShakeRecord.cs" />
-    <Compile Include="Data\Entity\Welfare_PartUser.cs" />
-    <Compile Include="Data\Entity\Welfare_Phases.cs" />
-    <Compile Include="Data\Entity\Welfare_Remind.cs" />
     <Compile Include="Data\Model\WelfareModel.cs" />
     <Compile Include="Data\Provider\ShakeProvider.cs" />
     <Compile Include="Data\Provider\UserProvider.cs" />
@@ -251,24 +262,12 @@
     <Compile Include="Services\WelfareLottery\LotteryScheduler.cs" />
     <Compile Include="Services\WelfareLottery\WelfareLotterySchedulerManager.cs" />
     <Compile Include="Services\WelfareLottery\WelfareLotteryService.cs" />
-    <Compile Include="SysEnums\AppointBusinessType.cs" />
-    <Compile Include="SysEnums\AppointServerType.cs" />
-    <Compile Include="SysEnums\BusinessPayerType.cs" />
-    <Compile Include="SysEnums\MallOrderLateType.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="SysEnums\AppointLateType.cs" />
-    <Compile Include="SysEnums\AppointPaymentType.cs" />
-    <Compile Include="SysEnums\AppointQuoteWays.cs" />
-    <Compile Include="SysEnums\MallOrderStatus.cs" />
-    <Compile Include="SysEnums\MallOrderType.cs" />
-    <Compile Include="SysEnums\MerchantTradType.cs" />
+    <Compile Include="SysEnums\MerchantOrderLateType.cs" />
+    <Compile Include="SysEnums\MallOrderLateType.cs" />
     <Compile Include="SysEnums\RedisSaveType.cs" />
     <Compile Include="SysEnums\ScheduleType.cs" />
-    <Compile Include="SysEnums\ShangMenOrderStatus.cs" />
-    <Compile Include="SysEnums\UserTradType.cs" />
-    <Compile Include="SysEnums\WelfareStatus.cs" />
-    <Compile Include="SysEnums\WelfareType.cs" />
-    <Compile Include="SysEnums\WorkerTradType.cs" />
-    <Compile Include="SysEnums\YuYueOrderStatus.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

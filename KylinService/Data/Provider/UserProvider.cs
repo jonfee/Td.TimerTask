@@ -1,9 +1,6 @@
-﻿using KylinService.Data.Entity;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Td.Kylin.Entity;
 
 namespace KylinService.Data.Provider
 {

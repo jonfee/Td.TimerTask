@@ -42,7 +42,7 @@ namespace KylinService.Services.MallOrderLate
         /// <param name="order"></param>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public void StartScheduler(SysEnums.MallOrderLateType lateType, OrderLateConfig config, MallOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
+        public void StartScheduler(SysEnums.MallOrderLateType lateType, B2COrderLateConfig config, MallOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate)
         {
             if (Schedulers.ContainsKey(order.OrderID))
             {

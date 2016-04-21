@@ -6,18 +6,18 @@ using System.Threading;
 using System.Windows.Forms;
 using Td.Kylin.EnumLibrary;
 
-namespace KylinService.Services.MallOrderLate
+namespace KylinService.Services.MerchantOrderLate
 {
     /// <summary>
-    /// 商城订单逾期未付款自动取消订单任务计划
+    /// 商家订单逾期未付款自动取消订单任务计划
     /// </summary>
-    public class MallOrderPaymentLateScheduler : BaseMallOrderLateScheduler
+    public class MerchantOrderPaymentLateScheduler : BaseMerchantOrderLateScheduler
     {
-        public MallOrderPaymentLateScheduler(B2COrderLateConfig config, MallOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(config, order, form, writeDelegate)
+        public MerchantOrderPaymentLateScheduler(MerchantOrderLateConfig config, MerchantOrderModel order, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(config, order, form, writeDelegate)
         {
             if (!string.IsNullOrWhiteSpace(Key))
             {
-                DateTime baseTime = MallOrderTimeCalculator.GetTimeoutTime(Order, Config, SysEnums.MallOrderLateType.LateNoPayment);
+                DateTime baseTime = MerchantOrderTimeCalculator.GetTimeoutTime(Order, Config, SysEnums.MerchantOrderLateType.LateNoPayment);
 
                 //计算自动取消订单时间的时间差
                 TimeSpan dueTime = baseTime - DateTime.Now;
@@ -41,35 +41,35 @@ namespace KylinService.Services.MallOrderLate
             if (null == Order) return;
 
             try {
-                var lastOrder = MallOrderProvider.GetOrder(Order.OrderID);
+                var lastOrder = MerchantOrderProvider.GetOrder(Order.OrderID);
 
                 if (null == lastOrder) throw new Exception("订单信息已不存在！");
 
                 if (!CheckAutoOk(lastOrder)) throw new Exception("当前订单状态发生变更，不能自动取消订单");
 
-                var lastTimeout = MallOrderTimeCalculator.GetTimeoutTime(Order, Config, SysEnums.MallOrderLateType.LateNoPayment);
+                var lastTimeout = MerchantOrderTimeCalculator.GetTimeoutTime(Order, Config, SysEnums.MerchantOrderLateType.LateNoPayment);
 
                 if (DateTime.Now < lastTimeout) throw new Exception("支付期限未到，不能自动取消订单！");
 
                 //自动取消订单
-                bool cancelSuccess = MallOrderProvider.AutoCancelOrder(Order.OrderID).Result;
+                bool cancelSuccess = MerchantOrderProvider.AutoCancelOrder(Order.OrderID).Result;
 
                 string message = string.Empty;
 
                 if (cancelSuccess)
                 {
-                    message = string.Format("〖订单（{0}）：{1}〗因超时未付款，系统已自动取消订单！", Order.OrderCode, Order.ProductInfo);
+                    message = string.Format("〖订单（{0}）〗因超时未付款，系统已自动取消订单！", Order.OrderCode);
                 }
                 else
                 {
-                    message = string.Format("〖订单（{0}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", Order.OrderCode, Order.ProductInfo);
+                    message = string.Format("〖订单（{0}）〗因超时未付款，系统自动取消订单时操作失败！", Order.OrderCode);
                 }
 
                 DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
             }
             catch (Exception ex)
             {
-                string errMsg = string.Format("〖订单（{0}）：{1}〗自动取消订单失败，原因：{2}", Order.OrderCode, Order.ProductInfo, ex.Message);
+                string errMsg = string.Format("〖订单（{0}）〗自动取消订单失败，原因：{1}", Order.OrderCode, ex.Message);
                 DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, errMsg);
             }
         }
@@ -78,9 +78,9 @@ namespace KylinService.Services.MallOrderLate
         /// 检测自动处理的订单有效性
         /// </summary>
         /// <returns></returns>
-        private bool CheckAutoOk(MallOrderModel order)
+        private bool CheckAutoOk(MerchantOrderModel order)
         {
-            return order.OrderStatus == (int)B2COrderStatus.WaitingPayment;
+            return order.OrderStatus == (int)MerchantOrderStatus.WaitingPayment;
         }
     }
 }

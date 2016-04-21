@@ -34,7 +34,7 @@ namespace KylinService.Services.WelfareLottery
             //写入开奖计划任务
             if (null != list && list.Count > 0)
             {
-                WelfareLotterySchedulerManager.Instance.CheckScheduler(list.Select(p => p.PhaseID).ToArray());
+                WelfareLotterySchedulerManager.Instance.CheckScheduler(list.Select(p => p.WelfareID).ToArray());
 
                 foreach (var welfare in list)
                 {

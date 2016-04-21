@@ -5,6 +5,7 @@ using KylinService.SysEnums;
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Services.Appoint
 {
@@ -83,10 +84,10 @@ namespace KylinService.Services.Appoint
         {
             if (!order.WorkerFinishTime.HasValue) return false;
 
-            if (order.BusinessType == (int)AppointBusinessType.ShangMen && order.Status == (int)ShangMenOrderStatus.WorkerFinish)//上门服务且状态为服务人员已完成服务
+            if (order.BusinessType == (int)BusinessServiceType.Visiting && order.Status == (int)VisitingServiceOrderStatus.WorkerServiceDone)//上门服务且状态为服务人员已完成服务
                 return true;
 
-            if (order.BusinessType == (int)AppointBusinessType.YuYue && order.Status == (int)YuYueOrderStatus.WorkerFinish)//预约服务且状态为商家已完成服务
+            if (order.BusinessType == (int)BusinessServiceType.Reservation && order.Status == (int)ReservationServiceOrderStatus.MerchantServiceDone)//预约服务且状态为商家已完成服务
                 return true;
 
             return false;

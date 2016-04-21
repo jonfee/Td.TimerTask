@@ -18,11 +18,6 @@ namespace KylinService.Redis.Models
         public int WelfareType { get; set; }
 
         /// <summary>
-        /// 福利活动ID
-        /// </summary>
-        public long WelfarePhaseID { get; set; }
-
-        /// <summary>
         /// 福利名称
         /// </summary>
         public string WelfareName { get; set; }

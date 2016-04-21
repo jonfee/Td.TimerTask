@@ -12,6 +12,10 @@
         /// <summary>
         /// 用户超时未确认服务完成
         /// </summary>
-        LateUserFinish=2
+        LateUserFinish=2,
+        /// <summary>
+        /// 超时未评价
+        /// </summary>
+        LateNoEvaluate=4
     }
 }

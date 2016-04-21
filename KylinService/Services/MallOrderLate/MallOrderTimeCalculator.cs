@@ -1,5 +1,6 @@
 ﻿using KylinService.Data.Model;
 using System;
+using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Services.MallOrderLate
 {
@@ -13,7 +14,7 @@ namespace KylinService.Services.MallOrderLate
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public static DateTime GetTimeoutTime(MallOrderModel order, OrderLateConfig config, SysEnums.MallOrderLateType lateType)
+        public static DateTime GetTimeoutTime(MallOrderModel order, B2COrderLateConfig config, SysEnums.MallOrderLateType lateType)
         {
             DateTime timeout = DateTime.Now.Date;
 
@@ -22,13 +23,13 @@ namespace KylinService.Services.MallOrderLate
                 switch (lateType)
                 {
                     case SysEnums.MallOrderLateType.LateNoPayment:
-                        if (order.OrderType == (int)SysEnums.MallOrderType.ShakeBuy && order.NeedPayTime.HasValue)
+                        if (order.OrderType == (int)B2COrderType.ShakeOrder && order.NeedPayTime.HasValue)
                         {
                             timeout = order.NeedPayTime.Value;
                         }
                         else
                         {
-                            timeout = order.CreateTime.AddHours(config.WaitPaymentHours);
+                            timeout = order.CreateTime.AddMinutes(config.WaitPaymentMinutes);
                         }
                         break;
                     case SysEnums.MallOrderLateType.LateUserFinish:

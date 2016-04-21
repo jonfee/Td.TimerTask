@@ -36,16 +36,16 @@
             // 
             this.groupSchedule.Location = new System.Drawing.Point(13, 13);
             this.groupSchedule.Name = "groupSchedule";
-            this.groupSchedule.Size = new System.Drawing.Size(795, 168);
+            this.groupSchedule.Size = new System.Drawing.Size(795, 188);
             this.groupSchedule.TabIndex = 0;
             this.groupSchedule.TabStop = false;
             this.groupSchedule.Text = "定时任务设置";
             // 
             // richMessage
             // 
-            this.richMessage.Location = new System.Drawing.Point(13, 199);
+            this.richMessage.Location = new System.Drawing.Point(13, 216);
             this.richMessage.Name = "richMessage";
-            this.richMessage.Size = new System.Drawing.Size(795, 289);
+            this.richMessage.Size = new System.Drawing.Size(795, 272);
             this.richMessage.TabIndex = 1;
             this.richMessage.Text = "";
             // 

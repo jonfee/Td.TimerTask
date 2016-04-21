@@ -1,15 +1,16 @@
-﻿using KylinService.Data.Entity;
-using KylinService.Data.Model;
+﻿using KylinService.Data.Model;
 using KylinService.Redis.Models;
 using KylinService.Services.WelfareLottery;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Td.Kylin.Entity;
+using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Data.Provider
 {
     /// <summary>
-    /// 限时福利分期活动
+    /// 限时福利活动
     /// </summary>
     public class WelfareProvider
     {
@@ -23,26 +24,22 @@ namespace KylinService.Data.Provider
             {
                 var lastTime = DateTime.Now.Date.AddDays(1);
 
-                var query = from p in db.Welfare_Phases
-                            join w in db.Merchant_Welfare
-                            on p.WelfareID equals w.WelfareID
-                            where p.Enabled == true && p.LotteryTime > DateTime.Now && p.LotteryTime < lastTime
+                var query = from p in db.Merchant_Welfare
+                            where p.IsDelete == false && p.LotteryTime.HasValue && p.LotteryTime > DateTime.Now && p.LotteryTime < lastTime
                             select new WelfareModel
                             {
-                                Enabled = p.Enabled,
-                                LotteryTime = p.LotteryTime,
-                                MarchantName = w.MerchantName,
+                                LotteryTime = p.LotteryTime.Value,
+                                MarchantName = p.MerchantName,
                                 Number = p.Number,
                                 PartNumber = p.PartNumber,
-                                PhaseID = p.PhasesID,
                                 WelfareID = p.WelfareID,
-                                WelfareName = w.Name,
+                                WelfareName = p.Name,
                                 WelfareType = p.WelfareType,
                                 WinNumber = p.WinNumber,
-                                IsDelete = w.IsDelete,
-                                ExpiryStartTime = w.ExpiryStartTime,
-                                ExpiryEndTime = w.ExpiryEndTime,
-                                Status = w.Status
+                                IsDelete = p.IsDelete,
+                                ExpiryStartTime = p.ExpiryStartTime,
+                                ExpiryEndTime = p.ExpiryEndTime,
+                                Status = p.Status
                             };
 
                 return query.OrderBy(p => p.LotteryTime).ToList();
@@ -52,32 +49,28 @@ namespace KylinService.Data.Provider
         /// <summary>
         /// 获取福利信息
         /// </summary>
-        /// <param name="phaseID"></param>
+        /// <param name="welfareID"></param>
         /// <returns></returns>
-        public static WelfareModel GetWelfare(long phaseID)
+        public static WelfareModel GetWelfare(long welfareID)
         {
             using (var db = new DataContext())
             {
-                var query = from p in db.Welfare_Phases
-                            join w in db.Merchant_Welfare
-                            on p.WelfareID equals w.WelfareID
-                            where p.PhasesID == phaseID
+                var query = from p in db.Merchant_Welfare
+                            where p.WelfareID == welfareID
                             select new WelfareModel
                             {
-                                Enabled = p.Enabled,
-                                LotteryTime = p.LotteryTime,
-                                MarchantName = w.MerchantName,
+                                LotteryTime = p.LotteryTime.Value,
+                                MarchantName = p.MerchantName,
                                 Number = p.Number,
                                 PartNumber = p.PartNumber,
-                                PhaseID = p.PhasesID,
                                 WelfareID = p.WelfareID,
-                                WelfareName = w.Name,
+                                WelfareName = p.Name,
                                 WelfareType = p.WelfareType,
                                 WinNumber = p.WinNumber,
-                                IsDelete = w.IsDelete,
-                                ExpiryStartTime = w.ExpiryStartTime,
-                                ExpiryEndTime = w.ExpiryEndTime,
-                                Status = w.Status
+                                IsDelete = p.IsDelete,
+                                ExpiryStartTime = p.ExpiryStartTime,
+                                ExpiryEndTime = p.ExpiryEndTime,
+                                Status = p.Status
                             };
 
                 return query.FirstOrDefault();
@@ -87,31 +80,29 @@ namespace KylinService.Data.Provider
         /// <summary>
         /// 获取福利活动的所有参与编号
         /// </summary>
-        /// <param name="phaesID"></param>
+        /// <param name="welfareID"></param>
         /// <returns></returns>
-        public static string[] GetAllPartCode(long phaesID)
+        public static string[] GetAllPartCode(long welfareID)
         {
             using (var db = new DataContext())
             {
-                return db.Welfare_PartUser.Where(p => p.PhasesID == phaesID).Select(p => p.PartCode).ToArray();
+                return db.Welfare_PartUser.Where(p => p.WelfareID == welfareID).Select(p => p.PartCode).ToArray();
             }
         }
 
         /// <summary>
         /// 写入开奖结果,并将福利放置用户名下等待用户领取（优惠券自动领取）
         /// </summary>
-        /// <param name="phasesID"></param>
+        /// <param name="welfareID"></param>
         /// <param name="partCodes"></param>
-        public static WelfareWinnerContent WriteLotteryResult(long phasesID, string[] partCodes)
+        public static WelfareWinnerContent WriteLotteryResult(long welfareID, string[] partCodes)
         {
             using (var db = new DataContext())
             {
-                var phases = db.Welfare_Phases.SingleOrDefault(p => p.PhasesID == phasesID);
-
-                var welfare = db.Merchant_Welfare.SingleOrDefault(p => p.WelfareID == phases.WelfareID);
+                var welfare = db.Merchant_Welfare.SingleOrDefault(p => p.WelfareID == welfareID);
 
                 //是否应立即自动领取
-                bool isNowAward = welfare.WelfareType == (int)SysEnums.WelfareType.Coupon;
+                bool isNowAward = welfare.WelfareType == (int)WelfareType.Coupon;
 
                 //中奖人员集合
                 var winners = new List<Welfare_PartUser>();
@@ -119,7 +110,7 @@ namespace KylinService.Data.Provider
                 #region 存在参与人员，才会有中奖名单
                 if (null != partCodes && partCodes.Length > 0)
                 {
-                    winners = db.Welfare_PartUser.Where(p => p.PhasesID == phasesID && partCodes.Contains(p.PartCode)).ToList();
+                    winners = db.Welfare_PartUser.Where(p => p.WelfareID == welfareID && partCodes.Contains(p.PartCode)).ToList();
 
                     winners.ForEach((item) =>
                     {
@@ -165,19 +156,6 @@ namespace KylinService.Data.Provider
 
                 #region 更新福利信息
 
-                //中奖人数
-                phases.WinNumber = winners.Count;
-                //领取人数
-                if (isNowAward)
-                {
-                    phases.AcceptNumber = winners.Count;
-                }
-
-                //本次开奖剩余的福利数
-                int surplusNumber = phases.Number - winners.Count;
-
-                //剩余福利数
-                welfare.SurplusNumber += surplusNumber;
                 //总中奖人数
                 welfare.WinNumber += winners.Count;
                 //总领取人数
@@ -185,11 +163,9 @@ namespace KylinService.Data.Provider
                 {
                     welfare.DrawNumber += winners.Count;
                 }
-                if (welfare.SurplusNumber <= 0)
-                {
-                    //全部开奖完成后结束
-                    welfare.Status = (int)SysEnums.WelfareStatus.Finish;
-                }
+
+                //全部开奖完成后结束
+                welfare.Status = (int)WelfareStatus.Done;
 
                 #endregion
 
@@ -197,14 +173,13 @@ namespace KylinService.Data.Provider
                 {
                     return new WelfareWinnerContent
                     {
-                        LolleryTime = phases.LotteryTime,
+                        LolleryTime = welfare.LotteryTime.Value,
                         MerchantID = welfare.MerchantID,
                         MerchantName = welfare.MerchantName,
                         UserIDs = winners.Select(p => p.UserID).ToArray(),
-                        WelfareID = phases.WelfareID,
+                        WelfareID = welfare.WelfareID,
                         WelfareName = welfare.Name,
-                        WelfarePhaseID = phases.PhasesID,
-                        WelfareType = phases.WelfareType
+                        WelfareType = welfare.WelfareType
                     };
                 }
                 else
