@@ -1,19 +1,24 @@
-﻿using KylinService.Redis;
-using KylinService.Services.Appoint;
-using KylinService.Services.MallOrderLate;
-using KylinService.Services.MerchantOrderLate;
+﻿using KylinService.Redis.Push;
+using KylinService.Redis.Schedule;
+using KylinService.Services.Queue.Appoint;
+using KylinService.Services.Queue.Circle;
+using KylinService.Services.Queue.Mall;
+using KylinService.Services.Queue.Merchant;
+using KylinService.Services.Queue.Welfare;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Td.Kylin.DataCache;
 using Td.Kylin.DataCache.CacheModel;
 using Td.Kylin.EnumLibrary;
-using Td.Kylin.Redis;
 
 namespace KylinService
 {
     internal sealed class Startup
     {
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public static void Init()
         {
             #region //Kylin数据库连接字符串
@@ -22,16 +27,7 @@ namespace KylinService
 
             #endregion
 
-            #region //自助处理数据所在的Redis服务配置
-
-            AutoDataRedisConfig = RedisConfigManager.Config;
-
-            #endregion
-
             #region  //注入
-
-            //注入Redis
-            RedisInjection.UseRedis(AutoDataRedisConfig.ConnectString);
 
             string dataCacheRedisConn = ConfigurationManager.ConnectionStrings["RedisDataCacheConnectionString"].ConnectionString;
             //注入数据缓存组件
@@ -39,7 +35,31 @@ namespace KylinService
 
             #endregion            
 
+            #region //任务计划数据在Redis中的配置
+            ScheduleRedisConfigs = ScheduleConfigManager.Collection;
+            #endregion
+
+            #region //推送消息 Redis配置
+            PushRedisConfigs = PushRedisConfigManager.Collection;
+            #endregion
+
+            UpdateConfig();
+        }
+
+        /// <summary>
+        /// 更新配置
+        /// </summary>
+        public static void UpdateConfig()
+        {
             var sysConfigs = CacheCollection.SystemGolbalConfigCache.Value();
+
+            #region //社区配置
+            CircleConfig = GetCircleConfig(sysConfigs);
+            #endregion
+
+            #region //福利配置
+            WelfareConfig = GetWelfareConfig(sysConfigs);
+            #endregion
 
             #region //上门预约订单自动服务参数配置
             AppointConfig = GetAppointConfig(sysConfigs);
@@ -54,12 +74,14 @@ namespace KylinService
             #endregion
         }
 
+        #region 私有方法
+
         /// <summary>
         /// 上门预约订单自动服务参数配置
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        static AppointConfig GetAppointConfig(List<SystemGolbalConfigCacheModel> values)
+        static AppointLateConfig GetAppointConfig(List<SystemGolbalConfigCacheModel> values)
         {
             var waitPay = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitPayment);
             var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserDone);
@@ -69,7 +91,7 @@ namespace KylinService
             int waitDoneMinutes = GetMinutes(waitDone.Value, waitDone.ValueUnit);
             int waitEvalMimutes = GetMinutes(waitEval.Value, waitEval.ValueUnit);
 
-            return new AppointConfig
+            return new AppointLateConfig
             {
                 EndServiceWaitUserDays = waitDoneMinutes / (24 * 60),
                 PaymentWaitMinutes = waitPayMinutes,
@@ -124,6 +146,36 @@ namespace KylinService
         }
 
         /// <summary>
+        /// 社区相关配置
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        static CircleConfig GetCircleConfig(List<SystemGolbalConfigCacheModel> values)
+        {
+            var remindTime = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.CircleEventRemind);
+
+            return new CircleConfig
+            {
+                BeforeRemindMinutes = GetMinutes(remindTime.Value, remindTime.ValueUnit)
+            };
+        }
+
+        /// <summary>
+        /// 福利相关配置
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        static WelfareConfig GetWelfareConfig(List<SystemGolbalConfigCacheModel> values)
+        {
+            var remindTime = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.WelfareApplyRemind);
+
+            return new WelfareConfig
+            {
+                BeforeRemindMinutes = GetMinutes(remindTime.Value, remindTime.ValueUnit)
+            };
+        }
+
+        /// <summary>
         /// 获取分钟数
         /// </summary>
         /// <param name="val"></param>
@@ -143,15 +195,29 @@ namespace KylinService
             return minutes;
         }
 
+        #endregion
+
+        #region 成员
+
         /// <summary>
         /// Kylin数据库连接字符串
         /// </summary>
         public static string KylinDBConnectionString;
 
         /// <summary>
+        /// 社区配置
+        /// </summary>
+        public static CircleConfig CircleConfig;
+
+        /// <summary>
+        /// 福利配置
+        /// </summary>
+        public static WelfareConfig WelfareConfig;
+
+        /// <summary>
         /// 上门预约订单自动服务配置
         /// </summary>
-        public static AppointConfig AppointConfig;
+        public static AppointLateConfig AppointConfig;
 
         /// <summary>
         /// B2C订单逾期自动服务配置
@@ -164,8 +230,15 @@ namespace KylinService
         public static MerchantOrderLateConfig MerchantOrderConfig;
 
         /// <summary>
-        /// 自助处理数据所在的Redis服务配置
+        /// 任务计划数据在Redis缓存中的配置
         /// </summary>
-        public static RedisConfig AutoDataRedisConfig;
+        public static ScheduleRedisCollection ScheduleRedisConfigs;
+
+        /// <summary>
+        /// 推送消息 Redis缓存配置 
+        /// </summary>
+        public static PushRedisCollection PushRedisConfigs;
+
+        #endregion
     }
 }

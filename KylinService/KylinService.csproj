@@ -179,8 +179,8 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Td.Kylin.DataCache, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.DataCache.1.0.2-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
+    <Reference Include="Td.Kylin.DataCache, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.DataCache.1.0.3-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -197,6 +197,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigForm.Designer.cs">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\ConsumerCodeGenerater.cs" />
     <Compile Include="Core\DelegateTool.cs" />
     <Compile Include="Core\EnumExtensions.cs" />
     <Compile Include="Core\IDCreater.cs" />
@@ -206,39 +213,51 @@
     <Compile Include="Core\Loger\ServerLoger.cs" />
     <Compile Include="Core\Tools.cs" />
     <Compile Include="Data\Model\AppointOrderModel.cs" />
+    <Compile Include="Data\Model\CircleEventModel.cs" />
     <Compile Include="Data\Model\MallOrderModel.cs" />
     <Compile Include="Data\Model\MerchantOrderModel.cs" />
     <Compile Include="Data\Provider\AppointOrderProvider.cs" />
+    <Compile Include="Data\Provider\CircleProvider.cs" />
     <Compile Include="Data\Provider\MerchantOrderProvider.cs" />
     <Compile Include="Data\Provider\MallOrderProvider.cs" />
-    <Compile Include="Redis\KeysConfig.cs" />
-    <Compile Include="Redis\Models\WelfareWinnerContent.cs" />
-    <Compile Include="Redis\RedisConfig.cs" />
-    <Compile Include="Redis\RedisConfigManager.cs" />
-    <Compile Include="Services\Appoint\AppointConfig.cs" />
-    <Compile Include="Services\Appoint\AppointOrderLateSchedulerManager.cs" />
-    <Compile Include="Services\Appoint\AppointOrderPaymentLateScheduler.cs" />
-    <Compile Include="Services\Appoint\AppointOrderTimeCalculator.cs" />
-    <Compile Include="Services\Appoint\AppointOrderUserFinishLateScheduler.cs" />
-    <Compile Include="Services\Appoint\AppointService.cs" />
-    <Compile Include="Services\Appoint\BaseAppointOrderLateScheduler.cs" />
-    <Compile Include="Services\BaseSchedulerManager.cs" />
-    <Compile Include="Services\MerchantOrderLate\BaseMerchantOrderLateScheduler.cs" />
-    <Compile Include="Services\MallOrderLate\BaseMallOrderLateScheduler.cs" />
-    <Compile Include="Services\MallOrderLate\MallOrderLateSchedulerManager.cs" />
-    <Compile Include="Services\MallOrderLate\MallOrderLateUserFinishScheduler.cs" />
-    <Compile Include="Services\MallOrderLate\MallOrderPaymentLateScheduler.cs" />
-    <Compile Include="Services\MallOrderLate\MallOrderService.cs" />
-    <Compile Include="Services\MallOrderLate\MallOrderTimeCalculator.cs" />
-    <Compile Include="Services\MallOrderLate\B2COrderLateConfig.cs" />
-    <Compile Include="Services\MerchantOrderLate\MerchantOrderLateUserFinishScheduler.cs" />
-    <Compile Include="Services\MerchantOrderLate\MerchantOrderPaymentLateScheduler.cs" />
-    <Compile Include="Services\MerchantOrderLate\MerchantOrderService.cs" />
-    <Compile Include="Services\MerchantOrderLate\MerchantOrderLateSchedulerManager.cs" />
-    <Compile Include="Services\MerchantOrderLate\MerchantOrderTimeCalculator.cs" />
-    <Compile Include="Services\MerchantOrderLate\MerchantOrderLateConfig.cs" />
-    <Compile Include="Services\WelfareLottery\ConsumerCodeGenerater.cs" />
-    <Compile Include="Services\WelfareLottery\LotteryContext.cs" />
+    <Compile Include="Redis\Push\Model\CircleEventRemindContent.cs" />
+    <Compile Include="Redis\Push\Model\WelfareRemindContent.cs" />
+    <Compile Include="Redis\Push\PushKeysConfig.cs" />
+    <Compile Include="Redis\Push\Model\WelfareWinnerContent.cs" />
+    <Compile Include="Redis\Push\PushRedisCollection.cs" />
+    <Compile Include="Redis\Push\PushRedisConfigManager.cs" />
+    <Compile Include="Redis\Schedule\Model\CircleEventRemindModel.cs" />
+    <Compile Include="Redis\Schedule\Model\MallOrderLateReceiveModel.cs" />
+    <Compile Include="Redis\Schedule\Model\MallOrderNoPaymentModel.cs" />
+    <Compile Include="Redis\Schedule\Model\MerchantOrderLateNoPaymentModel.cs" />
+    <Compile Include="Redis\Schedule\Model\MerchantOrderNoReceiveModel.cs" />
+    <Compile Include="Redis\Schedule\Model\ReservationOrderLateNoPaymentModel.cs" />
+    <Compile Include="Redis\Schedule\Model\VisitingOrderLateNoPaymentModel.cs" />
+    <Compile Include="Redis\Schedule\Model\ReservationOrderLateReceiveModel.cs" />
+    <Compile Include="Redis\Schedule\Model\VisitingOrderLateReceiveModel.cs" />
+    <Compile Include="Redis\Schedule\Model\WelfareRemindModel.cs" />
+    <Compile Include="Redis\Schedule\ScheduleConfigManager.cs" />
+    <Compile Include="Redis\Schedule\ScheduleRedisCollection.cs" />
+    <Compile Include="Redis\Schedule\ScheduleRedisConfig.cs" />
+    <Compile Include="Services\Clear\ClearSchedulerService.cs" />
+    <Compile Include="Services\Queue\Appoint\AppointLateConfig.cs" />
+    <Compile Include="Services\Queue\Appoint\ReservationOrderLateConfirmDoneService.cs" />
+    <Compile Include="Services\Queue\Appoint\ReservationOrderLatePaymentService.cs" />
+    <Compile Include="Services\Queue\Appoint\VisitingOrderLateConfirmDoneService.cs" />
+    <Compile Include="Services\Queue\Appoint\VisitingOrderLatePaymentService.cs" />
+    <Compile Include="Services\Queue\Circle\CircleConfig.cs" />
+    <Compile Include="Services\Queue\Circle\EventRemindService.cs" />
+    <Compile Include="Services\IService.cs" />
+    <Compile Include="Services\Queue\Mall\B2COrderLateConfig.cs" />
+    <Compile Include="Services\Queue\Mall\MallOrderLatePaymentService.cs" />
+    <Compile Include="Services\Queue\Mall\MallOrderLateReceiveService.cs" />
+    <Compile Include="Services\Queue\Merchant\MerchantOrderLateConfig.cs" />
+    <Compile Include="Services\Queue\Merchant\MerchantOrderLatePaymentService.cs" />
+    <Compile Include="Services\Queue\Merchant\MerchantOrderLateReceiveService.cs" />
+    <Compile Include="Services\Queue\QueueSchedulerService.cs" />
+    <Compile Include="Services\SchedulerCollection.cs" />
+    <Compile Include="Services\Clear\Shake\ShakeService.cs" />
+    <Compile Include="Services\SchedulerService.cs" />
     <Compile Include="Core\SysData.cs" />
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\Model\WelfareModel.cs" />
@@ -255,19 +274,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Manager\Clocker.cs" />
     <Compile Include="Manager\ClockerManager.cs" />
-    <Compile Include="Services\BaseService.cs" />
-    <Compile Include="Services\IScheduler.cs" />
-    <Compile Include="Services\ShakeDayTimes\ShakeTimesClearService.cs" />
-    <Compile Include="Services\ShakeDayTimes\ShakeTimesClearScheduler.cs" />
-    <Compile Include="Services\WelfareLottery\LotteryScheduler.cs" />
-    <Compile Include="Services\WelfareLottery\WelfareLotterySchedulerManager.cs" />
-    <Compile Include="Services\WelfareLottery\WelfareLotteryService.cs" />
+    <Compile Include="Services\Queue\Welfare\WelfareBaoMinRemindService.cs" />
+    <Compile Include="Services\Queue\Welfare\LotteryContext.cs" />
+    <Compile Include="Services\Queue\Welfare\LotteryService.cs" />
+    <Compile Include="Redis\Schedule\Model\WelfareLotteryModel.cs" />
+    <Compile Include="Services\Queue\Welfare\WelfareConfig.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="SysEnums\AppointLateType.cs" />
-    <Compile Include="SysEnums\MerchantOrderLateType.cs" />
-    <Compile Include="SysEnums\MallOrderLateType.cs" />
-    <Compile Include="SysEnums\RedisSaveType.cs" />
+    <Compile Include="SysEnums\CacheTimeOption.cs" />
+    <Compile Include="SysEnums\RedisPushType.cs" />
     <Compile Include="SysEnums\ScheduleType.cs" />
+    <EmbeddedResource Include="ConfigForm.resx">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -299,12 +317,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Td.Task.Framework\Td.Task.Framework.csproj">
-      <Project>{ca9cdde7-9f71-46d7-b17c-f15f0f167576}</Project>
-      <Name>Td.Task.Framework</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">

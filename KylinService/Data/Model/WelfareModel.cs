@@ -33,6 +33,11 @@ namespace KylinService.Data.Model
         public int Number { get; set; }
 
         /// <summary>
+        /// 接受报名的开始时间
+        /// </summary>
+        public DateTime? ApplyStartTime { get; set; }
+
+        /// <summary>
         /// 参与人数
         /// </summary>
         public int PartNumber { get; set; }

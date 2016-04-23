@@ -1,6 +1,6 @@
-﻿using KylinService.Data.Model;
-using KylinService.Redis.Models;
-using KylinService.Services.WelfareLottery;
+﻿using KylinService.Core;
+using KylinService.Data.Model;
+using KylinService.Redis.Push.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +70,8 @@ namespace KylinService.Data.Provider
                                 IsDelete = p.IsDelete,
                                 ExpiryStartTime = p.ExpiryStartTime,
                                 ExpiryEndTime = p.ExpiryEndTime,
-                                Status = p.Status
+                                Status = p.Status,
+                                ApplyStartTime = p.ApplyStartTime
                             };
 
                 return query.FirstOrDefault();
@@ -186,6 +187,34 @@ namespace KylinService.Data.Provider
                 {
                     return null;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 获取需要提醒的消息列表
+        /// </summary>
+        /// <param name="welfareID"></param>
+        /// <returns></returns>
+        public static List<WelfareRemindContent> GetRemindContentList(long welfareID)
+        {
+            using (var db = new DataContext())
+            {
+                var query = from p in db.Welfare_Remind
+                            join w in db.Merchant_Welfare
+                            on p.WelfareID equals w.WelfareID
+                            where w.WelfareID == welfareID
+                            select new WelfareRemindContent
+                            {
+                                ApplyStartTime = w.ApplyStartTime.Value,
+                                WelfareID = w.WelfareID,
+                                MerchantID = w.MerchantID,
+                                MerchantName = w.MerchantName,
+                                Name = w.Name,
+                                Number = w.Number,
+                                UserID = p.UserID
+                            };
+
+                return query.ToList();
             }
         }
     }
