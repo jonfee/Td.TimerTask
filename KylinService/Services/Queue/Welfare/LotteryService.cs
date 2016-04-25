@@ -51,6 +51,10 @@ namespace KylinService.Services.Queue.Welfare
 
                         System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, Timeout.Infinite);
 
+                        //输出消息
+                        string message = string.Format("福利“{0}”将于{1}开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"));
+                        OutputMessage(message);
+
                         Schedulers.Add(model.WelfareID, timer);
                     }
 

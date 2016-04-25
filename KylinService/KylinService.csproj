@@ -220,6 +220,10 @@
     <Compile Include="Data\Provider\CircleProvider.cs" />
     <Compile Include="Data\Provider\MerchantOrderProvider.cs" />
     <Compile Include="Data\Provider\MallOrderProvider.cs" />
+    <Compile Include="Data\Settlement\MallOrderSettlementCenter.cs" />
+    <Compile Include="Data\Settlement\MerchantOrderSettlementCenter.cs" />
+    <Compile Include="Data\Settlement\ReservationOrderSettlementCenter.cs" />
+    <Compile Include="Data\Settlement\VisitingOrderSettlementCenter.cs" />
     <Compile Include="Redis\Push\Model\CircleEventRemindContent.cs" />
     <Compile Include="Redis\Push\Model\WelfareRemindContent.cs" />
     <Compile Include="Redis\Push\PushKeysConfig.cs" />

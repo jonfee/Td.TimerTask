@@ -179,6 +179,7 @@ namespace KylinService
                 //找到状态Label，并更新状态为：运行中
                 var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
                 lbStatus.Text = "运行中";
+                lbStatus.ForeColor = System.Drawing.Color.Green;
 
                 //服务已启动
                 var servName = SysData.GetClearServiceName(serviceName);
@@ -228,6 +229,7 @@ namespace KylinService
                 //找到状态Label，并更新状态为：已停止
                 var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
                 lbStatus.Text = "已停止";
+                lbStatus.ForeColor = System.Drawing.Color.Red;
 
                 //服务名称
                 var servName = SysData.GetClearServiceName(serviceName);
@@ -421,6 +423,7 @@ namespace KylinService
                 //找到状态Label，并更新状态为：运行中
                 var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
                 lbStatus.Text = "运行中";
+                lbStatus.ForeColor = System.Drawing.Color.Green;
 
                 //服务已启动
                 var servName = SysData.GetQueueServiceName(serviceName);
@@ -487,6 +490,7 @@ namespace KylinService
                 //找到状态Label，并更新状态为：已停止
                 var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
                 lbStatus.Text = "已停止";
+                lbStatus.ForeColor = System.Drawing.Color.Red;
 
                 //服务名称
                 var servName = SysData.GetQueueServiceName(serviceName);
@@ -709,6 +713,7 @@ namespace KylinService
             //找到状态Label，并更新状态为：运行中
             var lbStatus = Find<Label>(this.tabCache, "cacheServiceStatus");
             lbStatus.Text = "运行中";
+            lbStatus.ForeColor = System.Drawing.Color.Green;
 
             string message = string.Format("【{0}】 服务已启动！", serviceName);
             WriteMessage(message);
@@ -750,7 +755,7 @@ namespace KylinService
                 //找到状态Label，并更新状态为：已停止
                 var lbStatus = Find<Label>(this.tabCache, "cacheServiceStatus");
                 lbStatus.Text = "已停止";
-
+                lbStatus.ForeColor = System.Drawing.Color.Red;
 
 
                 string message = string.Format("【{0}】 服务已停止！", serviceName);
