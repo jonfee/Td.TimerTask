@@ -123,7 +123,7 @@ namespace KylinService.Services.Queue.Welfare
                 {
                     string sucMessage = string.Format("〖福利：{0}〗已开奖，本次共有 {1} 名参与人员中奖！", model.Name, winnerPartCodes.Length);
 
-                    DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, sucMessage);
+                    OutputMessage(sucMessage);
                 }
                 else
                 {

@@ -1,10 +1,14 @@
-﻿using KylinService.Redis.Push;
+﻿using KylinService.Core;
+using KylinService.Redis.Push;
 using KylinService.Redis.Schedule;
+using KylinService.Services.CacheMaintain;
 using KylinService.Services.Queue.Appoint;
 using KylinService.Services.Queue.Circle;
 using KylinService.Services.Queue.Mall;
 using KylinService.Services.Queue.Merchant;
 using KylinService.Services.Queue.Welfare;
+using KylinService.SysEnums;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -33,7 +37,7 @@ namespace KylinService
             //注入数据缓存组件
             DataCacheInjection.UseDataCache(dataCacheRedisConn, SqlProviderType.PostgreSQL, KylinDBConnectionString);
 
-            #endregion            
+            #endregion
 
             #region //任务计划数据在Redis中的配置
             ScheduleRedisConfigs = ScheduleConfigManager.Collection;
@@ -43,13 +47,17 @@ namespace KylinService
             PushRedisConfigs = PushRedisConfigManager.Collection;
             #endregion
 
-            UpdateConfig();
+            //更新队列服务配置
+            UpdateQueueConfig();
+
+            //初始化缓存维护参数配置
+            UpdateCacheMaintainConfig();
         }
 
         /// <summary>
-        /// 更新配置
+        /// 更新队列服务配置
         /// </summary>
-        public static void UpdateConfig()
+        public static void UpdateQueueConfig()
         {
             var sysConfigs = CacheCollection.SystemGolbalConfigCache.Value();
 
@@ -72,6 +80,59 @@ namespace KylinService
             #region //商家商品订单自动服务参数配置
             MerchantOrderConfig = GetMerchantOrderConfig(sysConfigs);
             #endregion
+        }
+
+        /// <summary>
+        /// 更新缓存维护参数配置
+        /// </summary>
+        public static void UpdateCacheMaintainConfig(IEnumerable<CacheMaintainConfig> configs = null)
+        {
+            var _list = new List<CacheMaintainConfig>();
+
+            //缓存级别列表
+            var levelList = typeof(CacheLevel).GetEnumDesc<CacheLevel>();
+
+            foreach (var item in levelList)
+            {
+                var level = (CacheLevel)Enum.Parse(typeof(CacheLevel), item.Name);
+
+                CacheMaintainConfig conf = new CacheMaintainConfig
+                {
+                    Level = level,
+                    PeriodTime = 0,
+                    TimeOption = default(CacheTimeOption)
+                };
+
+
+                CacheMaintainConfig _temp = null;
+                if (null != configs)
+                {
+                    _temp = configs.FirstOrDefault(p => (int)p.Level == item.Value);
+                }
+
+                if (null != _temp)
+                {
+                    conf.PeriodTime = _temp.PeriodTime;
+                    conf.TimeOption = _temp.TimeOption;
+                }
+                else
+                {
+                    switch (level)
+                    {
+                        case CacheLevel.Hight: conf.PeriodTime = 7; conf.TimeOption = CacheTimeOption.Day; break;
+                        case CacheLevel.Lower: conf.PeriodTime = 30; conf.TimeOption = CacheTimeOption.Minute; break;
+                        case CacheLevel.Middel: conf.PeriodTime = 1; conf.TimeOption = CacheTimeOption.Day; break;
+                        case CacheLevel.Permanent: conf.PeriodTime = 180; conf.TimeOption = CacheTimeOption.Day; break;
+                    }
+                }
+
+                if (conf.PeriodTime < 0) conf.PeriodTime = 0;
+
+
+                _list.Add(conf);
+            }
+
+            CacheMaintainConfigs = _list;
         }
 
         #region 私有方法
@@ -238,6 +299,11 @@ namespace KylinService
         /// 推送消息 Redis缓存配置 
         /// </summary>
         public static PushRedisCollection PushRedisConfigs;
+
+        /// <summary>
+        /// 缓存维护参数配置
+        /// </summary>
+        public static List<CacheMaintainConfig> CacheMaintainConfigs;
 
         #endregion
     }

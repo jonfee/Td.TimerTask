@@ -89,7 +89,7 @@ namespace KylinService.Services.Queue.Mall
                     message = string.Format("〖订单（{0}）：{1}〗因超时未确认收货，系统自动收货确认处理时操作失败！", lastOrder.OrderCode, lastOrder.ProductInfo);
                 }
 
-                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
+                OutputMessage(message);
             }
             catch (Exception ex)
             {

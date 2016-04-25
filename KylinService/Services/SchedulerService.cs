@@ -1,7 +1,5 @@
 ﻿using KylinService.Core;
 using KylinService.Core.Loger;
-using KylinService.Redis.Schedule;
-using KylinService.SysEnums;
 using System;
 using System.Text;
 using System.Windows.Forms;
@@ -21,12 +19,12 @@ namespace KylinService.Services
         /// <summary>
         /// 消息输出委托
         /// </summary>
-        protected DelegateTool.WriteMessageDelegate WriteDelegate;
+        private DelegateTool.WriteMessageDelegate WriteDelegate;
 
         /// <summary>
         /// 当前操作Form窗体
         /// </summary>
-        protected Form CurrentForm;
+        private Form CurrentForm;
 
         /// <summary>
         /// 任务计划收集器
@@ -124,6 +122,15 @@ namespace KylinService.Services
             //写入异常日志
             var loger = new ExceptionLoger();
             loger.Write(ServiceName, ex);
+        }
+
+        /// <summary>
+        /// 输出消息
+        /// </summary>
+        /// <param name="message"></param>
+        protected void OutputMessage(string message)
+        {
+            DelegateTool.WriteMessage(CurrentForm, WriteDelegate, message);
         }
     }
 }

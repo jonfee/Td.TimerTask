@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Td.Kylin.DataCache;
 
 namespace KylinService
 {
@@ -47,6 +48,9 @@ namespace KylinService
 
             //附近购订单配置信息
             ShowMerchantConfig();
+
+            //缓存维护参数配置信息
+            ShowCacheMaintainConfig();
         }
 
         /// <summary>
@@ -206,6 +210,38 @@ namespace KylinService
             sb.AppendLine("附近购（商家）自助服务配置：");
             sb.AppendLine(string.Format("   未支付订单超过{0}分钟系统自动取消订单", Startup.MerchantOrderConfig.WaitPaymentMinutes));
             sb.AppendLine(string.Format("   发货后超过{0}天系统自动确认服务完成", Startup.MerchantOrderConfig.WaitReceiptGoodsDays));
+
+            WriteOutConfig(sb.ToString(), true);
+        }
+
+        /// <summary>
+        /// 缓存维护参数配置信息
+        /// </summary>
+        void ShowCacheMaintainConfig()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (null != Startup.CacheMaintainConfigs && Startup.CacheMaintainConfigs.Count > 0)
+            {
+                sb.AppendLine("缓存维护参数配置：");
+
+                foreach (var config in Startup.CacheMaintainConfigs)
+                {
+                    string levelDesc = "";
+
+                    switch (config.Level)
+                    {
+                        case CacheLevel.Hight: levelDesc = "高"; break;
+                        case CacheLevel.Lower: levelDesc = "低"; break;
+                        case CacheLevel.Middel: levelDesc = "中等"; break;
+                        case CacheLevel.Permanent: levelDesc = "持久"; break;
+                    }
+
+                    string option = SysData.GetCacheTimeOptionName(config.TimeOption.ToString());
+
+                    sb.AppendLine(string.Format("   {0}级别的缓存更新周期为 {1} {2}", levelDesc, config.PeriodTime, option));
+                }
+            }
 
             WriteOutConfig(sb.ToString(), true);
         }

@@ -44,7 +44,7 @@ namespace KylinService.Services.Clear.Shake
         /// 执行事务
         /// </summary>
         /// <param name="state"></param>
-       protected override void Execute(object state)
+        protected override void Execute(object state)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace KylinService.Services.Clear.Shake
 
                 string message = string.Format("共对 {0} 位用户进行了摇一摇当日已摇次数清除", count);
 
-                WriteDelegate(message);
+                OutputMessage(message);
             }
             catch (Exception ex)
             {

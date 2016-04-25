@@ -85,7 +85,7 @@ namespace KylinService.Services.Queue.Appoint
                     message = string.Format("〖订单（{0}）：{1}〗因超时未确认服务完成，系统自动确认服务完成时操作失败！", lastOrder.OrderCode, lastOrder.BusinessName);
                 }
 
-                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
+                OutputMessage(message);
             }
             catch (Exception ex)
             {

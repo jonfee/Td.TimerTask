@@ -87,7 +87,7 @@ namespace KylinService.Services.Queue.Mall
                     message = string.Format("〖订单（{0}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", lastOrder.OrderCode, lastOrder.ProductInfo);
                 }
 
-                DelegateTool.WriteMessage(this.CurrentForm, this.WriteDelegate, message);
+                OutputMessage(message);
             }
             catch (Exception ex)
             {

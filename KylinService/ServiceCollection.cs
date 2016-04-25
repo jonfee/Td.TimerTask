@@ -1,12 +1,10 @@
-﻿using System;
+﻿using KylinService.Services;
+using System;
 using System.Collections;
 
-namespace KylinService.Services
+namespace KylinService
 {
-    /// <summary>
-    /// 任务采集器
-    /// </summary>
-    public class SchedulerCollection : IDisposable
+    public class ServiceCollection<T> where T : SchedulerService, IService
     {
         Hashtable hastable = Hashtable.Synchronized(new Hashtable());
 
@@ -28,11 +26,11 @@ namespace KylinService.Services
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public object this[object key]
+        public T this[object key]
         {
             get
             {
-                return hastable[key];
+                return hastable[key] as T;
             }
             set
             {
@@ -53,7 +51,7 @@ namespace KylinService.Services
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void Add(object key, object value)
+        public void Add(object key, T value)
         {
             lock (locking)
             {
@@ -96,13 +94,13 @@ namespace KylinService.Services
             {
                 if (disposing)
                 {
-                   if(Items!= null)
+                    if (Items != null)
                     {
-                        foreach(var item in Items)
+                        foreach (var item in Items)
                         {
-                            if(item is IDisposable)
+                            if (item is T)
                             {
-                                ((IDisposable)item).Dispose();
+                                ((T)item).Dispose();
                             }
                         }
                     }

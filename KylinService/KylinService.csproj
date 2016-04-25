@@ -179,8 +179,8 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Td.Kylin.DataCache, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.DataCache.1.0.3-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
+    <Reference Include="Td.Kylin.DataCache, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.DataCache.1.0.4-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -239,6 +239,9 @@
     <Compile Include="Redis\Schedule\ScheduleConfigManager.cs" />
     <Compile Include="Redis\Schedule\ScheduleRedisCollection.cs" />
     <Compile Include="Redis\Schedule\ScheduleRedisConfig.cs" />
+    <Compile Include="ServiceCollection.cs" />
+    <Compile Include="Services\CacheMaintain\CacheMaintainConfig.cs" />
+    <Compile Include="Services\CacheMaintain\CacheMaintainService.cs" />
     <Compile Include="Services\Clear\ClearSchedulerService.cs" />
     <Compile Include="Services\Queue\Appoint\AppointLateConfig.cs" />
     <Compile Include="Services\Queue\Appoint\ReservationOrderLateConfirmDoneService.cs" />
@@ -255,6 +258,7 @@
     <Compile Include="Services\Queue\Merchant\MerchantOrderLatePaymentService.cs" />
     <Compile Include="Services\Queue\Merchant\MerchantOrderLateReceiveService.cs" />
     <Compile Include="Services\Queue\QueueSchedulerService.cs" />
+    <Compile Include="Services\ScheduleClocker.cs" />
     <Compile Include="Services\SchedulerCollection.cs" />
     <Compile Include="Services\Clear\Shake\ShakeService.cs" />
     <Compile Include="Services\SchedulerService.cs" />

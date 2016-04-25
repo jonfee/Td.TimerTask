@@ -46,9 +46,9 @@ namespace KylinService.Core
         /// </summary>
         /// <param name="enumType"></param>
         /// <returns></returns>
-        public static List<EnumDesc> GetEnumDesc(this Type enumType)
+        public static List<EnumDesc<T>> GetEnumDesc<T>(this Type enumType) where T : struct
         {
-            List<EnumDesc> list = new List<EnumDesc>();
+            List<EnumDesc<T>> list = new List<EnumDesc<T>>();
 
             if (enumType.IsEnum)
             {
@@ -65,8 +65,9 @@ namespace KylinService.Core
 
                     if (string.IsNullOrWhiteSpace(description)) description = field.Name;
 
-                    list.Add(new EnumDesc
+                    list.Add(new EnumDesc<T>
                     {
+                        EnumItem = (T)Enum.Parse(enumType, field.Name, true),
                         Value = (int)System.Enum.Parse(enumType, field.Name, true),
                         Name = field.Name,
                         Description = description
@@ -80,8 +81,13 @@ namespace KylinService.Core
         /// <summary>
         /// 枚举描述类
         /// </summary>
-        public class EnumDesc
+        public class EnumDesc<T> where T : struct
         {
+            /// <summary>
+            /// 枚举
+            /// </summary>
+            public T EnumItem { get; set; }
+
             /// <summary>
             /// 常数值表示
             /// </summary>

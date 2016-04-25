@@ -1,5 +1,7 @@
 ﻿using KylinService.Core;
 using KylinService.Core.Loger;
+using KylinService.Services;
+using KylinService.Services.CacheMaintain;
 using KylinService.Services.Clear.Shake;
 using KylinService.Services.Queue.Appoint;
 using KylinService.Services.Queue.Circle;
@@ -8,6 +10,8 @@ using KylinService.Services.Queue.Merchant;
 using KylinService.Services.Queue.Welfare;
 using KylinService.SysEnums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Td.Kylin.DataCache;
 
@@ -37,8 +41,10 @@ namespace KylinService
             InitQueueControls();
 
             //缓存维护服务控制绑定
-            IntiCacheControls();
+            InitCacheControls();
         }
+
+        ServiceCollection<SchedulerService> _serviceCollection = new ServiceCollection<SchedulerService>();
 
         #region /////////////////私有变量///////////////////
 
@@ -46,7 +52,7 @@ namespace KylinService
         private string _serTstatus = "lb_Status_";  //服务运行状态展示控件标识
         private string _serTstartbtn = "btnStart_"; //服务启用按钮标识
         private string _serTstopbtn = "btnStop_";   //服务停止按钮标识
-        private string _serTtime = "time_";         //服务运行时间控件标识
+        //private string _serTtime = "time_";         //服务运行时间控件标识
 
         //定义消息输出委托
         private DelegateTool.WriteMessageDelegate writeDelegate;
@@ -130,25 +136,23 @@ namespace KylinService
 
             var btn = (Button)sender;
 
-            var scheduleTypeName = (btn.Tag ?? string.Empty).ToString();
+            var serviceName = (btn.Tag ?? string.Empty).ToString();
 
             #endregion
 
             #region 启动服务
 
             //当前服务的计划类型
-            ClearScheduleType schedule = (ClearScheduleType)Enum.Parse(typeof(ClearScheduleType), scheduleTypeName);
+            ClearScheduleType schedule = (ClearScheduleType)Enum.Parse(typeof(ClearScheduleType), serviceName);
 
-            //是否已启动
-            bool isOpened = false;
+            //任务计划服务
+            SchedulerService service = null;
 
             switch (schedule)
             {
                 //摇一摇服务
                 case ClearScheduleType.ShakeDayTimesClear:
-                    var shakeService = new ShakeService(this, writeDelegate);
-                    shakeService.OnStart();
-                    isOpened = true;
+                    service = new ShakeService(this, writeDelegate);
                     break;
             }
 
@@ -156,8 +160,12 @@ namespace KylinService
 
             #region 
 
-            if (isOpened)
+            if (service != null)
             {
+                service.OnStart();
+
+                _serviceCollection.Add(serviceName, service);
+
                 //禁用启动按钮
                 btn.Enabled = false;
 
@@ -165,18 +173,15 @@ namespace KylinService
                 var parent = btn.Parent;
 
                 //找到停止按钮并启用交互
-                var btnStop = Find<Button>(parent, _serTstopbtn, scheduleTypeName);
+                var btnStop = Find<Button>(parent, _serTstopbtn, serviceName);
                 btnStop.Enabled = true;
 
                 //找到状态Label，并更新状态为：运行中
-                var lbStatus = Find<Label>(parent, _serTstatus, scheduleTypeName);
+                var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
                 lbStatus.Text = "运行中";
 
                 //服务已启动
-                var servName = SysData.GetClearServiceName(scheduleTypeName);
-
-                //找到运行时间显示控件
-                var lbTime = Find<Label>(parent, _serTtime, scheduleTypeName);
+                var servName = SysData.GetClearServiceName(serviceName);
 
                 string message = string.Format("【{0}】 服务已启动！", servName);
                 WriteMessage(message);
@@ -197,33 +202,44 @@ namespace KylinService
         {
             var btn = (Button)sender;
 
-            var scheduleTypeName = (btn.Tag ?? string.Empty).ToString();
+            var serviceName = (btn.Tag ?? string.Empty).ToString();
 
             #region 停止服务
 
-            btn.Enabled = false;
+            //当前服务的计划类型
+            ClearScheduleType schedule = (ClearScheduleType)Enum.Parse(typeof(ClearScheduleType), serviceName);
 
-            //父控件
-            var parent = btn.Parent;
+            //任务计划服务
+            SchedulerService service = _serviceCollection[serviceName];
 
-            //找到启用按钮并启用交互
-            var btnStart = Find<Button>(parent, _serTstartbtn, scheduleTypeName);
-            btnStart.Enabled = true;
+            if (null != service)
+            {
+                service.Dispose();
 
-            //找到状态Label，并更新状态为：已停止
-            var lbStatus = Find<Label>(parent, _serTstatus, scheduleTypeName);
-            lbStatus.Text = "已停止";
+                btn.Enabled = false;
 
-            //服务名称
-            var servName = SysData.GetClearServiceName(scheduleTypeName);
+                //父控件
+                var parent = btn.Parent;
 
-            string message = string.Format("【{0}】 服务已停止！", servName);
-            WriteMessage(message);
+                //找到启用按钮并启用交互
+                var btnStart = Find<Button>(parent, _serTstartbtn, serviceName);
+                btnStart.Enabled = true;
 
-            //记录停止日志
-            var loger = new ServerLoger(servName);
-            loger.Write("服务已停止！");
+                //找到状态Label，并更新状态为：已停止
+                var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
+                lbStatus.Text = "已停止";
 
+                //服务名称
+                var servName = SysData.GetClearServiceName(serviceName);
+
+                string message = string.Format("【{0}】 服务已停止！", servName);
+                WriteMessage(message);
+
+                //记录停止日志
+                var loger = new ServerLoger(servName);
+                loger.Write("服务已停止！");
+
+            }
             #endregion
         }
 
@@ -322,85 +338,63 @@ namespace KylinService
 
             var btn = (Button)sender;
 
-            var scheduleTypeName = (btn.Tag ?? string.Empty).ToString();
+            var serviceName = (btn.Tag ?? string.Empty).ToString();
 
             #endregion
 
             #region 启动服务
 
             //当前服务的计划类型
-            QueueScheduleType schedule = (QueueScheduleType)Enum.Parse(typeof(QueueScheduleType), scheduleTypeName);
+            QueueScheduleType schedule = (QueueScheduleType)Enum.Parse(typeof(QueueScheduleType), serviceName);
 
-            //是否已启动
-            bool isOpened = false;
+            //任务计划服务
+            SchedulerService service = null;
 
             switch (schedule)
             {
                 //福利开奖 
                 case QueueScheduleType.WelfareLottery:
-                    var lotteryService = new LotteryService(this, writeDelegate);
-                    lotteryService.OnStart();
-                    isOpened = true;
+                    service = new LotteryService(this, writeDelegate);
                     break;
                 //福利报名提醒
                 case QueueScheduleType.WelfareBaoMinRemind:
-                    var welfareRemindService = new WelfareBaoMinRemindService(this, writeDelegate);
-                    welfareRemindService.OnStart();
-                    isOpened = true;
+                    service = new WelfareBaoMinRemindService(this, writeDelegate);
                     break;
                 //社区活动提醒
                 case QueueScheduleType.CircleEventRemind:
-                    var eventRemindService = new EventRemindService(this, writeDelegate);
-                    eventRemindService.OnStart();
-                    isOpened = true;
+                    service = new EventRemindService(this, writeDelegate);
                     break;
                 //精品汇订单超时未支付
                 case QueueScheduleType.MallOrderLatePayment:
-                    var mallNoPayService = new MallOrderLatePaymentService(this, writeDelegate);
-                    mallNoPayService.OnStart();
-                    isOpened = true;
+                    service = new MallOrderLatePaymentService(this, writeDelegate);
                     break;
                 //精品汇订单超时未收货
                 case QueueScheduleType.MallOrderLateReceive:
-                    var mallNoReceiveService = new MallOrderLateReceiveService(this, writeDelegate);
-                    mallNoReceiveService.OnStart();
-                    isOpened = true;
+                    service = new MallOrderLateReceiveService(this, writeDelegate);
                     break;
                 //附近购订单超时未支付
                 case QueueScheduleType.MerchantOrderLatePayment:
-                    var merchantNoPayService = new MerchantOrderLatePaymentService(this, writeDelegate);
-                    merchantNoPayService.OnStart();
-                    isOpened = true;
+                    service = new MerchantOrderLatePaymentService(this, writeDelegate);
                     break;
                 //附近购订单超时未收货
                 case QueueScheduleType.MerchantOrderLateReceive:
-                    var merchantNoReceiveService = new MerchantOrderLateReceiveService(this, writeDelegate);
-                    merchantNoReceiveService.OnStart();
-                    isOpened = true;
+                    service = new MerchantOrderLateReceiveService(this, writeDelegate);
                     break;
                 //上门订单超时未支付
                 case QueueScheduleType.VisitingOrderLatePayment:
-                    var visitNoPayService = new VisitingOrderLatePaymentService(this, writeDelegate);
-                    visitNoPayService.OnStart();
-                    isOpened = true;
+                    service = new VisitingOrderLatePaymentService(this, writeDelegate);
                     break;
                 //上门订单超时未确认服务完成
                 case QueueScheduleType.VisitingOrderLateConfirmDone:
-                    var visitNoDoneService = new VisitingOrderLateConfirmDoneService(this, writeDelegate);
-                    visitNoDoneService.OnStart();
-                    isOpened = true;
+                    service = new VisitingOrderLateConfirmDoneService(this, writeDelegate);
                     break;
                 //预约订单超时未支付
                 case QueueScheduleType.ReservationOrderLatePayment:
-                    var reservaNoPayService = new ReservationOrderLatePaymentService(this, writeDelegate);
-                    reservaNoPayService.OnStart();
-                    isOpened = true;
+                    service = new ReservationOrderLatePaymentService(this, writeDelegate);
                     break;
                 //预约订单超时未确认服务完成
                 case QueueScheduleType.ReservationOrderLateConfirmDone:
-                    var reservaNoDoneService = new ReservationOrderLateConfirmDoneService(this, writeDelegate);
-                    reservaNoDoneService.OnStart();
-                    isOpened = true;
+                    service = new ReservationOrderLateConfirmDoneService(this, writeDelegate);
                     break;
             }
 
@@ -408,8 +402,12 @@ namespace KylinService
 
             #region 
 
-            if (isOpened)
+            if (service != null)
             {
+                service.OnStart();
+
+                _serviceCollection.Add(serviceName, service);
+
                 //禁用启动按钮
                 btn.Enabled = false;
 
@@ -417,18 +415,18 @@ namespace KylinService
                 var parent = btn.Parent;
 
                 //找到停止按钮并启用交互
-                var btnStop = Find<Button>(parent, _serTstopbtn, scheduleTypeName);
+                var btnStop = Find<Button>(parent, _serTstopbtn, serviceName);
                 btnStop.Enabled = true;
 
                 //找到状态Label，并更新状态为：运行中
-                var lbStatus = Find<Label>(parent, _serTstatus, scheduleTypeName);
+                var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
                 lbStatus.Text = "运行中";
 
                 //服务已启动
-                var servName = SysData.GetQueueServiceName(scheduleTypeName);
+                var servName = SysData.GetQueueServiceName(serviceName);
 
-                //找到运行时间显示控件
-                var lbTime = Find<Label>(parent, _serTtime, scheduleTypeName);
+                ////找到运行时间显示控件
+                //var lbTime = Find<Label>(parent, _serTtime, scheduleTypeName);
 
                 ////服务计时
                 //var clocker = new Clocker(scheduleTypeName, (obj) =>
@@ -466,35 +464,43 @@ namespace KylinService
         {
             var btn = (Button)sender;
 
-            var scheduleTypeName = (btn.Tag ?? string.Empty).ToString();
+            var serviceName = (btn.Tag ?? string.Empty).ToString();
 
             #region 停止服务
 
-            btn.Enabled = false;
+            //任务计划服务
+            SchedulerService service = _serviceCollection[serviceName];
 
-            //父控件
-            var parent = btn.Parent;
+            if (null != service)
+            {
+                service.Dispose();
 
-            //找到启用按钮并启用交互
-            var btnStart = Find<Button>(parent, _serTstartbtn, scheduleTypeName);
-            btnStart.Enabled = true;
+                btn.Enabled = false;
 
-            //找到状态Label，并更新状态为：已停止
-            var lbStatus = Find<Label>(parent, _serTstatus, scheduleTypeName);
-            lbStatus.Text = "已停止";
+                //父控件
+                var parent = btn.Parent;
 
-            //服务名称
-            var servName = SysData.GetQueueServiceName(scheduleTypeName);
+                //找到启用按钮并启用交互
+                var btnStart = Find<Button>(parent, _serTstartbtn, serviceName);
+                btnStart.Enabled = true;
 
-            //停止计时器
-            //ClockerManager.Instance.Stop(scheduleTypeName);
+                //找到状态Label，并更新状态为：已停止
+                var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
+                lbStatus.Text = "已停止";
 
-            string message = string.Format("【{0}】 服务已停止！", servName);
-            WriteMessage(message);
+                //服务名称
+                var servName = SysData.GetQueueServiceName(serviceName);
 
-            //记录停止日志
-            var loger = new ServerLoger(servName);
-            loger.Write("服务已停止！");
+                //停止计时器
+                //ClockerManager.Instance.Stop(scheduleTypeName);
+
+                string message = string.Format("【{0}】 服务已停止！", servName);
+                WriteMessage(message);
+
+                //记录停止日志
+                var loger = new ServerLoger(servName);
+                loger.Write("服务已停止！");
+            }
 
             #endregion
         }
@@ -503,15 +509,12 @@ namespace KylinService
 
         #region 缓存维护
 
-        private void IntiCacheControls()
+        private void InitCacheControls()
         {
             Type enumLevelType = typeof(CacheLevel);
 
             //缓存级别列表
-            var levelList = enumLevelType.GetEnumDesc();
-
-            //缓存周期单位列表
-            var timeoptions = typeof(CacheTimeOption).GetEnumDesc();
+            var levelList = enumLevelType.GetEnumDesc<CacheLevel>();
 
             int itemHight = 30;
 
@@ -519,15 +522,13 @@ namespace KylinService
             {
                 var level = levelList[i];
 
-                var levelType = (CacheLevel)Enum.Parse(enumLevelType, level.Name);
-
                 //缓存更新周期
                 int time = 0;
 
                 //缓存更新周期时间单位
                 var timeOption = default(CacheTimeOption);
 
-                switch (levelType)
+                switch (level.EnumItem)
                 {
                     case CacheLevel.Hight: level.Description = "高"; time = 7; timeOption = CacheTimeOption.Day; break;
                     case CacheLevel.Lower: level.Description = "低"; time = 30; timeOption = CacheTimeOption.Minute; break;
@@ -567,7 +568,7 @@ namespace KylinService
                 combTimeOption.Name = "comb_lv_" + level.Name;
                 combTimeOption.Location = new System.Drawing.Point(280, 5);
                 //绑定项
-                foreach (var to in timeoptions)
+                foreach (var to in SysData.CacheTimeOptionList)
                 {
                     combTimeOption.Items.Add(to.Description);
 
@@ -642,7 +643,81 @@ namespace KylinService
         /// <param name="e"></param>
         private void BtnCacheStart_Click(object sender, EventArgs e)
         {
+            var btn = (Button)sender;
 
+            #region 获取并更新配置
+
+            List<CacheMaintainConfig> configs = new List<CacheMaintainConfig>();
+
+            //缓存级别列表
+            var levelList = typeof(CacheLevel).GetEnumDesc<CacheLevel>();
+
+            foreach (var lv in levelList)
+            {
+                //获取级别对应的周期
+                TextBox tbPeriod = Find<TextBox>(this.tabCache, "tb_lv_", lv.Name);
+                int time = 0;
+                if (null != tbPeriod)
+                {
+                    int.TryParse(tbPeriod.Text.Trim(), out time);
+                }
+
+                //获取级别对应的周期单位
+                ComboBox combTimeOption = Find<ComboBox>(this.tabCache, "comb_lv_", lv.Name);
+                CacheTimeOption option = CacheTimeOption.Day;
+                if (null != combTimeOption)
+                {
+                    string strOption = combTimeOption.SelectedText.Trim();
+
+                    var _tempOption = SysData.CacheTimeOptionList.FirstOrDefault(p => p.Description.Equals(strOption));
+
+                    if (null != _tempOption)
+                    {
+                        option = (CacheTimeOption)Enum.Parse(typeof(CacheTimeOption), _tempOption.Name);
+                    }
+                }
+
+                configs.Add(new CacheMaintainConfig
+                {
+                    Level = (CacheLevel)Enum.Parse(typeof(CacheLevel), lv.Name),
+                    PeriodTime = time,
+                    TimeOption = option
+                });
+            }
+            //更新缓存维护参数配置
+            Startup.UpdateCacheMaintainConfig(configs);
+
+            #endregion
+
+            #region 启动服务
+
+            string serviceName = "缓存维护服务";
+
+            SchedulerService service = new CacheMaintainService(serviceName, this, writeDelegate);
+
+            service.OnStart();
+
+            _serviceCollection.Add(serviceName, service);
+
+            //禁用启动按钮
+            btn.Enabled = false;
+
+            //找到停止按钮并启用交互
+            var btnStop = Find<Button>(this.tabCache, "btnCacheStop");
+            btnStop.Enabled = true;
+
+            //找到状态Label，并更新状态为：运行中
+            var lbStatus = Find<Label>(this.tabCache, "cacheServiceStatus");
+            lbStatus.Text = "运行中";
+
+            string message = string.Format("【{0}】 服务已启动！", serviceName);
+            WriteMessage(message);
+
+            //记录启动日志
+            var loger = new ServerLoger(serviceName);
+            loger.Write("服务已启动！");
+
+            #endregion
         }
 
         /// <summary>
@@ -652,7 +727,41 @@ namespace KylinService
         /// <param name="e"></param>
         private void BtnCacheStop_Click(object sender, EventArgs e)
         {
+            var btn = (Button)sender;
 
+            #region 停止服务
+
+            //服务名称
+            var serviceName = "缓存维护服务";
+
+            //任务计划服务
+            SchedulerService service = _serviceCollection[serviceName];
+
+            if (null != service)
+            {
+                service.Dispose();
+
+                btn.Enabled = false;
+
+                //找到启用按钮并启用交互
+                var btnStart = Find<Button>(this.tabCache, "btnCacheStart");
+                btnStart.Enabled = true;
+
+                //找到状态Label，并更新状态为：已停止
+                var lbStatus = Find<Label>(this.tabCache, "cacheServiceStatus");
+                lbStatus.Text = "已停止";
+
+
+
+                string message = string.Format("【{0}】 服务已停止！", serviceName);
+                WriteMessage(message);
+
+                //记录停止日志
+                var loger = new ServerLoger(serviceName);
+                loger.Write("服务已停止！");
+            }
+
+            #endregion
         }
 
         #endregion
@@ -667,21 +776,60 @@ namespace KylinService
         /// <returns></returns>
         private T Find<T>(Control parent, string tagName, string scheduleType) where T : Control
         {
-            Type type = typeof(T);
+            string name = tagName + scheduleType;
 
-            var controls = parent.Controls;
+            return Find<T>(parent, name);
+        }
 
-            foreach (Control item in controls)
+        /// <summary>
+        /// 获取控件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private T Find<T>(Control parent, string name) where T : Control
+        {
+            var find = Fix<Control, string, T>(f => (control, controlName) =>
             {
-                string name = tagName + scheduleType;
+                T rstControl = null;
 
-                if (item.Name == name)
+                Type type = typeof(T);
+
+                var controls = control.Controls;
+
+                foreach (Control item in controls)
                 {
-                    return (T)item;
+                    if (item.Name == controlName)
+                    {
+                        rstControl = (T)item;
+                        break;
+                    }
+                    else
+                    {
+                        rstControl = f(item, controlName);
+                        if (rstControl != null)
+                        {
+                            break;
+                        }
+                    }
                 }
-            }
 
-            return default(T);
+                return rstControl;
+            });
+
+            return find(parent, name);
+        }
+
+        /// <summary>
+        /// 不动点算子函数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="g"></param>
+        /// <returns></returns>
+        Func<T1, T2, TResult> Fix<T1, T2, TResult>(Func<Func<T1, T2, TResult>, Func<T1, T2, TResult>> g)
+        {
+            return (x, y) => g(Fix(g))(x, y);
         }
 
         #endregion
@@ -711,7 +859,7 @@ namespace KylinService
         /// <param name="e"></param>
         private void btnUpdateConfig_Click(object sender, EventArgs e)
         {
-            Startup.UpdateConfig();
+            Startup.UpdateQueueConfig();
 
             WriteMessage("配置已更新！");
         }
