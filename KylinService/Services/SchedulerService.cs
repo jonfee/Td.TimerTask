@@ -117,7 +117,7 @@ namespace KylinService.Services
             sb.AppendLine("异常详情：");
             sb.AppendLine(ex.StackTrace);
 
-            DelegateTool.WriteMessage(this.CurrentForm, WriteDelegate, sb.ToString());
+            OutputMessage(sb.ToString());
 
             //写入异常日志
             var loger = new ExceptionLoger();
