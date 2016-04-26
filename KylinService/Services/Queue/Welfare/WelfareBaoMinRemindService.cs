@@ -78,7 +78,7 @@ namespace KylinService.Services.Queue.Welfare
                 #region 推送消息给需要提醒的用户
 
                 //获取需要提醒的用户
-                var remindContentList = WelfareProvider.GetRemindContentList(model.WelfareID) as IEnumerable<WelfareRemindContent>;
+                IEnumerable<WelfareRemindContent> remindContentList = WelfareProvider.GetRemindContentList(model.WelfareID);
 
                 if (null != remindContentList && remindContentList.Count() > 0)
                 {

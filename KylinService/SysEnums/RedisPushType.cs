@@ -21,6 +21,16 @@ namespace KylinService.SysEnums
         /// 福利报名提醒
         /// </summary>
         [Description("福利报名提醒")]
-        WelfareRemind = 4
+        WelfareRemind = 3,
+        /// <summary>
+        /// 精品汇订单确认收货消息
+        /// </summary>
+        [Description("精品汇订单确认收货消息")]
+        B2COrderReceivedGoods = 4,
+        /// <summary>
+        /// 附近购订单确认收货消息
+        /// </summary>
+        [Description("附近购订单确认收货消息")]
+        MerchantOrderReceivedGoods = 5
     }
 }

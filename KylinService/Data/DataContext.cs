@@ -712,7 +712,11 @@ namespace KylinService.Data
             {
                 entity.HasKey(p => new { p.OperatorID, p.AreaID });
             });
-
+            modelBuilder.Entity<AreaOperator_TradeRecords>(entity =>
+            {
+                entity.Property(p => p.TradeID).ValueGeneratedNever();
+                entity.HasKey(p => p.TradeID);
+            });
             #endregion
 
             #region 代理商
@@ -755,11 +759,12 @@ namespace KylinService.Data
 
             #endregion
 
-
+            #region 平台资金流水
             modelBuilder.Entity<Platform_MoneyTransaction>(entity =>
             {
                 entity.HasKey(p => p.TransactionCode);
             });
+            #endregion
         }
 
         #region DbSet
@@ -1367,7 +1372,10 @@ namespace KylinService.Data
         /// </summary>
         public DbSet<Area_OperatorRelation> Area_OperatorRelation { get { return Set<Area_OperatorRelation>(); } }
 
-
+        /// <summary>
+        /// 运营商交易记录
+        /// </summary>
+        public DbSet<AreaOperator_TradeRecords> AreaOperator_TradeRecords { get { return Set<AreaOperator_TradeRecords>(); } }
         #endregion
 
         #region 代理商
@@ -1389,10 +1397,12 @@ namespace KylinService.Data
 
         #endregion
 
+        #region 平台资金流水
         /// <summary>
         /// 平台资金流水
         /// </summary>
         public DbSet<Platform_MoneyTransaction> Platform_MoneyTransaction { get { return Set<Platform_MoneyTransaction>(); } }
+        #endregion
 
         #endregion
     }

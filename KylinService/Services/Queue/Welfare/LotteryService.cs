@@ -1,5 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Provider;
+using KylinService.Redis.Push.Model;
 using KylinService.Redis.Schedule;
 using KylinService.Redis.Schedule.Model;
 using KylinService.SysEnums;
@@ -121,7 +122,7 @@ namespace KylinService.Services.Queue.Welfare
 
                 #region //写入中奖结果
 
-                var pushContent = WelfareProvider.WriteLotteryResult(model.WelfareID, winnerPartCodes);
+                WelfareWinnerContent pushContent = WelfareProvider.WriteLotteryResult(model.WelfareID, winnerPartCodes);
 
                 if (null != pushContent)
                 {

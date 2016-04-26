@@ -12,71 +12,6 @@ namespace KylinService.Data.Provider
     public class MallOrderProvider
     {
         /// <summary>
-        /// 获取今天逾期未付款的订单
-        /// </summary>
-        /// <returns></returns>
-        public static List<MallOrderModel> GetNoPaymentListForTodayWillTimeout(int minutes)
-        {
-            using (var db = new DataContext())
-            {
-                var query = from o in db.Mall_Order
-                            where o.OrderStatus == (int)B2COrderStatus.WaitingPayment
-                            && (
-                                (o.OrderType == (int)B2COrderType.MallOrder && o.CreateTime.AddMinutes(minutes) < DateTime.Now.Date.AddDays(1))//商城购买，未付款，今天将超时&&o.CreateTime.AddHours(hours).Date == DateTime.Now.Date
-                                ||
-                                (o.OrderType == (int)B2COrderType.ShakeOrder && o.NeedPayTime.HasValue && o.NeedPayTime.Value < DateTime.Now.Date.AddDays(1))//摇一摇购买，未付款，今天将超时 && o.NeedPayTime.Value.Date == DateTime.Now.Date
-                            )
-                            select new MallOrderModel
-                            {
-                                ActualOrderAmount = o.ActualOrderAmount,
-                                CreateTime = o.CreateTime,
-                                NeedPayTime = o.NeedPayTime,
-                                OrderCode = o.OrderCode,
-                                OrderID = o.OrderID,
-                                OrderStatus = o.OrderStatus,
-                                OrderType = o.OrderType,
-                                ProductInfo = o.ProductInfo,
-                                ShipTime = o.ShipTime,
-                                SourceDataID = o.SourceDataID,
-                                UserID = o.UserID,
-                                AreaID = o.AreaID
-                            };
-
-                return query.ToList();
-            }
-        }
-
-        /// <summary>
-        /// 获取今天逾期未确认收货的订单
-        /// </summary>
-        /// <returns></returns>
-        public static List<MallOrderModel> GetNoConfirmReceiptGoodsListForTodayWillTimeout(int days)
-        {
-            using (var db = new DataContext())
-            {
-                var query = from o in db.Mall_Order
-                            where o.OrderStatus == (int)B2COrderStatus.WaitingReceipt && o.ShipTime.HasValue && o.ShipTime.Value.AddDays(days) < DateTime.Now.Date.AddDays(1)//发货后未确认收货，今天将超时 && o.ShipTime.Value.AddDays(days).Date == DateTime.Now.Date
-                            select new MallOrderModel
-                            {
-                                ActualOrderAmount = o.ActualOrderAmount,
-                                CreateTime = o.CreateTime,
-                                NeedPayTime = o.NeedPayTime,
-                                OrderCode = o.OrderCode,
-                                OrderID = o.OrderID,
-                                OrderStatus = o.OrderStatus,
-                                OrderType = o.OrderType,
-                                ProductInfo = o.ProductInfo,
-                                ShipTime = o.ShipTime,
-                                SourceDataID = o.SourceDataID,
-                                UserID = o.UserID,
-                                AreaID = o.AreaID
-                            };
-
-                return query.ToList();
-            }
-        }
-
-        /// <summary>
         /// 获取订单信息
         /// </summary>
         /// <param name="orderID"></param>
@@ -201,35 +136,6 @@ namespace KylinService.Data.Provider
                 }
 
                 return true;
-            }
-        }
-
-        /// <summary>
-        /// 自动收货确认
-        /// </summary>
-        /// <param name="orderID"></param>
-        /// <returns></returns>
-        public async static Task<bool> AutoReceiptGoods(long orderID)
-        {
-            using (var db = new DataContext())
-            {
-                var order = db.Mall_Order.SingleOrDefault(p => p.OrderID == orderID);
-
-                if (order.OrderStatus != (int)B2COrderStatus.WaitingReceipt) throw new Exception("订单状态已被更改，本次操作失败！");
-
-                #region //扣款，将用户的订单金额从冻结资金中扣除
-
-                var userAccount = db.User_Account.SingleOrDefault(p => p.UserID == order.UserID);
-                if (userAccount.FreezeMoney < order.ActualOrderAmount) throw new Exception("程序猿大哥摊上大事了，用户冻结资金怎么不够本次订单扣款呢？！");
-                userAccount.FreezeMoney -= order.ActualOrderAmount;
-
-                #endregion
-
-                //修改订单状态为已完成
-                order.OrderStatus = (int)B2COrderStatus.Done;
-                order.ReceivedTime = DateTime.Now;
-
-                return await db.SaveChangesAsync() > 0;
             }
         }
     }

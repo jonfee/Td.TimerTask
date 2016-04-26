@@ -113,6 +113,26 @@ namespace KylinService.Data.Provider
                 {
                     winners = db.Welfare_PartUser.Where(p => p.WelfareID == welfareID && partCodes.Contains(p.PartCode)).ToList();
 
+                    decimal valueMoney = new Func<decimal>(() =>
+                    {
+                        decimal _money = 0M;
+
+                        if (welfare.WelfareType == (int)WelfareType.Coupon)
+                        {
+                            return db.Welfare_Coupon.Where(p => p.WelfareID == welfareID).Select(p => p.FaceMoney).FirstOrDefault();
+                        }
+                        else if (welfare.WelfareType == (int)WelfareType.DiscountGoods)
+                        {
+                            return db.Welfare_Goods.Where(p => p.WelfareID == welfareID).Select(p => p.OriginalPrice).FirstOrDefault();
+                        }
+                        else if (welfare.WelfareType == (int)WelfareType.FreeGoods)
+                        {
+                            return db.Welfare_DonatedGoods.Where(p => p.WelfareID == welfareID).Select(p => p.Price).FirstOrDefault();
+                        }
+
+                        return _money;
+                    }).Invoke();
+
                     winners.ForEach((item) =>
                     {
                         #region 更新中奖用户的参与信息
@@ -145,7 +165,8 @@ namespace KylinService.Data.Provider
                             UserID = item.UserID,
                             UseTime = null,
                             WelfareID = welfare.WelfareID,
-                            WelfareType = welfare.WelfareType
+                            WelfareType = welfare.WelfareType,
+                            ValueMoney = valueMoney
                         };
                         db.User_Welfare.Add(userWelfare);
                         #endregion

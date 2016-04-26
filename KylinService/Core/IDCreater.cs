@@ -1,4 +1,5 @@
 ﻿using System;
+using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Core
 {
@@ -48,6 +49,20 @@ namespace KylinService.Core
             CurrentTagNo++;
 
             return long.Parse(code);
+        }
+
+        /// <summary>
+        /// 获取基础流水号（23位）
+        /// </summary>
+        /// <returns></returns>
+        public string GetPlatformTransactionCode(PlatformTransactionType transType,int areaID)
+        {
+            string date = DateTime.Now.ToString("yyMMdd");
+            string trans = transType.ToString("d").PadLeft(2, '0');
+            string area = areaID.ToString().PadLeft(6, '0');
+            string rand = new Random(Guid.NewGuid().GetHashCode()).Next(100000000, 999999999).ToString();
+
+            return string.Format("{0}{1}{2}{3}", date, trans, area, rand);
         }
 
         /// <summary>

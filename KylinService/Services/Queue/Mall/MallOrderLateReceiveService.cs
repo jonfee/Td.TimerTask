@@ -1,5 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Provider;
+using KylinService.Data.Settlement;
 using KylinService.Redis.Schedule;
 using KylinService.Redis.Schedule.Model;
 using KylinService.SysEnums;
@@ -75,18 +76,19 @@ namespace KylinService.Services.Queue.Mall
 
                 if (model.ShipTime != model.ShipTime) throw new Exception("不能确定发货时间，不能自动完成收货！");
 
-                //自动收货确认
-                bool receiptSuccess = MallOrderProvider.AutoReceiptGoods(lastOrder.OrderID).Result;
+                //结算并自动收货
+                var settlement = new MallOrderSettlementCenter(model.OrderID, true);
+                settlement.Execute();
 
                 string message = string.Empty;
 
-                if (receiptSuccess)
+                if (settlement.Success)
                 {
-                    message = string.Format("〖订单（{0}）：{1}〗因超时未确认收货，系统已自动收货确认处理！", lastOrder.OrderCode, lastOrder.ProductInfo);
+                    message = string.Format("〖订单（{0}）：{1}〗自动确认收货完成！", lastOrder.OrderCode, lastOrder.ProductInfo  );
                 }
                 else
                 {
-                    message = string.Format("〖订单（{0}）：{1}〗因超时未确认收货，系统自动收货确认处理时操作失败！", lastOrder.OrderCode, lastOrder.ProductInfo);
+                    message = string.Format("〖订单（{0}）：{1}〗自动确认收货失败，原因：{2}", lastOrder.OrderCode, lastOrder.ProductInfo, settlement.ErrorMessage);
                 }
 
                 OutputMessage(message);

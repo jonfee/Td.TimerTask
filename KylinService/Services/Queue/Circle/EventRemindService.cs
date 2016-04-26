@@ -74,7 +74,7 @@ namespace KylinService.Services.Queue.Circle
                 #region 推送消息给需要提醒的用户
 
                 //获取需要提醒的用户
-                var remindContentList = CircleProvider.GetRemindContentList(model.EventID) as IEnumerable<CircleEventRemindContent>;
+                IEnumerable<CircleEventRemindContent> remindContentList = CircleProvider.GetRemindContentList(model.EventID);
 
                 if (null != remindContentList && remindContentList.Count() > 0)
                 {

@@ -12,59 +12,6 @@ namespace KylinService.Data.Provider
     public class MerchantOrderProvider
     {
         /// <summary>
-        /// 获取今天逾期未付款的订单
-        /// </summary>
-        /// <returns></returns>
-        public static List<MerchantOrderModel> GetNoPaymentListForTodayWillTimeout(int minutes)
-        {
-            using (var db = new DataContext())
-            {
-                var query = from o in db.Merchant_Order
-                            where o.OrderStatus == (int)MerchantOrderStatus.WaitingPayment
-                            && o.CreateTime.AddMinutes(minutes) < DateTime.Now.Date.AddDays(1)//未付款，今天将超时&&o.CreateTime.AddHours(hours).Date == DateTime.Now.Date
-                            select new MerchantOrderModel
-                            {
-                                ActualOrderAmount = o.ActualOrderAmount,
-                                CreateTime = o.CreateTime,
-                                OrderCode = o.OrderCode,
-                                OrderID = o.OrderID,
-                                OrderStatus = o.OrderStatus,
-                                UserID = o.UserID,
-                                SendTime = o.SendTime,
-                                MerchantID = o.MerchantID
-                            };
-
-                return query.ToList();
-            }
-        }
-
-        /// <summary>
-        /// 获取今天逾期未确认收货的订单
-        /// </summary>
-        /// <returns></returns>
-        public static List<MerchantOrderModel> GetNoConfirmReceiptGoodsListForTodayWillTimeout(int days)
-        {
-            using (var db = new DataContext())
-            {
-                var query = from o in db.Merchant_Order
-                            where o.OrderStatus == (int)MerchantOrderStatus.WaitingReceipt && o.SendTime.HasValue && o.SendTime.Value.AddDays(days) < DateTime.Now.Date.AddDays(1)//发货后未确认收货，今天将超时 && o.ShipTime.Value.AddDays(days).Date == DateTime.Now.Date
-                            select new MerchantOrderModel
-                            {
-                                ActualOrderAmount = o.ActualOrderAmount,
-                                CreateTime = o.CreateTime,
-                                OrderCode = o.OrderCode,
-                                OrderID = o.OrderID,
-                                OrderStatus = o.OrderStatus,
-                                UserID = o.UserID,
-                                SendTime = o.SendTime,
-                                MerchantID = o.MerchantID
-                            };
-
-                return query.ToList();
-            }
-        }
-
-        /// <summary>
         /// 获取订单信息
         /// </summary>
         /// <param name="orderID"></param>
