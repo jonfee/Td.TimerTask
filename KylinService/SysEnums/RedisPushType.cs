@@ -31,6 +31,11 @@ namespace KylinService.SysEnums
         /// 附近购订单确认收货消息
         /// </summary>
         [Description("附近购订单确认收货消息")]
-        MerchantOrderReceivedGoods = 5
+        MerchantOrderReceivedGoods = 5,
+        /// <summary>
+        /// 上门预约订单确认收货后消息
+        /// </summary>
+        [Description("上门预约订单确认收货后消息")]
+        AppointOrderReceivedGoods =6
     }
 }

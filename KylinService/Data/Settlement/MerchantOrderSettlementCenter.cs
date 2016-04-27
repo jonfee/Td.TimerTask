@@ -14,7 +14,7 @@ namespace KylinService.Data.Settlement
     /// <summary>
     /// 附近购（商家）订单结算中心
     /// </summary>
-    public class MerchantOrderSettlementCenter
+    public class MerchantOrderSettlementCenter : SettlementCenter
     {
         /// <summary>
         /// 初始化商家订单结算实例
@@ -27,10 +27,10 @@ namespace KylinService.Data.Settlement
             {
                 var order = db.Merchant_Order.SingleOrDefault(p => p.OrderID == orderID);
 
-                Order = order;
+                _order = order;
             }
 
-            NeedProcessOrder = needProcessOrder;
+            _needProcessOrder = needProcessOrder;
         }
 
         /// <summary>
@@ -40,24 +40,24 @@ namespace KylinService.Data.Settlement
         /// <param name="needProcessOrder">是否需要处理订单</param>
         public MerchantOrderSettlementCenter(Merchant_Order order, bool needProcessOrder)
         {
-            Order = order;
-            NeedProcessOrder = needProcessOrder;
+            _order = order;
+            _needProcessOrder = needProcessOrder;
         }
 
         /// <summary>
         /// 当前结算的订单
         /// </summary>
-        public Merchant_Order Order { get; private set; }
+        private Merchant_Order _order;
 
         /// <summary>
         /// 是否需要处理订单
         /// </summary>
-        public bool NeedProcessOrder { get; private set; }
+        private bool _needProcessOrder;
 
         /// <summary>
         /// 结算结果
         /// </summary>
-        public bool Success
+        public override bool Success
         {
             get
             {
@@ -69,7 +69,7 @@ namespace KylinService.Data.Settlement
         /// <summary>
         /// 错误消息
         /// </summary>
-        public string ErrorMessage
+        public override string ErrorMessage
         {
             get { return _errorMessage; }
         }
@@ -77,17 +77,17 @@ namespace KylinService.Data.Settlement
         /// <summary>
         /// 执行结算
         /// </summary>
-        public void Execute()
+        public override void Execute()
         {
             #region//检测订单有效性
 
-            if (null == Order)
+            if (null == _order)
             {
                 _errorMessage = "订单数据不存在！";
                 return;
             }
 
-            if (Order.OrderStatus != (int)MerchantOrderStatus.WaitingReceipt)
+            if (_order.OrderStatus != (int)MerchantOrderStatus.WaitingReceipt)
             {
                 _errorMessage = "当前订单状态不适合进行结算处理！";
                 return;
@@ -100,13 +100,13 @@ namespace KylinService.Data.Settlement
             using (var db = new DataContext())
             {
                 #region//1、获取用户资金并检测
-                var user = db.User_Account.SingleOrDefault(p => p.UserID == Order.UserID);
+                var user = db.User_Account.SingleOrDefault(p => p.UserID == _order.UserID);
                 if (null == user)
                 {
                     _errorMessage = "用户数据异常，未检测到用户信息！";
                     return;
                 }
-                if (user.FreezeMoney < Order.ActualOrderAmount)
+                if (user.FreezeMoney < _order.ActualOrderAmount)
                 {
                     _errorMessage = "呼叫程序猿，用户钱跑哪去了？冻结资金结算不了当前订单！";
                     return;
@@ -114,7 +114,7 @@ namespace KylinService.Data.Settlement
                 #endregion
 
                 #region//2、获得商家信息
-                var merchant = db.Merchant_Account.SingleOrDefault(p => p.MerchantID == Order.MerchantID);
+                var merchant = db.Merchant_Account.SingleOrDefault(p => p.MerchantID == _order.MerchantID);
                 if (null == merchant)
                 {
                     _errorMessage = "哇哦，商家呢？跑哪去了，不见了？钱给谁？给谁？给谁……";
@@ -132,6 +132,7 @@ namespace KylinService.Data.Settlement
                     if (areaLayers.Contains(area.AreaID.ToString()))
                     {
                         areaID = area.AreaID;
+                        break;
                     }
                 }
 
@@ -153,18 +154,18 @@ namespace KylinService.Data.Settlement
                 #region//4、用户货款从冻结金额中结算并写入交易记录、资金明细
                 db.User_Account.Attach(user);
                 db.Entry(user).Property(p => p.FreezeMoney).IsModified = true;
-                user.FreezeMoney -= Order.ActualOrderAmount;
+                user.FreezeMoney -= _order.ActualOrderAmount;
                 #endregion
 
                 #region//5、获取用户支付时的交易记录信息（从中获取平台交易流水号）
-                var userTradeRecord = db.User_TradeRecords.Where(p => p.DataID == Order.OrderID).FirstOrDefault();
+                var userTradeRecord = db.User_TradeRecords.Where(p => p.DataID == _order.OrderID).FirstOrDefault();
 
                 string mainTransCode = null != userTradeRecord ? userTradeRecord.PlatformTransactionCode : string.Empty;
                 if (!string.IsNullOrWhiteSpace(mainTransCode) && mainTransCode.Length == 24)
                 {
                     mainTransCode = mainTransCode.Remove(23, 1);
                 }
-                if (mainTransCode.Length != 23) mainTransCode = IDCreater.Instance.GetPlatformTransactionCode(PlatformTransactionType.BuyProduct, merchant.AreaID);
+                if (mainTransCode.Length != 23) mainTransCode = IDCreater.Instance.GetPlatformTransactionCode(PlatformTransactionType.BuyProduct, areaID);
                 //业务序号
                 int transIndex = 0;
                 #endregion
@@ -173,22 +174,22 @@ namespace KylinService.Data.Settlement
                 string merchantGetSaleTransCode = mainTransCode + (++transIndex);
                 db.Merchant_Account.Attach(merchant);
                 db.Entry(merchant).Property(p => p.Balance).IsModified = true;
-                merchant.Balance = merchant.Balance + Order.ActualOrderAmount;
+                merchant.Balance = merchant.Balance + _order.ActualOrderAmount;
 
                 //写入商家交易记录
                 var merchantSaleTrandsRecords = new Merchant_TradeRecords
                 {
-                    Amount = Order.ActualOrderAmount,
-                    CounterpartyId = Order.UserID,
+                    Amount = _order.ActualOrderAmount,
+                    CounterpartyId = _order.UserID,
                     CounterpartyIdentity = (int)CounterpartyIdentity.User,
                     CreateTime = DateTime.Now,
-                    DataID = Order.OrderID,
+                    DataID = _order.OrderID,
                     LastBalance = merchant.Balance,
                     MerchantID = merchant.MerchantID,
                     PaymentType = (int)OnlinePaymentType.Balance,
                     PlatformTransactionCode = merchantGetSaleTransCode,
                     TradeID = IDCreater.Instance.GetID(),
-                    TradeInfo = string.Format("销售商品，订单编号：{0}", Order.OrderCode),
+                    TradeInfo = string.Format("销售商品，订单编号：{0}", _order.OrderCode),
                     TradeNo = string.Empty,
                     TradeType = (int)MerchantTransType.ProductSales
                 };
@@ -204,34 +205,22 @@ namespace KylinService.Data.Settlement
                     CustomName = merchant.Name,
                     IsMainTransaction = false,
                     LastBalance = merchantSaleTrandsRecords.LastBalance,
-                    Remark = string.Format("销售商品，订单编号：{0}", Order.OrderCode),
+                    Remark = string.Format("销售商品，订单编号：{0}", _order.OrderCode),
                     ThirdTransactionCode = string.Empty,
                     TransactionCode = merchantGetSaleTransCode,
                     TransactionTime = DateTime.Now,
                     TransactionType = (int)PlatformTransactionType.SaleProduct
                 });
                 #endregion
-
-                #region //7、商家返佣金给运营商  //8、运营商返佣金给平台（平台抽成）
+                
                 //总抽成
-                decimal totalCommissionMoney = 0;
-                //运营商针对商家抽成配置
-                var merchantCommission = CacheCollection.AreaForMerchantCommissionCache.Get(areaID, merchant.MerchantID, (int)AreaMerchantCommissionOption.MerchantProductOrder);
-                if (null != merchantCommission && merchantCommission.Value > 0)
-                {
-                    if (merchantCommission.CommissionType == (int)CommissionType.FixedAmount)
-                    {
-                        totalCommissionMoney = merchantCommission.Value;
-                    }
-                    else if (merchantCommission.CommissionType == (int)CommissionType.MoneyRate)
-                    {
-                        totalCommissionMoney = Math.Round(Order.ActualOrderAmount * merchantCommission.Value * 0.01M, MidpointRounding.ToEven);
-                    }
-                }
+                decimal totalCommissionMoney = new AreaForMerchantCommissionCalculator(areaID, _order.MerchantID, AreaMerchantCommissionOption.MerchantProductOrder, _order.ActualOrderAmount).CommissionMoney;
 
                 //抽成金额>0时
                 if (totalCommissionMoney > 0)
                 {
+                    #region//7、区域运营商抽成
+
                     #region//商家返佣给运营商
                     merchant.Balance -= totalCommissionMoney;
                     string merchantReturnTransCode = mainTransCode + (++transIndex);
@@ -242,13 +231,13 @@ namespace KylinService.Data.Settlement
                         CounterpartyId = operater.OperatorID,
                         CounterpartyIdentity = (int)CounterpartyIdentity.AreaOperator,
                         CreateTime = DateTime.Now,
-                        DataID = Order.OrderID,
+                        DataID = _order.OrderID,
                         LastBalance = merchant.Balance,
-                        MerchantID = Order.MerchantID,
+                        MerchantID = _order.MerchantID,
                         PaymentType = (int)OnlinePaymentType.Balance,
                         PlatformTransactionCode = merchantReturnTransCode,
                         TradeID = IDCreater.Instance.GetID(),
-                        TradeInfo = string.Format("销售商品返佣金给运营商，订单编号：{0}", Order.OrderCode),
+                        TradeInfo = string.Format("销售商品返佣金给运营商，订单编号：{0}", _order.OrderCode),
                         TradeNo = string.Empty,
                         TradeType = (int)MerchantTransType.ReturnCommissionToOperator
                     };
@@ -264,7 +253,7 @@ namespace KylinService.Data.Settlement
                         CustomName = merchant.Name,
                         IsMainTransaction = false,
                         LastBalance = merchantReturnTrandsRecords.LastBalance,
-                        Remark = string.Format("销售商品返佣金给运营商，订单编号：{0}", Order.OrderCode),
+                        Remark = string.Format("销售商品返佣金给运营商，订单编号：{0}", _order.OrderCode),
                         ThirdTransactionCode = string.Empty,
                         TransactionCode = merchantReturnTransCode,
                         TransactionTime = DateTime.Now,
@@ -281,16 +270,16 @@ namespace KylinService.Data.Settlement
                     var operatorGetReturnCommissionTrandsRecords = new AreaOperator_TradeRecords
                     {
                         Amount = totalCommissionMoney,
-                        CounterpartyId = Order.MerchantID,
+                        CounterpartyId = _order.MerchantID,
                         CounterpartyIdentity = (int)CounterpartyIdentity.Merchant,
                         CreateTime = DateTime.Now,
-                        DataID = Order.OrderID,
+                        DataID = _order.OrderID,
                         LastBalance = operater.Balance,
                         OpeartorID = operater.OperatorID,
                         PaymentType = (int)OnlinePaymentType.Balance,
                         PlatformTransactionCode = operatorGetReturnCommissionTransCode,
                         TradeID = IDCreater.Instance.GetID(),
-                        TradeInfo = string.Format("从商家销售商品中抽成，订单编号：{0}", Order.OrderCode),
+                        TradeInfo = string.Format("从商家销售商品中抽成，订单编号：{0}", _order.OrderCode),
                         TradeNo = string.Empty,
                         TradeType = (int)OperatorTradeType.CommissionGet
                     };
@@ -305,7 +294,7 @@ namespace KylinService.Data.Settlement
                         CustomName = operatorProfile?.CompanyName,
                         IsMainTransaction = false,
                         LastBalance = operatorGetReturnCommissionTrandsRecords.LastBalance,
-                        Remark = string.Format("从商家销售商品中抽成，订单编号：{0}", Order.OrderCode),
+                        Remark = string.Format("从商家销售商品中抽成，订单编号：{0}", _order.OrderCode),
                         ThirdTransactionCode = string.Empty,
                         TransactionCode = operatorGetReturnCommissionTransCode,
                         TransactionTime = DateTime.Now,
@@ -313,21 +302,11 @@ namespace KylinService.Data.Settlement
                     });
                     #endregion
 
+                    #endregion
+
                     #region//8、运营商返佣金给平台（平台抽成）
-                    decimal platformCommissionMoney = 0;//平台应抽成金额
-                    //平台对当前区域的抽成配置
-                    var platformCommission = CacheCollection.PlatformCommissionCache.Get(areaID, (int)PlatformCommissionOption.B2COrder);
-                    if (null != platformCommission && platformCommission.Value > 0)
-                    {
-                        if (platformCommission.CommissionType == (int)CommissionType.FixedAmount)
-                        {
-                            platformCommissionMoney = platformCommission.Value;
-                        }
-                        else if (platformCommission.CommissionType == (int)CommissionType.MoneyRate)
-                        {
-                            platformCommissionMoney = Math.Round(totalCommissionMoney * platformCommission.Value * 0.01M, MidpointRounding.ToEven);
-                        }
-                    }
+                    //平台应抽成金额
+                    decimal platformCommissionMoney = new PlatformCommissionCalculator(areaID, PlatformCommissionOption.AreaCommissionByMerchantOrder, totalCommissionMoney).CommissionMoney;
 
                     //需要抽佣时（抽佣金额>0）才进入
                     if (platformCommissionMoney > 0)
@@ -344,13 +323,13 @@ namespace KylinService.Data.Settlement
                             CounterpartyId = 0,
                             CounterpartyIdentity = (int)CounterpartyIdentity.Platform,
                             CreateTime = DateTime.Now,
-                            DataID = Order.OrderID,
+                            DataID = _order.OrderID,
                             LastBalance = operater.Balance,
                             OpeartorID = operater.OperatorID,
                             PaymentType = (int)OnlinePaymentType.Balance,
                             PlatformTransactionCode = operatorPayCommissionTransCode,
                             TradeID = IDCreater.Instance.GetID(),
-                            TradeInfo = string.Format("从商家订单抽成后返佣金给平台，订单编号：{0}", Order.OrderCode),
+                            TradeInfo = string.Format("从商家订单抽成后返佣金给平台，订单编号：{0}", _order.OrderCode),
                             TradeNo = string.Empty,
                             TradeType = (int)OperatorTradeType.PayCommission
                         };
@@ -365,7 +344,7 @@ namespace KylinService.Data.Settlement
                             CustomName = operatorProfile?.CompanyName,
                             IsMainTransaction = false,
                             LastBalance = operatorPayCommissionTrandsRecords.LastBalance,
-                            Remark = string.Format("从商家订单抽成后返佣金给平台，订单编号：{0}", Order.OrderCode),
+                            Remark = string.Format("从商家订单抽成后返佣金给平台，订单编号：{0}", _order.OrderCode),
                             ThirdTransactionCode = string.Empty,
                             TransactionCode = operatorPayCommissionTransCode,
                             TransactionTime = DateTime.Now,
@@ -374,24 +353,22 @@ namespace KylinService.Data.Settlement
                     }
                     #endregion
                 }
-
-                #endregion
-
+                
                 #region//9、更新订单状态
-                if (NeedProcessOrder)
+                if (_needProcessOrder)
                 {
-                    db.Merchant_Order.Attach(Order);
-                    db.Entry(Order).Property(p => p.OrderStatus).IsModified = true;
-                    db.Entry(Order).Property(p => p.ReceivedTime).IsModified = true;
+                    db.Merchant_Order.Attach(_order);
+                    db.Entry(_order).Property(p => p.OrderStatus).IsModified = true;
+                    db.Entry(_order).Property(p => p.ReceivedTime).IsModified = true;
 
                     //修改订单状态为已完成
-                    Order.OrderStatus = (int)MerchantOrderStatus.Done;
-                    Order.ReceivedTime = DateTime.Now;
+                    _order.OrderStatus = (int)MerchantOrderStatus.Done;
+                    _order.ReceivedTime = DateTime.Now;
                 }
                 #endregion
 
                 #region//10、用户积分奖励
-                var pointCalc = new PointCalculator(Order.UserID, UserActivityType.OrderFinish);
+                var pointCalc = new PointCalculator(_order.UserID, UserActivityType.OrderFinish);
                 if (pointCalc.CanContinue)
                 {
                     int points = pointCalc.Score;
@@ -406,15 +383,15 @@ namespace KylinService.Data.Settlement
                         ActivityType = (int)UserActivityType.OrderFinish,
                         CreateTime = DateTime.Now,
                         RecordsID = IDCreater.Instance.GetID(),
-                        Remark = string.Format("订单（编号：{0}）交易完成，获得{1}积分。", Order.OrderCode, points),
+                        Remark = string.Format("订单（编号：{0}）交易完成，获得{1}积分。", _order.OrderCode, points),
                         Score = points,
-                        UserID = Order.UserID
+                        UserID = _order.UserID
                     });
                 }
                 #endregion
 
                 #region//11、用户经验值奖励
-                var empiricalCalc = new EmpiricalCalculator(Order.UserID, UserActivityType.OrderFinish);
+                var empiricalCalc = new EmpiricalCalculator(_order.UserID, UserActivityType.OrderFinish);
                 if (empiricalCalc.CanContinue)
                 {
                     int empirical = empiricalCalc.Score;
@@ -429,9 +406,9 @@ namespace KylinService.Data.Settlement
                         ActivityType = (int)UserActivityType.OrderFinish,
                         CreateTime = DateTime.Now,
                         RecordsID = IDCreater.Instance.GetID(),
-                        Remark = string.Format("订单（编号：{0}）交易完成，获得{1}点经验值。", Order.OrderCode, empirical),
+                        Remark = string.Format("订单（编号：{0}）交易完成，获得{1}点经验值。", _order.OrderCode, empirical),
                         Score = empirical,
-                        UserID = Order.UserID
+                        UserID = _order.UserID
                     });
                 }
                 #endregion
@@ -455,14 +432,13 @@ namespace KylinService.Data.Settlement
                         {
                             var msgContent = new MerchantOrderReceivedGoodsContent
                             {
-                                ActualOrderAmount = Order.ActualOrderAmount,
-                                OrderCode = Order.OrderCode,
-                                OrderID = Order.OrderID,
-                                ReceivedTime = Order.ReceivedTime ?? DateTime.Now,
-                                UserID = Order.UserID,
+                                ActualOrderAmount = _order.ActualOrderAmount,
+                                OrderCode = _order.OrderCode,
+                                OrderID = _order.OrderID,
+                                ReceivedTime = _order.ReceivedTime ?? DateTime.Now,
+                                UserID = _order.UserID,
                                 UserName = user.Username,
-                                MerchantID = Order.MerchantID,
-                                OrderStatus = Order.OrderStatus
+                                MerchantID = _order.MerchantID
                             };
                             pushRedis.DataBase.ListRightPush(pushRedis.Key, msgContent);
                         }

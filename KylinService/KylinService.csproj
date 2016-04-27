@@ -184,11 +184,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.Entity.1.0.0-rc1-26\lib\net46\Td.Kylin.Entity.dll</HintPath>
+      <HintPath>..\packages\Td.Kylin.Entity.1.0.0-rc1-27\lib\net46\Td.Kylin.Entity.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.24.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.24-beta\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
+    <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.25.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.25-beta\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Redis, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
@@ -221,15 +221,20 @@
     <Compile Include="Data\Provider\MerchantOrderProvider.cs" />
     <Compile Include="Data\Provider\MallOrderProvider.cs" />
     <Compile Include="Data\Provider\MerchantProvider.cs" />
+    <Compile Include="Data\Settlement\AreaForWorkerCommissionCalculator.cs" />
+    <Compile Include="Data\Settlement\SettlementCenter.cs" />
     <Compile Include="Data\Settlement\MallOrderSettlementCenter.cs" />
     <Compile Include="Data\Settlement\MerchantOrderSettlementCenter.cs" />
     <Compile Include="Data\Settlement\EmpiricalCalculator.cs" />
+    <Compile Include="Data\Settlement\AreaForMerchantCommissionCalculator.cs" />
+    <Compile Include="Data\Settlement\PlatformCommissionCalculator.cs" />
     <Compile Include="Data\Settlement\PointCalculator.cs" />
     <Compile Include="Data\Settlement\ReservationOrderSettlementCenter.cs" />
     <Compile Include="Data\Settlement\VisitingOrderSettlementCenter.cs" />
     <Compile Include="Redis\Push\Model\B2COrderReceivedGoodsContent.cs" />
     <Compile Include="Redis\Push\Model\CircleEventRemindContent.cs" />
     <Compile Include="Redis\Push\Model\MerchantOrderReceivedGoodsContent.cs" />
+    <Compile Include="Redis\Push\Model\AppointOrderReceivedGoodsContent.cs" />
     <Compile Include="Redis\Push\Model\WelfareRemindContent.cs" />
     <Compile Include="Redis\Push\PushKeysConfig.cs" />
     <Compile Include="Redis\Push\Model\WelfareWinnerContent.cs" />

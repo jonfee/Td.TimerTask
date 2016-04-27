@@ -96,34 +96,5 @@ namespace KylinService.Data.Provider
                 return true;
             }
         }
-
-        /// <summary>
-        /// 自动收货确认
-        /// </summary>
-        /// <param name="orderID"></param>
-        /// <returns></returns>
-        public async static Task<bool> AutoReceiptGoods(long orderID)
-        {
-            using (var db = new DataContext())
-            {
-                var order = db.Merchant_Order.SingleOrDefault(p => p.OrderID == orderID);
-
-                if (order.OrderStatus != (int)MerchantOrderStatus.WaitingReceipt) throw new Exception("订单状态已被更改，本次操作失败！");
-
-                #region //扣款，将用户的订单金额从冻结资金中扣除
-
-                var userAccount = db.User_Account.SingleOrDefault(p => p.UserID == order.UserID);
-                if (userAccount.FreezeMoney < order.ActualOrderAmount) throw new Exception("程序猿大哥摊上大事了，用户冻结资金怎么不够本次订单扣款呢？！");
-                userAccount.FreezeMoney -= order.ActualOrderAmount;
-
-                #endregion
-
-                //修改订单状态为已完成
-                order.OrderStatus = (int)MerchantOrderStatus.Done;
-                order.ReceivedTime = DateTime.Now;
-
-                return await db.SaveChangesAsync() > 0;
-            }
-        }
     }
 }

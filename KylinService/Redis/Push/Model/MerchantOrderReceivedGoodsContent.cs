@@ -33,12 +33,7 @@ namespace KylinService.Redis.Push.Model
         /// 用户名称
         /// </summary>
         public string UserName { get; set; }
-
-        ///<summary>
-        ///订单状态
-        ///</summary>
-        public int OrderStatus { get; set; }
-
+        
         ///<summary>
         ///收货时间
         ///</summary>

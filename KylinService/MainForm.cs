@@ -43,13 +43,7 @@ namespace KylinService
 
             //缓存维护服务控制绑定
             InitCacheControls();
-
-            //var center = new MallOrderSettlementCenter(6276346803285721100,true);
-
-            //center.Execute();
-
-            //var result = center.Success;
-        }
+          }
 
         ServiceCollection<SchedulerService> _serviceCollection = new ServiceCollection<SchedulerService>();
 

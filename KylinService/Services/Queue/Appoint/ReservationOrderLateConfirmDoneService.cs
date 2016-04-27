@@ -1,5 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Provider;
+using KylinService.Data.Settlement;
 using KylinService.Redis.Schedule;
 using KylinService.Redis.Schedule.Model;
 using KylinService.SysEnums;
@@ -69,20 +70,21 @@ namespace KylinService.Services.Queue.Appoint
 
                 if (null == lastOrder) throw new Exception("订单信息已不存在！");
 
-                if (lastOrder.Status != (int)ReservationServiceOrderStatus.MerchantServiceDone) throw new Exception("订单状态已发生变更，不能自动完成收货！");
+                if (lastOrder.Status != (int)ReservationServiceOrderStatus.MerchantServiceDone) throw new Exception("订单状态已发生变更，不能自动确认服务完成！");
 
-                //自动确认服务完成
-                bool success = AppointOrderProvider.AutoFinishByUser(lastOrder.OrderID);
+                //结算并自动收货
+                var settlement = new ReservationOrderSettlementCenter(model.OrderID, true);
+                settlement.Execute();
 
                 string message = string.Empty;
 
-                if (success)
+                if (settlement.Success)
                 {
-                    message = string.Format("〖订单（{0}）：{1}〗因超时未确认服务完成，系统已自动确认服务完成！", lastOrder.OrderCode, lastOrder.BusinessName);
+                    message = string.Format("〖预约订单（{0}）〗自动确认服务完成！", lastOrder.OrderCode);
                 }
                 else
                 {
-                    message = string.Format("〖订单（{0}）：{1}〗因超时未确认服务完成，系统自动确认服务完成时操作失败！", lastOrder.OrderCode, lastOrder.BusinessName);
+                    message = string.Format("〖预约订单（{0}）〗自动确认服务完成失败，原因：{1}", lastOrder.OrderCode, settlement.ErrorMessage);
                 }
 
                 OutputMessage(message);
