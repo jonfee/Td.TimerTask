@@ -909,6 +909,9 @@ namespace KylinService
                 Startup.ProductInfo.Mobile);
         }
 
+        /// <summary>
+        /// 默认显示
+        /// </summary>
         void InitShow()
         {
             StringBuilder sb = new StringBuilder();
