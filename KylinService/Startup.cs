@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Windows.Forms;
 using Td.Kylin.DataCache;
 using Td.Kylin.DataCache.CacheModel;
 using Td.Kylin.EnumLibrary;
@@ -25,6 +26,18 @@ namespace KylinService
         /// </summary>
         public static void Init()
         {
+            #region//产品信息及维护人员信息
+            ProductInfo = new ProductInfo
+            {
+                Author = ConfigurationManager.AppSettings["Author"],
+                Email = ConfigurationManager.AppSettings["Email"],
+                Mobile = ConfigurationManager.AppSettings["Mobile"],
+                QQ = ConfigurationManager.AppSettings["QQ"],
+                ProductName = Application.ProductName,
+                Version = Application.ProductVersion
+            };
+            #endregion
+
             #region //Kylin数据库连接字符串
 
             KylinDBConnectionString = ConfigurationManager.ConnectionStrings["KylinConnectionString"].ConnectionString;
@@ -259,6 +272,8 @@ namespace KylinService
         #endregion
 
         #region 成员
+
+        public static ProductInfo ProductInfo;
 
         /// <summary>
         /// Kylin数据库连接字符串

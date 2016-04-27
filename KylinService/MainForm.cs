@@ -13,6 +13,7 @@ using KylinService.SysEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Td.Kylin.DataCache;
 
@@ -32,8 +33,16 @@ namespace KylinService
         /// </summary>
         private void Init()
         {
+            this.richMessage.ReadOnly = true;
+
+            //初始化显示消息
+            InitShow();
+
             //委托
             writeDelegate = WriteMessage;
+
+            //初始化显示产品信息
+            InitProductInfo();
 
             //初始化清理服务控件绑定
             InitClearControls();
@@ -43,7 +52,7 @@ namespace KylinService
 
             //缓存维护服务控制绑定
             InitCacheControls();
-          }
+        }
 
         ServiceCollection<SchedulerService> _serviceCollection = new ServiceCollection<SchedulerService>();
 
@@ -846,9 +855,12 @@ namespace KylinService
         /// 输出消息
         /// </summary>
         /// <param name="message"></param>
-        private void WriteMessage(string message)
+        private void WriteMessage(string message, bool padTime = true)
         {
-            message += DateTime.Now.ToString("@yyyy-MM-dd HH:mm:ss");
+            if (padTime)
+            {
+                message += DateTime.Now.ToString("      ### yyyy-MM-dd HH:mm:ss ###");
+            }
             this.richMessage.AppendText(message);
             this.richMessage.AppendText("\n");
             this.richMessage.Focus();
@@ -882,5 +894,50 @@ namespace KylinService
         }
 
         #endregion
+
+        /// <summary>
+        /// 绑定产品信息及维护人员信息
+        /// </summary>
+        void InitProductInfo()
+        {
+            this.Text = string.Format("{0}（v{1}）{2} / QQ:{3} / {4} / {5}",
+                Startup.ProductInfo.ProductName,
+                Startup.ProductInfo.Version,
+                Startup.ProductInfo.Author,
+                Startup.ProductInfo.QQ,
+                Startup.ProductInfo.Email,
+                Startup.ProductInfo.Mobile);
+        }
+
+        void InitShow()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("┏＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝┓");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　★★★★★★★★★★★★★★★★★★★★　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　  感谢默默坚守在服务后台的机器人　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　★★★★★★★★★★★★★★★★★★★★　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　           →谨以此诗表达团队人员对你的敬佩之情！　　 　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　来一首极度华丽的诗词：　　　      　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　红 酥 手   黄 滕 酒   两 个 黄 鹂 鸣 翠 柳   　　　　 　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　 ~~长 亭 外　 古 道 边  一 行 白 鹭 上 青 天 ~~~　　　  　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("╃　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　┾");
+            sb.AppendLine("┗＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝┛");
+
+            WriteMessage(sb.ToString(), false);
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace KylinService.Core
         /// 消息输出委托
         /// </summary>
         /// <param name="message"></param>
-        public delegate void WriteMessageDelegate(string message);
+        public delegate void WriteMessageDelegate(string message, bool padTime = true);
 
         /// <summary>
         /// 输出消息
@@ -22,7 +22,7 @@ namespace KylinService.Core
             {
                 form.Invoke((EventHandler)delegate
                 {
-                    writeDelegate(message);
+                    writeDelegate(message, true);
                 });
             }
         }

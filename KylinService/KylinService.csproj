@@ -231,6 +231,7 @@
     <Compile Include="Data\Settlement\PointCalculator.cs" />
     <Compile Include="Data\Settlement\ReservationOrderSettlementCenter.cs" />
     <Compile Include="Data\Settlement\VisitingOrderSettlementCenter.cs" />
+    <Compile Include="ProductInfo.cs" />
     <Compile Include="Redis\Push\Model\B2COrderReceivedGoodsContent.cs" />
     <Compile Include="Redis\Push\Model\CircleEventRemindContent.cs" />
     <Compile Include="Redis\Push\Model\MerchantOrderReceivedGoodsContent.cs" />
