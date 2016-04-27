@@ -1,4 +1,6 @@
-﻿namespace KylinService
+﻿using System.Windows.Forms;
+
+namespace KylinService
 {
     partial class MainForm
     {
@@ -28,14 +30,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.richMessage = new System.Windows.Forms.RichTextBox();
             this.groupTool = new System.Windows.Forms.GroupBox();
             this.btnLookConfig = new System.Windows.Forms.Button();
             this.btnUpdateConfig = new System.Windows.Forms.Button();
             this.tabMenu = new System.Windows.Forms.TabControl();
-            this.tabQueue = new System.Windows.Forms.TabPage();
-            this.tabCache = new System.Windows.Forms.TabPage();
             this.tabClear = new System.Windows.Forms.TabPage();
+            this.tabCache = new System.Windows.Forms.TabPage();
+            this.tabQueue = new System.Windows.Forms.TabPage();
             this.groupTool.SuspendLayout();
             this.tabMenu.SuspendLayout();
             this.SuspendLayout();
@@ -92,15 +95,14 @@
             this.tabMenu.Size = new System.Drawing.Size(568, 594);
             this.tabMenu.TabIndex = 3;
             // 
-            // tabQueue
+            // tabClear
             // 
-            this.tabQueue.Location = new System.Drawing.Point(4, 22);
-            this.tabQueue.Name = "tabQueue";
-            this.tabQueue.Padding = new System.Windows.Forms.Padding(3);
-            this.tabQueue.Size = new System.Drawing.Size(560, 568);
-            this.tabQueue.TabIndex = 0;
-            this.tabQueue.Text = "队列服务";
-            this.tabQueue.UseVisualStyleBackColor = true;
+            this.tabClear.Location = new System.Drawing.Point(4, 22);
+            this.tabClear.Name = "tabClear";
+            this.tabClear.Size = new System.Drawing.Size(560, 568);
+            this.tabClear.TabIndex = 2;
+            this.tabClear.Text = "定期清理";
+            this.tabClear.UseVisualStyleBackColor = true;
             // 
             // tabCache
             // 
@@ -112,14 +114,15 @@
             this.tabCache.Text = "缓存维护";
             this.tabCache.UseVisualStyleBackColor = true;
             // 
-            // tabClear
+            // tabQueue
             // 
-            this.tabClear.Location = new System.Drawing.Point(4, 22);
-            this.tabClear.Name = "tabClear";
-            this.tabClear.Size = new System.Drawing.Size(560, 568);
-            this.tabClear.TabIndex = 2;
-            this.tabClear.Text = "定期清理";
-            this.tabClear.UseVisualStyleBackColor = true;
+            this.tabQueue.Location = new System.Drawing.Point(4, 22);
+            this.tabQueue.Name = "tabQueue";
+            this.tabQueue.Padding = new System.Windows.Forms.Padding(3);
+            this.tabQueue.Size = new System.Drawing.Size(560, 568);
+            this.tabQueue.TabIndex = 0;
+            this.tabQueue.Text = "队列服务";
+            this.tabQueue.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -129,11 +132,15 @@
             this.Controls.Add(this.tabMenu);
             this.Controls.Add(this.groupTool);
             this.Controls.Add(this.richMessage);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Kylin智能服务托管";
             this.groupTool.ResumeLayout(false);
             this.tabMenu.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.FormClosing += new FormClosingEventHandler(this.MainForm_FormClosing);
 
         }
 

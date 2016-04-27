@@ -21,6 +21,9 @@ namespace KylinService
 {
     public partial class MainForm : Form
     {
+        //这里在窗体上没有拖拽一个NotifyIcon控件，而是在这里定义了一个变量  
+        private NotifyIcon notifyIcon = null;
+
         public MainForm()
         {
             InitializeComponent();
@@ -942,5 +945,87 @@ namespace KylinService
 
             WriteMessage(sb.ToString(), false);
         }
+
+        #region //关闭与托盘
+
+        /// <summary>
+        /// 关闭事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Hide();
+            e.Cancel = true;
+
+            if (null == notifyIcon)
+            {
+                InitialTray();
+            }
+        }
+
+        /// <summary>
+        /// 初始化托盘
+        /// </summary>
+        private void InitialTray()
+        {
+            //实例化一个NotifyIcon对象  
+            notifyIcon = new NotifyIcon();
+            //托盘图标气泡显示的内容  
+            notifyIcon.BalloonTipText = string.Format("{0}正在后台运行", Startup.ProductInfo.ProductName);
+            //托盘图标显示的内容  
+            notifyIcon.Text = Startup.ProductInfo.ProductName;
+            //注意：下面的路径可以是绝对路径、相对路径。但是需要注意的是：文件必须是一个.ico格式  
+            notifyIcon.Icon = new System.Drawing.Icon(AppDomain.CurrentDomain.BaseDirectory + "/kylin.ico");
+            //true表示在托盘区可见，false表示在托盘区不可见  
+            notifyIcon.Visible = true;
+            //气泡显示的时间（单位是毫秒）  
+            notifyIcon.ShowBalloonTip(1000);
+            notifyIcon.MouseClick += new MouseEventHandler(notifyIcon_MouseClick);
+
+            //退出菜单项  
+            MenuItem exit = new MenuItem("退出");
+            exit.Click += new EventHandler(exit_Click);
+
+            //关联托盘控件
+            MenuItem[] childen = new MenuItem[] { exit };
+            notifyIcon.ContextMenu = new ContextMenu(childen);
+        }
+
+        /// <summary>  
+        /// 鼠标单击  
+        /// </summary>  
+        /// <param name="sender"></param>  
+        /// <param name="e"></param>  
+        private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            //鼠标左键单击  
+            if (e.Button == MouseButtons.Left)
+            {
+                //如果窗体是可见的，那么鼠标左击托盘区图标后，窗体为不可见  
+                if (this.Visible == true)
+                {
+                    this.Visible = false;
+                }
+                else
+                {
+                    this.Visible = true;
+                    this.Activate();
+                }
+            }
+        }
+
+        /// <summary>  
+        /// 退出选项  
+        /// </summary>  
+        /// <param name="sender"></param>  
+        /// <param name="e"></param>  
+        private void exit_Click(object sender, EventArgs e)
+        {
+            //退出程序  
+            Environment.Exit(0);
+        }
+
+        #endregion
     }
 }
