@@ -32,7 +32,6 @@ namespace KylinService.Data.Settlement
             }
 
             _needProcessOrder = needProcessOrder;
-            _db = new DataContext();
         }
 
         /// <summary>
@@ -44,13 +43,12 @@ namespace KylinService.Data.Settlement
         {
             _order = order;
             _needProcessOrder = needProcessOrder;
-            _db = new DataContext();
         }
 
         /// <summary>
         /// 数据上下文
         /// </summary>
-        private DataContext _db;
+        private DataContext _context;
 
         /// <summary>
         /// 当前结算的订单
@@ -123,7 +121,7 @@ namespace KylinService.Data.Settlement
             #endregion
 
             #region //2、获取用户支付时的交易记录信息（从中获取平台交易流水号）
-            var userTradeRecord = _db.User_TradeRecords.Where(p => p.DataID == _order.OrderID).FirstOrDefault();
+            var userTradeRecord = _context.User_TradeRecords.Where(p => p.DataID == _order.OrderID).FirstOrDefault();
             string mainTransCode = null != userTradeRecord ? userTradeRecord.PlatformTransactionCode : string.Empty;
             if (!string.IsNullOrWhiteSpace(mainTransCode) && mainTransCode.Length == 24)
             {
@@ -155,10 +153,10 @@ namespace KylinService.Data.Settlement
                 TradeNo = string.Empty,
                 TradeType = (int)MerchantTransType.ServiceSales
             };
-            _db.Merchant_TradeRecords.Add(merchantSaleTrandsRecords);
+            _context.Merchant_TradeRecords.Add(merchantSaleTrandsRecords);
 
             //写入平台资金流水
-            _db.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
+            _context.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
             {
                 Amount = merchantSaleTrandsRecords.Amount,
                 AreaID = _order.AreaID,
@@ -202,10 +200,10 @@ namespace KylinService.Data.Settlement
                     TradeNo = string.Empty,
                     TradeType = (int)MerchantTransType.ReturnCommissionToOperator
                 };
-                _db.Merchant_TradeRecords.Add(merchantReturnTrandsRecords);
+                _context.Merchant_TradeRecords.Add(merchantReturnTrandsRecords);
 
                 //写入平台资金流水
-                _db.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
+                _context.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
                 {
                     Amount = merchantReturnTrandsRecords.Amount,
                     AreaID = _order.AreaID,
@@ -242,9 +240,9 @@ namespace KylinService.Data.Settlement
                     TradeNo = string.Empty,
                     TradeType = (int)OperatorTradeType.CommissionGet
                 };
-                _db.AreaOperator_TradeRecords.Add(operatorGetReturnCommissionTrandsRecords);
+                _context.AreaOperator_TradeRecords.Add(operatorGetReturnCommissionTrandsRecords);
                 //写入平台资金流水
-                _db.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
+                _context.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
                 {
                     Amount = operatorGetReturnCommissionTrandsRecords.Amount,
                     AreaID = _order.AreaID,
@@ -292,9 +290,9 @@ namespace KylinService.Data.Settlement
                         TradeNo = string.Empty,
                         TradeType = (int)OperatorTradeType.PayCommission
                     };
-                    _db.AreaOperator_TradeRecords.Add(operatorPayCommissionTrandsRecords);
+                    _context.AreaOperator_TradeRecords.Add(operatorPayCommissionTrandsRecords);
                     //写入平台资金流水
-                    _db.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
+                    _context.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
                     {
                         Amount = operatorPayCommissionTrandsRecords.Amount,
                         AreaID = _order.AreaID,
@@ -330,7 +328,7 @@ namespace KylinService.Data.Settlement
             #endregion
 
             #region //2、获取商家支付时的交易记录信息（从中获取平台交易流水号）
-            var merchantTradeRecord = _db.Merchant_TradeRecords.Where(p => p.DataID == _order.OrderID).FirstOrDefault();
+            var merchantTradeRecord = _context.Merchant_TradeRecords.Where(p => p.DataID == _order.OrderID).FirstOrDefault();
             string mainTransCode = null != merchantTradeRecord ? merchantTradeRecord.PlatformTransactionCode : string.Empty;
             if (!string.IsNullOrWhiteSpace(mainTransCode) && mainTransCode.Length == 24)
             {
@@ -362,10 +360,10 @@ namespace KylinService.Data.Settlement
                 TradeNo = string.Empty,
                 TradeType = (int)UserTransType.Proceeds
             };
-            _db.User_TradeRecords.Add(userGetTrandsRecords);
+            _context.User_TradeRecords.Add(userGetTrandsRecords);
 
             //写入平台资金流水
-            _db.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
+            _context.Platform_MoneyTransaction.Add(new Platform_MoneyTransaction
             {
                 Amount = userGetTrandsRecords.Amount,
                 AreaID = _order.AreaID,
@@ -388,6 +386,8 @@ namespace KylinService.Data.Settlement
         /// </summary>
         public override void Execute()
         {
+            _context = new DataContext();
+
             #region//检测订单有效性
 
             if (null == _order)
@@ -434,19 +434,19 @@ namespace KylinService.Data.Settlement
                 //支付方
                 BusinessServicePayer payer = default(BusinessServicePayer);
                 //业务信息
-                var business = _db.KylinService_Business.SingleOrDefault(p => p.BusinessID == _order.BusinessID);
+                var business = _context.KylinService_Business.SingleOrDefault(p => p.BusinessID == _order.BusinessID);
                 payer = (BusinessServicePayer)Enum.Parse(typeof(BusinessServicePayer), business.PayerType.ToString());
                 #endregion
 
                 #region//3、获取用户资金并检测
-                _user = _db.User_Account.SingleOrDefault(p => p.UserID == _order.UserID);
+                _user = _context.User_Account.SingleOrDefault(p => p.UserID == _order.UserID);
                 if (null == _user)
                 {
                     _errorMessage = "用户数据异常，未检测到用户信息！";
                     return;
                 }
-                _db.User_Account.Attach(_user);
-                _db.Entry(_user).Property(p => p.Balance).IsModified = true;
+                _context.User_Account.Attach(_user);
+                _context.Entry(_user).Property(p => p.Balance).IsModified = true;
                 #endregion
 
                 #region //4、检测并获取服务提供方信息
@@ -457,7 +457,7 @@ namespace KylinService.Data.Settlement
                 switch (servicerProvider)
                 {
                     case BusinessOrderServiceProvider.Merchant:
-                        _merchant = _db.Merchant_Account.SingleOrDefault(p => p.MerchantID == _order.MerchantID);
+                        _merchant = _context.Merchant_Account.SingleOrDefault(p => p.MerchantID == _order.MerchantID);
                         break;
                 }
                 //如果服务者不存在，则返回错误
@@ -468,29 +468,29 @@ namespace KylinService.Data.Settlement
                 }
                 else
                 {
-                    _db.Merchant_Account.Attach(_merchant);
-                    _db.Entry(_merchant).Property(p => p.Balance).IsModified = true;
-                    _db.Entry(_merchant).Property(p => p.FreezeMoney).IsModified = true;
+                    _context.Merchant_Account.Attach(_merchant);
+                    _context.Entry(_merchant).Property(p => p.Balance).IsModified = true;
+                    _context.Entry(_merchant).Property(p => p.FreezeMoney).IsModified = true;
                 }
                 #endregion
 
                 #region //5、获取当前订单所归属区域的运营商
                 //区域（大区域，即运营商区域）
-                var operatorQuery = from op in _db.Area_Operator
-                                    join ao in _db.Area_OperatorRelation
+                var operatorQuery = from op in _context.Area_Operator
+                                    join ao in _context.Area_OperatorRelation
                                     on op.OperatorID equals ao.OperatorID
                                     where ao.AreaID == _order.AreaID
                                     select op;
-                var operater = operatorQuery.FirstOrDefault();
-                if (null == operater)
+                _operator = operatorQuery.FirstOrDefault();
+                if (null == _operator)
                 {
                     _errorMessage = "启奏陛下，订单所在区域运营商不存在，微臣不敢擅作主张，还请陛下圣断！";
                     return;
                 }
-                _db.Area_Operator.Attach(_operator);
-                _db.Entry(_operator).Property(p => p.Balance).IsModified = true;
+                _context.Area_Operator.Attach(_operator);
+                _context.Entry(_operator).Property(p => p.Balance).IsModified = true;
                 //运营商基本资料
-                _operatorProfile = _db.Area_OperatorProfile.SingleOrDefault(p => p.OperatorID == operater.OperatorID);
+                _operatorProfile = _context.Area_OperatorProfile.SingleOrDefault(p => p.OperatorID == _operator.OperatorID);
                 #endregion
 
                 #region //6、处理结算及记录
@@ -517,9 +517,9 @@ namespace KylinService.Data.Settlement
                 #region//7、更新订单状态
                 if (_needProcessOrder)
                 {
-                    _db.KylinService_Order.Attach(_order);
-                    _db.Entry(_order).Property(p => p.Status).IsModified = true;
-                    _db.Entry(_order).Property(p => p.ReceivedTime).IsModified = true;
+                    _context.KylinService_Order.Attach(_order);
+                    _context.Entry(_order).Property(p => p.Status).IsModified = true;
+                    _context.Entry(_order).Property(p => p.ReceivedTime).IsModified = true;
 
                     //修改订单状态为已完成
                     _order.Status = (int)VisitingServiceOrderStatus.UserServiceConfirmDone;
@@ -534,11 +534,11 @@ namespace KylinService.Data.Settlement
                     int points = pointCalc.Score;
 
                     //更新用户积分
-                    _db.Entry(_user).Property(p => p.Points).IsModified = true;
+                    _context.Entry(_user).Property(p => p.Points).IsModified = true;
                     _user.Points += points;
 
                     //积分获取记录
-                    _db.User_PointsRecords.Add(new User_PointsRecords
+                    _context.User_PointsRecords.Add(new User_PointsRecords
                     {
                         ActivityType = (int)UserActivityType.OrderFinish,
                         CreateTime = DateTime.Now,
@@ -557,11 +557,11 @@ namespace KylinService.Data.Settlement
                     int empirical = empiricalCalc.Score;
 
                     //更新用户经验值
-                    _db.Entry(_user).Property(p => p.Empirical).IsModified = true;
+                    _context.Entry(_user).Property(p => p.Empirical).IsModified = true;
                     _user.Empirical += empirical;
 
                     //经验值获取记录
-                    _db.User_EmpiricalRecords.Add(new User_EmpiricalRecords
+                    _context.User_EmpiricalRecords.Add(new User_EmpiricalRecords
                     {
                         ActivityType = (int)UserActivityType.OrderFinish,
                         CreateTime = DateTime.Now,
@@ -574,7 +574,7 @@ namespace KylinService.Data.Settlement
                 #endregion
 
                 //返回处理结果
-                if (_db.SaveChanges() < 1)
+                if (_context.SaveChanges() < 1)
                 {
                     _errorMessage = "操作失败！";
                     return;
@@ -612,6 +612,8 @@ namespace KylinService.Data.Settlement
             }
 
             #endregion
+
+            _context.Dispose();
         }
     }
 }
