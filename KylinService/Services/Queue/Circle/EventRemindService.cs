@@ -65,11 +65,11 @@ namespace KylinService.Services.Queue.Circle
             {
                 var lastEvent = CircleProvider.GetEvent(model.EventID);
 
-                if (null == lastEvent) throw new Exception("活动不存在或已被删除");
+                if (null == lastEvent) throw new Exception(string.Format("活动(ID:{0})不存在或已被删除", model.EventID));
 
-                if (lastEvent.EventStatus == (int)CircleEventStatus.Canceled) throw new Exception("活动已被取消");
+                if (lastEvent.EventStatus == (int)CircleEventStatus.Canceled) throw new Exception(string.Format("活动(ID:{0})已被取消", lastEvent.EventID));
 
-                if (model.StartTime != lastEvent.StartTime) throw new Exception("活动开始时间异常");
+                if (model.StartTime != lastEvent.StartTime) throw new Exception(string.Format("活动(ID:{0}开始时间异常", lastEvent.EventID));
 
                 #region 推送消息给需要提醒的用户
 

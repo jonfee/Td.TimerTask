@@ -131,6 +131,9 @@ namespace KylinService.Services
         protected void OutputMessage(string message)
         {
             DelegateTool.WriteMessage(CurrentForm, WriteDelegate, message);
+
+            RunLoger loger = new RunLoger(ServiceName);
+            loger.Write(message);
         }
     }
 }

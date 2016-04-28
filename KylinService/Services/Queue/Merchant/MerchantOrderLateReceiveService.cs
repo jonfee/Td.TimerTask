@@ -70,11 +70,11 @@ namespace KylinService.Services.Queue.Merchant
             {
                 var lastOrder = MerchantOrderProvider.GetOrder(model.OrderID);
 
-                if (null == lastOrder) throw new Exception("订单信息已不存在！");
+                if (null == lastOrder) throw new Exception(string.Format("订单(ID:{0})信息已不存在！",model.OrderID));
 
-                if (lastOrder.OrderStatus != (int)MerchantOrderStatus.WaitingReceipt) throw new Exception("订单状态已发生变更，不能自动完成收货！");
+                if (lastOrder.OrderStatus != (int)MerchantOrderStatus.WaitingReceipt) throw new Exception(string.Format("订单(编号{0})状态已发生变更，不能自动完成收货！",lastOrder.OrderCode));
 
-                if (model.SendTime != lastOrder.SendTime) throw new Exception("未明确的发货时间，不能自动完成收货！");
+                if (model.SendTime != lastOrder.SendTime) throw new Exception(string.Format("订单(编号{0})未明确的发货时间，不能自动完成收货！",lastOrder.OrderCode));
 
                 //结算并自动收货
                 var settlement = new MerchantOrderSettlementCenter(model.OrderID, true);

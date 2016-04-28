@@ -69,7 +69,7 @@ namespace KylinService.Services.Queue.Welfare
         /// 执行任务
         /// </summary>
         /// <param name="state"></param>
-       protected override void Execute(object state)
+        protected override void Execute(object state)
         {
             var model = state as WelfareLotteryModel;
 
@@ -81,17 +81,19 @@ namespace KylinService.Services.Queue.Welfare
 
                 #region //验证开奖的有效性
 
-                if (null == lastWelfare) throw new Exception("福利信息已不存在！");
+                if (null == lastWelfare) throw new Exception(string.Format("〖福利：{0}〗已不存在！", model.Name));
 
-                if (DateTime.Now >= lastWelfare.ExpiryEndTime) throw new Exception("福利已失效，不能被开奖！");
+                if (DateTime.Now >= lastWelfare.ExpiryEndTime) throw new Exception(string.Format("〖福利：{0}〗已失效，不能被开奖！", lastWelfare.WelfareName));
 
-                if (lastWelfare.Status != (int)WelfareStatus.InProgress) throw new Exception("无效的开奖请求，福利不被允许开奖！");
+                if (lastWelfare.Status != (int)WelfareStatus.InProgress) throw new Exception(string.Format("无效的开奖请求，〖福利：{0}〗不被允许开奖！", lastWelfare.WelfareName));
 
-                if (lastWelfare.IsDelete == true) throw new Exception("福利已被下架，不能开奖！");
+                if (lastWelfare.IsDelete == true) throw new Exception(string.Format("〖福利：{0}〗已被下架，不能开奖！", lastWelfare.WelfareName));
 
-                if (DateTime.Now < lastWelfare.LotteryTime) throw new Exception("开奖时间未到，不能提前开奖！");
+                if (model.LotteryTime != lastWelfare.LotteryTime) throw new Exception(string.Format("〖福利：{0}〗不明确的开奖时间（在{1}与{2}之间不明确）！", lastWelfare.WelfareName, model.LotteryTime, lastWelfare.LotteryTime));
 
-                if (lastWelfare.WinNumber > 0) throw new Exception("福利活动不能重复开奖！");
+                if (DateTime.Now < lastWelfare.LotteryTime) throw new Exception(string.Format("〖福利：{0}〗开奖时间（{1}）未到！", lastWelfare.WelfareName, lastWelfare.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss")));
+
+                if (lastWelfare.WinNumber > 0) throw new Exception(string.Format("〖福利：{0}〗活动不能重复开奖！", lastWelfare.WelfareName));
 
                 //if (lastWelfare.PartNumber < 1) throw new Exception("没有报名参与的人员，不能开奖！");
 
@@ -126,13 +128,13 @@ namespace KylinService.Services.Queue.Welfare
 
                 if (null != pushContent)
                 {
-                    string sucMessage = string.Format("〖福利：{0}〗已开奖，本次共有 {1} 名参与人员中奖！", model.Name, winnerPartCodes.Length);
+                    string sucMessage = string.Format("〖福利：{0}〗已开奖，本次共有 {1} 名人员中奖（总参与人数：{2}）！", model.Name, winnerPartCodes.Length, lastWelfare.PartNumber);
 
                     OutputMessage(sucMessage);
                 }
                 else
                 {
-                    throw new Exception("开奖失败！");
+                    throw new Exception(string.Format("〖福利：{0}〗开奖失败！", lastWelfare.WelfareName));
                 }
 
                 #endregion

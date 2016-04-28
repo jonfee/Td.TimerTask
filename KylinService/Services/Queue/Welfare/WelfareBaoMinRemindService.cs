@@ -69,11 +69,11 @@ namespace KylinService.Services.Queue.Welfare
             {
                 var lastWelfare = WelfareProvider.GetWelfare(model.WelfareID);
 
-                if (null == lastWelfare || lastWelfare.IsDelete == true) throw new Exception("福利不存在或已被删除");
+                if (null == lastWelfare || lastWelfare.IsDelete == true) throw new Exception(string.Format("〖福利ID：{0}〗不存在或已被删除", model.WelfareID));
 
-                if (lastWelfare.Status != (int)WelfareStatus.InProgress) throw new Exception("福利状态异常，不能被提醒");
+                if (lastWelfare.Status != (int)WelfareStatus.InProgress) throw new Exception(string.Format("〖福利：{0}〗状态异常，不能被提醒", lastWelfare.WelfareName));
 
-                if (model.ApplyStartTime != lastWelfare.ApplyStartTime) throw new Exception("福利开始报名时间异常");
+                if (model.ApplyStartTime != lastWelfare.ApplyStartTime) throw new Exception(string.Format("〖福利：{0}〗开始报名时间异常", lastWelfare.WelfareName));
 
                 #region 推送消息给需要提醒的用户
 

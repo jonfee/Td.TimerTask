@@ -211,6 +211,7 @@
     <Compile Include="Core\Loger\BaseLoger.cs" />
     <Compile Include="Core\Loger\ErrorLoger.cs" />
     <Compile Include="Core\Loger\ExceptionLoger.cs" />
+    <Compile Include="Core\Loger\RunLoger.cs" />
     <Compile Include="Core\Loger\ServerLoger.cs" />
     <Compile Include="Core\Tools.cs" />
     <Compile Include="Data\Model\AppointOrderModel.cs" />

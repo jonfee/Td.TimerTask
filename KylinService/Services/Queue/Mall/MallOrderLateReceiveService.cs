@@ -70,11 +70,11 @@ namespace KylinService.Services.Queue.Mall
             {
                 var lastOrder = MallOrderProvider.GetOrder(model.OrderID);
 
-                if (null == lastOrder) throw new Exception("订单信息已不存在！");
+                if (null == lastOrder) throw new Exception(string.Format("订单(ID:{0})信息已不存在！", model.OrderID));
 
-                if (lastOrder.OrderStatus != (int)B2COrderStatus.WaitingReceipt) throw new Exception("订单状态已发生变更，不能自动完成收货！");
+                if (lastOrder.OrderStatus != (int)B2COrderStatus.WaitingReceipt) throw new Exception(string.Format("订单(编号{0})状态已发生变更，不能自动完成收货！", lastOrder.OrderCode));
 
-                if (model.ShipTime != model.ShipTime) throw new Exception("不能确定发货时间，不能自动完成收货！");
+                if (model.ShipTime != model.ShipTime) throw new Exception(string.Format("订单(编号{0})不能确定发货时间，不能自动完成收货！", lastOrder.OrderCode));
 
                 //结算并自动收货
                 var settlement = new MallOrderSettlementCenter(model.OrderID, true);
@@ -84,7 +84,7 @@ namespace KylinService.Services.Queue.Mall
 
                 if (settlement.Success)
                 {
-                    message = string.Format("〖订单（{0}）：{1}〗自动确认收货完成！", lastOrder.OrderCode, lastOrder.ProductInfo  );
+                    message = string.Format("〖订单（{0}）：{1}〗自动确认收货完成！", lastOrder.OrderCode, lastOrder.ProductInfo);
                 }
                 else
                 {
