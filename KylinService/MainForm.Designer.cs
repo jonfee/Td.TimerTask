@@ -106,6 +106,7 @@ namespace KylinService
             // 
             // tabCache
             // 
+            this.tabCache.AutoScroll = true;
             this.tabCache.Location = new System.Drawing.Point(4, 22);
             this.tabCache.Name = "tabCache";
             this.tabCache.Padding = new System.Windows.Forms.Padding(3);
@@ -137,10 +138,10 @@ namespace KylinService
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Kylin智能服务托管";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.groupTool.ResumeLayout(false);
             this.tabMenu.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.FormClosing += new FormClosingEventHandler(this.MainForm_FormClosing);
 
         }
 

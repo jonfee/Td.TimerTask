@@ -44,11 +44,15 @@ namespace KylinService.Services.Queue.Welfare
 
                     if (null != model)
                     {
-                        int duetime = (int)model.ApplyStartTime.AddMinutes(-Startup.WelfareConfig.BeforeRemindMinutes).Subtract(DateTime.Now).TotalMilliseconds;    //延迟执行时间（以毫秒为单位）
+                        TimeSpan duetime = model.ApplyStartTime.AddMinutes(-Startup.WelfareConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                        if (duetime < 0) duetime = 0;
+                        if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, Timeout.Infinite);
+                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime,TimeoutInfinite);
+
+                        //输出消息
+                        string message = string.Format("福利(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户参与报名", model.WelfareID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                        OutputMessage(message);
 
                         Schedulers.Add(model.WelfareID, timer);
                     }

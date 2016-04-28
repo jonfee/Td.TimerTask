@@ -2,6 +2,7 @@
 using KylinService.Core.Loger;
 using System;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace KylinService.Services
@@ -35,6 +36,16 @@ namespace KylinService.Services
         /// 服务名称
         /// </summary>
         public string ServiceName;
+
+        /// <summary>
+        /// Timeout.Infinite
+        /// </summary>
+        public TimeSpan TimeoutInfinite { get { return new TimeSpan(0, 0, 0, 0, -1); } }
+
+        /// <summary>
+        /// 表示0时间刻度
+        /// </summary>
+        public TimeSpan TimeoutZero { get { return new TimeSpan(0); } }
 
         #region 初始化
 

@@ -528,86 +528,108 @@ namespace KylinService
 
         private void InitCacheControls()
         {
+            int itemHight = 30;
+
+            int marginTop = 10;
+
+            #region 缓存更新周期设置
+
             Type enumLevelType = typeof(CacheLevel);
 
             //缓存级别列表
-            var levelList = enumLevelType.GetEnumDesc<CacheLevel>();
+            var levelList = SysData.CacheLevelList;
 
-            int itemHight = 30;
+            //定义外层Panel
+            Panel periodSerlPanel = new Panel();
+            periodSerlPanel.Width = (int)Math.Floor(tabCache.Width * 0.98);
+            var periodSerlPanelPadLeft = (tabCache.Width - periodSerlPanel.Width) / 2;
+            periodSerlPanel.Location = new System.Drawing.Point(periodSerlPanelPadLeft, 10);
+            periodSerlPanel.BackColor = System.Drawing.Color.FromArgb(250, 250, 250);
 
-            for (var i = 0; i < levelList.Count; i++)
+            //外层Panel高度
+            int levelPanelHight = 0;
+
+            if (null != levelList)
             {
-                var level = levelList[i];
-
-                //缓存更新周期
-                int time = 0;
-
-                //缓存更新周期时间单位
-                var timeOption = default(CacheTimeOption);
-
-                switch (level.EnumItem)
+                for (var i = 0; i < levelList.Count; i++)
                 {
-                    case CacheLevel.Hight: level.Description = "高"; time = 7; timeOption = CacheTimeOption.Day; break;
-                    case CacheLevel.Lower: level.Description = "低"; time = 30; timeOption = CacheTimeOption.Minute; break;
-                    case CacheLevel.Middel: level.Description = "中等"; time = 1; timeOption = CacheTimeOption.Day; break;
-                    case CacheLevel.Permanent: level.Description = "持久"; time = 180; timeOption = CacheTimeOption.Day; break;
+                    var level = levelList[i];
+
+                    //缓存更新周期
+                    int time = 0;
+
+                    //缓存更新周期时间单位
+                    var timeOption = default(CacheTimeOption);
+
+                    switch (level.EnumItem)
+                    {
+                        case CacheLevel.Hight: level.Description = "高"; time = 7; timeOption = CacheTimeOption.Day; break;
+                        case CacheLevel.Lower: level.Description = "低"; time = 30; timeOption = CacheTimeOption.Minute; break;
+                        case CacheLevel.Middel: level.Description = "中等"; time = 1; timeOption = CacheTimeOption.Day; break;
+                        case CacheLevel.Permanent: level.Description = "持久"; time = 180; timeOption = CacheTimeOption.Day; break;
+                    }
+
+                    #region//缓存级别配置项面板 Panel
+                    Panel panel = new Panel();
+                    panel.Width = (int)Math.Floor(periodSerlPanel.Width * 0.95);
+                    panel.Height = itemHight;
+                    var padLeft = (periodSerlPanel.Width - panel.Width) / 2;
+                    panel.Location = new System.Drawing.Point(padLeft, i * itemHight + marginTop);
+                    #endregion
+
+                    #region//缓存级别说明 Lable
+                    Label lbType = new Label();
+                    lbType.Width = 180;
+                    lbType.Text = level.Description + "级别缓存更新时间周期为：";
+                    lbType.Name = "lb_lv_" + level.Name;
+                    lbType.Location = new System.Drawing.Point(0, 5);
+                    panel.Controls.Add(lbType);
+                    #endregion
+
+                    #region //更新周期时间 TextBox
+                    TextBox tbPeriod = new TextBox();
+                    tbPeriod.Width = 100;
+                    tbPeriod.Text = time.ToString();
+                    tbPeriod.Name = "tb_lv_" + level.Name;
+                    tbPeriod.Location = new System.Drawing.Point(180, 5);
+                    panel.Controls.Add(tbPeriod);
+                    #endregion
+
+                    #region //更新周期时间单位 ComboBox
+                    ComboBox combTimeOption = new ComboBox();
+                    combTimeOption.Width = 50;
+                    combTimeOption.Name = "comb_lv_" + level.Name;
+                    combTimeOption.Location = new System.Drawing.Point(290, 5);
+                    //绑定项
+                    foreach (var to in SysData.CacheTimeOptionList)
+                    {
+                        combTimeOption.Items.Add(to.Description);
+
+                        if (to.Value == (int)timeOption) combTimeOption.SelectedItem = to.Description;
+                    }
+
+                    panel.Controls.Add(combTimeOption);
+                    #endregion
+
+                    periodSerlPanel.Controls.Add(panel);
                 }
-
-                #region//缓存级别配置项面板 Panel
-                Panel panel = new Panel();
-                panel.Width = (int)Math.Floor(tabCache.Width * 0.92);
-                panel.Height = itemHight;
-                var padLeft = (tabCache.Width - panel.Width) / 2;
-                panel.Location = new System.Drawing.Point(padLeft, i * itemHight + itemHight);
-                #endregion
-
-                #region//缓存级别说明 Lable
-                Label lbType = new Label();
-                lbType.Width = 180;
-                lbType.Text = level.Description + "级别缓存更新时间周期为：";
-                lbType.Name = "lb_lv_" + level.Name;
-                lbType.Location = new System.Drawing.Point(0, 5);
-                panel.Controls.Add(lbType);
-                #endregion
-
-                #region //更新周期时间 TextBox
-                TextBox tbPeriod = new TextBox();
-                tbPeriod.Width = 100;
-                tbPeriod.Text = time.ToString();
-                tbPeriod.Name = "tb_lv_" + level.Name;
-                tbPeriod.Location = new System.Drawing.Point(180, 5);
-                panel.Controls.Add(tbPeriod);
-                #endregion
-
-                #region //更新周期时间单位 ComboBox
-                ComboBox combTimeOption = new ComboBox();
-                combTimeOption.Width = 50;
-                combTimeOption.Name = "comb_lv_" + level.Name;
-                combTimeOption.Location = new System.Drawing.Point(280, 5);
-                //绑定项
-                foreach (var to in SysData.CacheTimeOptionList)
-                {
-                    combTimeOption.Items.Add(to.Description);
-
-                    if (to.Value == (int)timeOption) combTimeOption.SelectedItem = to.Description;
-                }
-
-                panel.Controls.Add(combTimeOption);
-                #endregion
-
-                this.tabCache.Controls.Add(panel);
             }
 
+            #endregion
 
             #region 缓存维护服务控件绑定
 
             #region//服务项面板Panel
             Panel serPanel = new Panel();
-            serPanel.Width = (int)Math.Floor(tabClear.Width * 0.92);
-            serPanel.Height = 30;
-            var ser_padLeft = (tabClear.Width - serPanel.Width) / 2;
-            serPanel.Location = new System.Drawing.Point(ser_padLeft, itemHight * levelList.Count + itemHight * 2);
+            serPanel.Width = (int)Math.Floor(periodSerlPanel.Width * 0.95);
+            serPanel.Height = itemHight;
+            var ser_padLeft = (tabCache.Width - serPanel.Width) / 2;
+            var ser_padTop = itemHight * levelList.Count + 30;
+            serPanel.Location = new System.Drawing.Point(ser_padLeft, ser_padTop);
             #endregion
+
+            //给定义外层Panel高度的变量赋值
+            levelPanelHight = ser_padTop + serPanel.Height + 20;
 
             #region//服务类型名称Lable
             Label ser_lbType = new Label();
@@ -648,7 +670,86 @@ namespace KylinService
             serPanel.Controls.Add(ser_stopButton);
             #endregion
 
-            this.tabCache.Controls.Add(serPanel);
+            periodSerlPanel.Controls.Add(serPanel);
+
+            periodSerlPanel.Height = levelPanelHight;
+            this.tabCache.Controls.Add(periodSerlPanel);
+
+            #endregion
+
+            #region 缓存级别设置与手动更新
+
+            var cacheList = CacheCollection.GetAllCache();
+
+            if (null != cacheList)
+            {
+                //外层Panel
+                Panel levelSetPanel = new Panel();
+                levelSetPanel.Width = (int)Math.Floor(tabCache.Width * 0.98);
+                levelSetPanel.Height = itemHight * cacheList.Count + 20;
+                var levelSetPanelPadLeft = (tabCache.Width - levelSetPanel.Width) / 2;
+                levelSetPanel.Location = new System.Drawing.Point(levelSetPanelPadLeft, periodSerlPanel.Height + 20);
+                levelSetPanel.BackColor = System.Drawing.Color.FromArgb(250, 250, 250);
+
+                int i = 0;
+                foreach (var cache in cacheList)
+                {
+                    #region//缓存级别配置项面板 Panel
+                    Panel panel = new Panel();
+                    panel.Width = (int)Math.Floor(levelSetPanel.Width * 0.95);
+                    panel.Height = itemHight;
+                    var padLeft = (levelSetPanel.Width - panel.Width) / 2;
+                    panel.Location = new System.Drawing.Point(padLeft, i++ * itemHight + marginTop);
+                    #endregion
+
+                    #region//缓存名称 Lable
+                    Label lbType = new Label();
+                    lbType.Width = 220;
+                    lbType.Text = cache.CacheKey;
+                    lbType.Location = new System.Drawing.Point(0, 5);
+                    panel.Controls.Add(lbType);
+                    #endregion
+
+                    #region//等级 Lable
+                    Label lbLevel = new Label();
+                    lbLevel.Width = 45;
+                    lbLevel.Text = "级别：";
+                    lbLevel.Location = new System.Drawing.Point(220, 5);
+                    panel.Controls.Add(lbLevel);
+                    #endregion
+
+                    #region //级别 ComboBox
+                    ComboBox combLevelSet = new ComboBox();
+                    combLevelSet.Width = 50;
+                    combLevelSet.Name = "comb_setlv_" + cache.CacheKey;
+                    combLevelSet.Tag = cache.ItemType.ToString("d");
+                    combLevelSet.Location = new System.Drawing.Point(270, 5);
+                    //绑定项
+                    foreach (var to in SysData.CacheLevelList)
+                    {
+                        combLevelSet.Items.Add(to.Description);
+
+                        if (to.Value == (int)cache.Level) combLevelSet.SelectedItem = to.Description;
+                    }
+                    combLevelSet.SelectedIndexChanged += CombLeveSet_SelectedIndexChanged;
+                    panel.Controls.Add(combLevelSet);
+                    #endregion
+
+                    #region //更新按钮 Button
+                    Button btnUpdateCacheItem = new Button();
+                    btnUpdateCacheItem.Text = "更新";
+                    btnUpdateCacheItem.Name = "btnCacheUpdate_" + cache.CacheKey;
+                    btnUpdateCacheItem.Tag = cache.ItemType.ToString("d");
+                    btnUpdateCacheItem.Location = new System.Drawing.Point(350, 0);
+                    btnUpdateCacheItem.Click += new EventHandler(BtnUpdateCacheItem_Click);
+                    panel.Controls.Add(btnUpdateCacheItem);
+                    #endregion
+
+                    levelSetPanel.Controls.Add(panel);
+                }
+
+                this.tabCache.Controls.Add(levelSetPanel);
+            }
 
             #endregion
         }
@@ -780,6 +881,62 @@ namespace KylinService
             }
 
             #endregion
+        }
+
+        /// <summary>
+        /// 设置缓存级别
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CombLeveSet_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox combo = (ComboBox)sender;
+
+            if (null == combo) return;
+
+            string tag = combo.Tag.ToString();
+
+            string selValue = combo.SelectedItem.ToString();
+
+            CacheItemType itemType = (CacheItemType)Enum.Parse(typeof(CacheItemType), tag);
+
+            //缓存级别列表
+            var levelList = SysData.CacheLevelList;
+
+            var level = SysData.CacheLevelList.FirstOrDefault(p => p.Description.ToString() == selValue);
+
+            var cache = CacheCollection.GetCache(itemType);
+
+            if (null != cache)
+            {
+                cache.ResetLevel(level.EnumItem);
+
+                WriteMessage(string.Format("{0}缓存级别调整为“{1}”。", cache.CacheKey, level.Description));
+            }
+        }
+
+        /// <summary>
+        /// 更新缓存项
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnUpdateCacheItem_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            if (null == btn) return;
+
+            string tag = btn.Tag.ToString();
+
+            CacheItemType itemType = (CacheItemType)Enum.Parse(typeof(CacheItemType), tag);
+
+            var cache = CacheCollection.GetCache(itemType);
+
+            if (null != cache)
+            {
+                cache.Update();
+                WriteMessage(string.Format("缓存{0}已更新！", cache.CacheKey));
+            }
         }
 
         #endregion

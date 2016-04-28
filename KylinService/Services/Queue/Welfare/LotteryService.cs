@@ -46,14 +46,14 @@ namespace KylinService.Services.Queue.Welfare
 
                     if (null != model)
                     {
-                        int duetime = (int)model.LotteryTime.Subtract(DateTime.Now).TotalMilliseconds;    //延迟执行时间（以毫秒为单位）
+                        TimeSpan duetime = model.LotteryTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                        if (duetime < 0) duetime = 0;
+                        if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, Timeout.Infinite);
+                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
                         //输出消息
-                        string message = string.Format("福利“{0}”将于{1}开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"));
+                        string message = string.Format("福利“{0}”将于{2}天{3}小时{4}分{5}秒后（{1}）开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"), duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
                         OutputMessage(message);
 
                         Schedulers.Add(model.WelfareID, timer);

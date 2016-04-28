@@ -45,11 +45,15 @@ namespace KylinService.Services.Queue.Merchant
                     {
                         DateTime lastTime = model.SendTime.AddDays(Startup.MerchantOrderConfig.WaitReceiptGoodsDays);
 
-                        int duetime = (int)lastTime.Subtract(DateTime.Now).TotalMilliseconds;    //延迟执行时间（以毫秒为单位）
+                        TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                        if (duetime < 0) duetime = 0;
+                        if (duetime.Ticks < 0) duetime =TimeoutZero;
 
-                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, Timeout.Infinite);
+                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+
+                        //输出消息
+                        string message = string.Format("附近购订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未收货系统将自动确认收货", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                        OutputMessage(message);
 
                         Schedulers.Add(model.OrderID, timer);
                     }

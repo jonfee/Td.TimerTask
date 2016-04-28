@@ -1,6 +1,7 @@
 ﻿using KylinService.SysEnums;
 using System.Collections.Generic;
 using System.Linq;
+using Td.Kylin.DataCache;
 using static KylinService.Core.EnumExtensions;
 
 namespace KylinService.Core
@@ -186,5 +187,124 @@ namespace KylinService.Core
         }
 
         #endregion
+
+        #region 缓存级别
+
+        private static List<EnumDesc<CacheLevel>> _cacheLevelList = null;
+
+        /// <summary>
+        /// 缓存级别集合
+        /// </summary>
+        public static List<EnumDesc<CacheLevel>> CacheLevelList
+        {
+            get
+            {
+                if (null == _cacheLevelList)
+                {
+                    _cacheLevelList = typeof(CacheLevel).GetEnumDesc<CacheLevel>();
+                }
+                return _cacheLevelList;
+            }
+        }
+
+        /// <summary>
+        /// 获取缓存级别的名称/描述
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public static string GetCacheLevelDescription(int option)
+        {
+            string name = string.Empty;
+
+            if (null != CacheLevelList)
+            {
+                var item = CacheLevelList.FirstOrDefault(p => p.Value == option);
+
+                name = null != item ? item.Description : string.Empty;
+            }
+
+            return name;
+        }
+
+        /// <summary>
+        /// 获取级别名称
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public static string GetCacheLevelDescription(string option)
+        {
+            string name = string.Empty;
+
+            if (null != CacheLevelList)
+            {
+                var item = CacheLevelList.FirstOrDefault(p => p.Name == option);
+
+                name = null != item ? item.Description : string.Empty;
+            }
+
+            return name;
+        }
+
+        #endregion
+
+        #region 缓存项
+
+        private static List<EnumDesc<CacheItemType>> _cacheItemTypeList = null;
+
+        /// <summary>
+        /// 缓存项集合
+        /// </summary>
+        public static List<EnumDesc<CacheItemType>> CacheItemTypelList
+        {
+            get
+            {
+                if (null == _cacheItemTypeList)
+                {
+                    _cacheItemTypeList = typeof(CacheItemType).GetEnumDesc<CacheItemType>();
+                }
+                return _cacheItemTypeList;
+            }
+        }
+
+        /// <summary>
+        /// 获取缓存项的名称/描述
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public static string GetCacheItemTypeDescription(int option)
+        {
+            string name = string.Empty;
+
+            if (null != CacheItemTypelList)
+            {
+                var item = CacheItemTypelList.FirstOrDefault(p => p.Value == option);
+
+                name = null != item ? item.Description : string.Empty;
+            }
+
+            return name;
+        }
+
+        /// <summary>
+        /// 获取缓存项名称
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public static string GetCacheItemTypeDescription(string option)
+        {
+            string name = string.Empty;
+
+            if (null != CacheItemTypelList)
+            {
+                var item = CacheItemTypelList.FirstOrDefault(p => p.Name == option);
+
+                name = null != item ? item.Description : string.Empty;
+            }
+
+            return name;
+        }
+
+        #endregion
+
     }
 }

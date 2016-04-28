@@ -44,11 +44,15 @@ namespace KylinService.Services.Queue.Mall
                     {
                         DateTime lastTime = model.NeedPayTime ?? model.CreateTime.AddMinutes(Startup.B2COrderConfig.WaitPaymentMinutes);
 
-                        int duetime = (int)lastTime.Subtract(DateTime.Now).TotalMilliseconds;    //延迟执行时间（以毫秒为单位）
+                        TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间
 
-                        if (duetime < 0) duetime = 0;
+                        if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, Timeout.Infinite);
+                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+
+                        //输出消息
+                        string message = string.Format("精品汇订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                        OutputMessage(message);
 
                         Schedulers.Add(model.OrderID, timer);
                     }
@@ -69,9 +73,9 @@ namespace KylinService.Services.Queue.Mall
             {
                 var lastOrder = MallOrderProvider.GetOrder(model.OrderID);
 
-                if (null == lastOrder) throw new Exception(string.Format("订单(ID:{0})信息已不存在！",model.OrderID));
+                if (null == lastOrder) throw new Exception(string.Format("订单(ID:{0})信息已不存在！", model.OrderID));
 
-                if (lastOrder.OrderStatus != (int)B2COrderStatus.WaitingPayment) throw new Exception(string.Format("当前订单(编号{0})状态发生变更，不能自动取消订单",lastOrder.OrderCode));
+                if (lastOrder.OrderStatus != (int)B2COrderStatus.WaitingPayment) throw new Exception(string.Format("当前订单(编号{0})状态发生变更，不能自动取消订单", lastOrder.OrderCode));
 
                 //自动取消订单
                 bool cancelSuccess = MallOrderProvider.AutoCancelOrder(lastOrder.OrderID).Result;

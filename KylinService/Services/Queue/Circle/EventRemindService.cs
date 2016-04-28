@@ -40,11 +40,15 @@ namespace KylinService.Services.Queue.Circle
 
                     if (null != model)
                     {
-                        int duetime = (int)model.StartTime.AddMinutes(-Startup.CircleConfig.BeforeRemindMinutes).Subtract(DateTime.Now).TotalMilliseconds;    //延迟执行时间（以毫秒为单位）
+                        TimeSpan duetime = model.StartTime.AddMinutes(-Startup.CircleConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                        if (duetime < 0) duetime = 0;
+                        if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, Timeout.Infinite);
+                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+
+                        //输出消息
+                        string message = string.Format("社区活动(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户", model.EventID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                        OutputMessage(message);
 
                         Schedulers.Add(model.EventID, timer);
                     }
