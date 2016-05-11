@@ -38,7 +38,21 @@ namespace KylinService
             };
             #endregion
 
-            #region //Kylin数据库连接字符串
+            #region //Kylin数据库类型及连接字符串
+
+            SqlType = new Func<SqlProviderType>(() =>
+              {
+                  string sqlType = ConfigurationManager.AppSettings["SqlType"] ?? string.Empty;
+                  switch (sqlType.ToLower())
+                  {
+                      case "pgsql":
+                          return SqlProviderType.PostgreSQL;
+                      case "mssql":
+                      default:
+                          return SqlProviderType.SqlServer;
+                  }
+
+              }).Invoke();
 
             KylinDBConnectionString = ConfigurationManager.ConnectionStrings["KylinConnectionString"].ConnectionString;
 
@@ -48,7 +62,7 @@ namespace KylinService
 
             string dataCacheRedisConn = ConfigurationManager.ConnectionStrings["RedisDataCacheConnectionString"].ConnectionString;
             //注入数据缓存组件
-            DataCacheInjection.UseDataCache(dataCacheRedisConn, SqlProviderType.PostgreSQL, KylinDBConnectionString);
+            DataCacheInjection.UseDataCache(dataCacheRedisConn, SqlType, KylinDBConnectionString);
 
             #endregion
 
@@ -272,8 +286,15 @@ namespace KylinService
         #endregion
 
         #region 成员
-
+        /// <summary>
+        /// 服务程序相关描述信息
+        /// </summary>
         public static ProductInfo ProductInfo;
+
+        /// <summary>
+        /// 数据库类型
+        /// </summary>
+        public static SqlProviderType SqlType;
 
         /// <summary>
         /// Kylin数据库连接字符串

@@ -7,7 +7,16 @@ namespace KylinService.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         {
-            optionBuilder.UseNpgsql(Startup.KylinDBConnectionString);
+            switch (Startup.SqlType)
+            {
+                case Td.Kylin.DataCache.SqlProviderType.PostgreSQL:
+                    optionBuilder.UseNpgsql(Startup.KylinDBConnectionString);
+                    break;
+                case Td.Kylin.DataCache.SqlProviderType.SqlServer:
+                default:
+                    optionBuilder.UseSqlServer(Startup.KylinDBConnectionString);
+                    break;
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

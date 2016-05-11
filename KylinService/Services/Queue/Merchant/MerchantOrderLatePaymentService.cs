@@ -73,9 +73,9 @@ namespace KylinService.Services.Queue.Merchant
             {
                 var lastOrder = MerchantOrderProvider.GetOrder(model.OrderID);
 
-                if (null == lastOrder) throw new Exception(string.Format("订单(ID:{0})信息已不存在！", model.OrderID));
+                if (null == lastOrder) throw new CustomException(string.Format("订单(ID:{0})信息已不存在！", model.OrderID));
 
-                if (lastOrder.OrderStatus != (int)MerchantOrderStatus.WaitingPayment) throw new Exception(string.Format("当前订单(编号{0})状态发生变更，不能自动取消订单", lastOrder.OrderCode));
+                if (lastOrder.OrderStatus != (int)MerchantOrderStatus.WaitingPayment) throw new CustomException(string.Format("当前订单(编号{0})状态发生变更，不能自动取消订单", lastOrder.OrderCode));
 
                 //自动取消订单
                 bool cancelSuccess = MerchantOrderProvider.AutoCancelOrder(lastOrder.OrderID).Result;

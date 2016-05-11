@@ -125,10 +125,14 @@ namespace KylinService.Services
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(string.Format("出错了，原因：{0}", ex.Message));
+
+            if (ex is CustomException)
+            {
+                OutputMessage(sb.ToString());
+            }
+
             sb.AppendLine("异常详情：");
             sb.AppendLine(ex.StackTrace);
-
-            OutputMessage(sb.ToString());
 
             //写入异常日志
             var loger = new ExceptionLoger();

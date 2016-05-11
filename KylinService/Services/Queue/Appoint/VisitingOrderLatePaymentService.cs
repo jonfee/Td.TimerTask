@@ -71,7 +71,7 @@ namespace KylinService.Services.Queue.Appoint
             {
                 var lastOrder = AppointOrderProvider.GetAppointOrder(model.OrderID);
 
-                if (null == lastOrder) throw new Exception(string.Format("订单(ID:{0})信息已不存在！", model.OrderID));
+                if (null == lastOrder) throw new CustomException(string.Format("订单(ID:{0})信息已不存在！", model.OrderID));
 
                 bool statusRight = false;
 
@@ -84,7 +84,7 @@ namespace KylinService.Services.Queue.Appoint
                     statusRight = true;
                 }
 
-                if (!statusRight) throw new Exception(string.Format("订单(编号:{0})状态已发生变更，不能自动完成收货！", lastOrder.OrderCode));
+                if (!statusRight) throw new CustomException(string.Format("订单(编号:{0})状态已发生变更，不能自动完成收货！", lastOrder.OrderCode));
 
                 //自动取消订单
                 bool success = AppointOrderProvider.AutoCancelOrder(lastOrder.OrderID);

@@ -205,6 +205,7 @@
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\ConsumerCodeGenerater.cs" />
+    <Compile Include="Core\CustomException.cs" />
     <Compile Include="Core\DelegateTool.cs" />
     <Compile Include="Core\EnumExtensions.cs" />
     <Compile Include="Core\IDCreater.cs" />

@@ -72,9 +72,9 @@ namespace KylinService.Services.Queue.Appoint
             {
                 var lastOrder = AppointOrderProvider.GetAppointOrder(model.OrderID);
 
-                if (null == lastOrder) throw new Exception(string.Format("订单(ID:{0})信息已不存在！",model.OrderID));
+                if (null == lastOrder) throw new CustomException(string.Format("订单(ID:{0})信息已不存在！",model.OrderID));
 
-                if (lastOrder.Status != (int)ReservationServiceOrderStatus.MerchantServiceDone) throw new Exception(string.Format("订单(编号:{0})状态已发生变更，不能自动确认服务完成！",lastOrder.OrderCode));
+                if (lastOrder.Status != (int)ReservationServiceOrderStatus.MerchantServiceDone) throw new CustomException(string.Format("订单(编号:{0})状态已发生变更，不能自动确认服务完成！",lastOrder.OrderCode));
 
                 //结算并自动收货
                 var settlement = new ReservationOrderSettlementCenter(model.OrderID, true);
