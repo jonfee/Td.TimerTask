@@ -88,7 +88,7 @@ namespace KylinService.Services.CacheMaintain
                         StringBuilder sb = new StringBuilder();
                         foreach (var item in list)
                         {
-                            sb.AppendLine(string.Format("{0}缓存“{1}”已更新！", levelName, item.ItemType));
+                            sb.AppendLine(string.Format("{0}缓存“{1}”已更新！", levelName, Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(item.ItemType)));
                         }
 
                         message = sb.ToString();

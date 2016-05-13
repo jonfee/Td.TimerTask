@@ -45,8 +45,8 @@ namespace KylinService
                   string sqlType = ConfigurationManager.AppSettings["SqlType"] ?? string.Empty;
                   switch (sqlType.ToLower())
                   {
-                      case "pgsql":
-                          return SqlProviderType.PostgreSQL;
+                      case "npgsql":
+                          return SqlProviderType.NpgSQL;
                       case "mssql":
                       default:
                           return SqlProviderType.SqlServer;

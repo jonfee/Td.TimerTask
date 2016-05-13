@@ -705,7 +705,7 @@ namespace KylinService
                     #region//缓存名称 Lable
                     Label lbType = new Label();
                     lbType.Width = 220;
-                    lbType.Text = cache.CacheKey;
+                    lbType.Text = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());// cache.CacheKey;
                     lbType.Location = new System.Drawing.Point(0, 5);
                     panel.Controls.Add(lbType);
                     #endregion

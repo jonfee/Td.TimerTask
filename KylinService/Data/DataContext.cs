@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Entity;
 using Td.Kylin.Entity;
+using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Data
 {
@@ -9,10 +10,10 @@ namespace KylinService.Data
         {
             switch (Startup.SqlType)
             {
-                case Td.Kylin.DataCache.SqlProviderType.PostgreSQL:
+                case SqlProviderType.NpgSQL:
                     optionBuilder.UseNpgsql(Startup.KylinDBConnectionString);
                     break;
-                case Td.Kylin.DataCache.SqlProviderType.SqlServer:
+                case SqlProviderType.SqlServer:
                 default:
                     optionBuilder.UseSqlServer(Startup.KylinDBConnectionString);
                     break;
