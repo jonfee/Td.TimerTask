@@ -184,16 +184,16 @@
       <HintPath>..\packages\Td.CoreLibrary.1.1.3.1-beta\lib\net46\Td.CoreLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.DataCache, Version=1.0.8.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.DataCache.1.0.8.1-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
+    <Reference Include="Td.Kylin.DataCache, Version=1.0.9.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.DataCache.1.0.9.1-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.Entity.1.0.0-rc1-28\lib\net46\Td.Kylin.Entity.dll</HintPath>
+      <HintPath>..\packages\Td.Kylin.Entity.1.0.0-rc1-32\lib\net46\Td.Kylin.Entity.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.33.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.33.1-beta\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
+    <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.27.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.33.7-bata\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Redis, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">

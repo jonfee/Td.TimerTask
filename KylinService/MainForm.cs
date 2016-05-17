@@ -12,6 +12,7 @@ using KylinService.Services.Queue.Welfare;
 using KylinService.SysEnums;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -89,7 +90,7 @@ namespace KylinService
 
                 #region//服务项面板Panel
                 Panel panel = new Panel();
-                panel.Width = (int)Math.Floor(tabClear.Width * 0.92);
+                panel.Width = (int)Math.Floor(tabClear.Width * 0.95);
                 panel.Height = 30;
                 var padLeft = (tabClear.Width - panel.Width) / 2;
                 panel.Location = new System.Drawing.Point(padLeft, i * 30 + 30);
@@ -276,7 +277,7 @@ namespace KylinService
 
                 #region//服务项面板Panel
                 Panel panel = new Panel();
-                panel.Width = (int)Math.Floor(tabQueue.Width * 0.92);
+                panel.Width = (int)Math.Floor(tabQueue.Width * 0.95);
                 panel.Height = 30;
                 var padLeft = (tabQueue.Width - panel.Width) / 2;
                 panel.Location = new System.Drawing.Point(padLeft, i * 30 + 30);
@@ -524,7 +525,7 @@ namespace KylinService
 
         #endregion
 
-        #region 缓存维护
+        #region 缓存维护  
 
         private void InitCacheControls()
         {
@@ -541,8 +542,8 @@ namespace KylinService
 
             //定义外层Panel
             Panel periodSerlPanel = new Panel();
-            periodSerlPanel.Width = (int)Math.Floor(tabCache.Width * 0.98);
-            var periodSerlPanelPadLeft = (tabCache.Width - periodSerlPanel.Width) / 2;
+            periodSerlPanel.Width = (int)Math.Floor(tabCache.Width - 40M);
+            var periodSerlPanelPadLeft = 10;
             periodSerlPanel.Location = new System.Drawing.Point(periodSerlPanelPadLeft, 10);
             periodSerlPanel.BackColor = System.Drawing.Color.FromArgb(250, 250, 250);
 
@@ -685,9 +686,9 @@ namespace KylinService
             {
                 //外层Panel
                 Panel levelSetPanel = new Panel();
-                levelSetPanel.Width = (int)Math.Floor(tabCache.Width * 0.98);
+                levelSetPanel.Width = (int)Math.Floor(tabCache.Width - 40M);
                 levelSetPanel.Height = itemHight * cacheList.Count + 20;
-                var levelSetPanelPadLeft = (tabCache.Width - levelSetPanel.Width) / 2;
+                var levelSetPanelPadLeft = 10;
                 levelSetPanel.Location = new System.Drawing.Point(levelSetPanelPadLeft, periodSerlPanel.Height + 20);
                 levelSetPanel.BackColor = System.Drawing.Color.FromArgb(250, 250, 250);
 
@@ -704,7 +705,7 @@ namespace KylinService
 
                     #region//缓存名称 Lable
                     Label lbType = new Label();
-                    lbType.Width = 220;
+                    lbType.Width = 200;
                     lbType.Text = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());// cache.CacheKey;
                     lbType.Location = new System.Drawing.Point(0, 5);
                     panel.Controls.Add(lbType);
@@ -714,7 +715,7 @@ namespace KylinService
                     Label lbLevel = new Label();
                     lbLevel.Width = 45;
                     lbLevel.Text = "级别：";
-                    lbLevel.Location = new System.Drawing.Point(220, 5);
+                    lbLevel.Location = new System.Drawing.Point(200, 5);
                     panel.Controls.Add(lbLevel);
                     #endregion
 
@@ -723,7 +724,7 @@ namespace KylinService
                     combLevelSet.Width = 50;
                     combLevelSet.Name = "comb_setlv_" + cache.CacheKey;
                     combLevelSet.Tag = cache.ItemType.ToString("d");
-                    combLevelSet.Location = new System.Drawing.Point(270, 5);
+                    combLevelSet.Location = new System.Drawing.Point(250, 5);
                     //绑定项
                     foreach (var to in SysData.CacheLevelList)
                     {
@@ -740,9 +741,22 @@ namespace KylinService
                     btnUpdateCacheItem.Text = "更新";
                     btnUpdateCacheItem.Name = "btnCacheUpdate_" + cache.CacheKey;
                     btnUpdateCacheItem.Tag = cache.ItemType.ToString("d");
-                    btnUpdateCacheItem.Location = new System.Drawing.Point(350, 0);
+                    btnUpdateCacheItem.Width = 60;
+                    btnUpdateCacheItem.Location = new System.Drawing.Point(330, 0);
                     btnUpdateCacheItem.Click += new EventHandler(BtnUpdateCacheItem_Click);
                     panel.Controls.Add(btnUpdateCacheItem);
+                    #endregion
+
+                    #region //查看缓存数据
+
+                    Button btnShowData = new Button();
+                    btnShowData.Text = "查看";
+                    btnShowData.Name = "btnshowdata_" + cache.CacheKey;
+                    btnShowData.Tag = cache.ItemType.ToString("d");
+                    btnShowData.Location = new System.Drawing.Point(405, 0);
+                    btnShowData.Click += new EventHandler(BtnShowData_Click);
+                    panel.Controls.Add(btnShowData);
+
                     #endregion
 
                     levelSetPanel.Controls.Add(panel);
@@ -843,7 +857,7 @@ namespace KylinService
         /// 缓存更新服务结束
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="e"></param> 
         private void BtnCacheStop_Click(object sender, EventArgs e)
         {
             var btn = (Button)sender;
@@ -919,7 +933,7 @@ namespace KylinService
         /// 更新缓存项
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="e"></param> 
         private void BtnUpdateCacheItem_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
@@ -935,7 +949,50 @@ namespace KylinService
             if (null != cache)
             {
                 cache.Update();
-                WriteMessage(string.Format("缓存{0}已更新！", cache.CacheKey));
+
+                var cacheName = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());
+
+                WriteMessage(string.Format("缓存“{0}”已更新！", cacheName));
+            }
+        }
+
+        /// <summary>
+        /// 显示缓存数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnShowData_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            if (null == btn) return;
+
+            string tag = btn.Tag.ToString();
+
+            CacheItemType itemType = (CacheItemType)Enum.Parse(typeof(CacheItemType), tag);
+
+            var cache = CacheCollection.GetCache(itemType);
+
+            if (null != cache)
+            {
+                var data = cache.GetCacheData();
+                
+                StringBuilder sb = new StringBuilder();
+
+                var cacheName = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());
+
+                sb.AppendLine(string.Format("缓存{0}的源数据为：",cacheName));
+
+                if (null != data)
+                {
+                    foreach (var item in data)
+                    {
+                        string temp = (item??string.Empty).ToString();
+                        sb.AppendLine(temp);
+                    }
+                }
+
+                WriteMessage(sb.ToString());
             }
         }
 
@@ -1112,13 +1169,13 @@ namespace KylinService
         /// <param name="e"></param>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.Hide();
-            e.Cancel = true;
+            //this.Hide();
+            //e.Cancel = true;
 
-            if (null == notifyIcon)
-            {
-                InitialTray();
-            }
+            //if (null == notifyIcon)
+            //{
+            //    InitialTray();
+            //}
         }
 
         /// <summary>
@@ -1132,8 +1189,12 @@ namespace KylinService
             notifyIcon.BalloonTipText = string.Format("{0}正在后台运行", Startup.ProductInfo.ProductName);
             //托盘图标显示的内容  
             notifyIcon.Text = Startup.ProductInfo.ProductName;
-            //注意：下面的路径可以是绝对路径、相对路径。但是需要注意的是：文件必须是一个.ico格式  
-            notifyIcon.Icon = new System.Drawing.Icon(AppDomain.CurrentDomain.BaseDirectory + "/kylin.ico");
+            string icon = AppDomain.CurrentDomain.BaseDirectory + "/kylin.ico";
+            if (File.Exists(icon))
+            {
+                //注意：下面的路径可以是绝对路径、相对路径。但是需要注意的是：文件必须是一个.ico格式  
+                notifyIcon.Icon = new System.Drawing.Icon(icon);
+            }
             //true表示在托盘区可见，false表示在托盘区不可见  
             notifyIcon.Visible = true;
             //气泡显示的时间（单位是毫秒）  

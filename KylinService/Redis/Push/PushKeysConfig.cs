@@ -44,5 +44,13 @@ namespace KylinService.Redis.Push
                 return _database;
             }
         }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        public void Update()
+        {
+            _database = null;
+        }
     }
 }

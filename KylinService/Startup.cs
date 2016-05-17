@@ -60,9 +60,9 @@ namespace KylinService
 
             #region  //注入
 
-            string dataCacheRedisConn = ConfigurationManager.ConnectionStrings["RedisDataCacheConnectionString"].ConnectionString;
+            DataCacheRedisConnectionString = ConfigurationManager.ConnectionStrings["RedisDataCacheConnectionString"].ConnectionString;
             //注入数据缓存组件
-            DataCacheInjection.UseDataCache(dataCacheRedisConn, SqlType, KylinDBConnectionString);
+            InjectionDataCache();
 
             #endregion
 
@@ -79,6 +79,73 @@ namespace KylinService
 
             //初始化缓存维护参数配置
             UpdateCacheMaintainConfig();
+        }
+
+        /// <summary>
+        /// 更新任务计划的队列Redis服务器
+        /// </summary>
+        /// <param name="scheduleRedisConn"></param>
+        public static void UpdateScheduleRedis(string scheduleRedisConn)
+        {
+            if (null != ScheduleRedisConfigs)
+            {
+                foreach (var item in ScheduleRedisConfigs.Items)
+                {
+                    item.ConnectionString = scheduleRedisConn;
+                    item.Update();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新消息推送的队列Redis服务器连接
+        /// </summary>
+        /// <param name="pushRedisConn"></param>
+        public static void UpdatePushRedis(string pushRedisConn)
+        {
+            if (null != PushRedisConfigs)
+            {
+                foreach (var item in PushRedisConfigs.Items)
+                {
+                    item.ConnectionString = pushRedisConn;
+                    item.Update();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新数据缓存的Redis服务器连接
+        /// </summary>
+        /// <param name="cacheRedisConn"></param>
+        /// <param name="sqlType"></param>
+        /// <param name="sqlConn"></param>
+        public static void UpdateDataCacheRedis(string cacheRedisConn)
+        {
+            DataCacheRedisConnectionString = cacheRedisConn;
+            InjectionDataCache();
+        }
+
+        /// <summary>
+        /// 注入数据缓存
+        /// </summary>
+        public static void InjectionDataCache()
+        {
+            //注入数据缓存组件
+            DataCacheInjection.UseDataCache(DataCacheRedisConnectionString, SqlType, KylinDBConnectionString);
+        }
+
+        /// <summary>
+        /// 更新数据库连接
+        /// </summary>
+        /// <param name="sqlType"></param>
+        /// <param name="connectionString"></param>
+        public static void UpdateSqlConnection(SqlProviderType sqlType, string connectionString)
+        {
+            KylinDBConnectionString = connectionString;
+
+            SqlType = sqlType;
+
+            InjectionDataCache();
         }
 
         /// <summary>
@@ -300,6 +367,11 @@ namespace KylinService
         /// Kylin数据库连接字符串
         /// </summary>
         public static string KylinDBConnectionString;
+
+        /// <summary>
+        /// 数据缓存Redis连接字符串
+        /// </summary>
+        public static string DataCacheRedisConnectionString;
 
         /// <summary>
         /// 社区配置

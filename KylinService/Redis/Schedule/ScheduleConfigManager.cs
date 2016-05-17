@@ -38,6 +38,8 @@ namespace KylinService.Redis.Schedule
                         }
                         else
                         {
+                            if (config == null) continue;
+                            if (string.IsNullOrWhiteSpace(config.Key)) continue;
                             if (defaultConfig != null && string.IsNullOrWhiteSpace(config.ConnectionString))
                             {
                                 config.ConnectionString = defaultConfig.ConnectionString;
