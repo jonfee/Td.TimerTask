@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Td.Kylin.DataCache;
 using Td.Kylin.DataCache.CacheModel;
@@ -156,23 +157,23 @@ namespace KylinService
             var sysConfigs = CacheCollection.SystemGolbalConfigCache.Value();
 
             #region //社区配置
-            CircleConfig = GetCircleConfig(sysConfigs);
+            UpdateCircleConfig(sysConfigs);
             #endregion
 
             #region //福利配置
-            WelfareConfig = GetWelfareConfig(sysConfigs);
+            UpdateWelfareConfig(sysConfigs);
             #endregion
 
             #region //上门预约订单自动服务参数配置
-            AppointConfig = GetAppointConfig(sysConfigs);
+            UpdateAppointConfig(sysConfigs);
             #endregion
 
             #region //B2C商城订单自动服务参数配置
-            B2COrderConfig = GetB2COrderConfig(sysConfigs);
+            UpdateB2COrderConfig(sysConfigs);
             #endregion
 
             #region //商家商品订单自动服务参数配置
-            MerchantOrderConfig = GetMerchantOrderConfig(sysConfigs);
+            UpdateMerchantOrderConfig(sysConfigs);
             #endregion
         }
 
@@ -236,8 +237,10 @@ namespace KylinService
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        static AppointLateConfig GetAppointConfig(List<SystemGolbalConfigCacheModel> values)
+        public static void UpdateAppointConfig(List<SystemGolbalConfigCacheModel> values = null)
         {
+            values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
+
             var waitPay = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitPayment);
             var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserDone);
             var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserEvaluate);
@@ -246,7 +249,7 @@ namespace KylinService
             int waitDoneMinutes = GetMinutes(waitDone.Value, waitDone.ValueUnit);
             int waitEvalMimutes = GetMinutes(waitEval.Value, waitEval.ValueUnit);
 
-            return new AppointLateConfig
+            AppointConfig = new AppointLateConfig
             {
                 EndServiceWaitUserDays = waitDoneMinutes / (24 * 60),
                 PaymentWaitMinutes = waitPayMinutes,
@@ -259,8 +262,10 @@ namespace KylinService
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        static B2COrderLateConfig GetB2COrderConfig(List<SystemGolbalConfigCacheModel> values)
+        public static void UpdateB2COrderConfig(List<SystemGolbalConfigCacheModel> values = null)
         {
+            values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
+
             var waitPay = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderWaitPayment);
             var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderWaitReceive);
             var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderEvaluate);
@@ -269,7 +274,7 @@ namespace KylinService
             int waitDoneMinutes = GetMinutes(waitDone.Value, waitDone.ValueUnit);
             int waitEvalMimutes = GetMinutes(waitEval.Value, waitEval.ValueUnit);
 
-            return new B2COrderLateConfig
+            B2COrderConfig = new B2COrderLateConfig
             {
                 WaitPaymentMinutes = waitPayMinutes,
                 WaitReceiptGoodsDays = waitDoneMinutes / (24 * 60),
@@ -282,8 +287,10 @@ namespace KylinService
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        static MerchantOrderLateConfig GetMerchantOrderConfig(List<SystemGolbalConfigCacheModel> values)
+        public static void UpdateMerchantOrderConfig(List<SystemGolbalConfigCacheModel> values = null)
         {
+            values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
+
             var waitPay = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitPayment);
             var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitReceive);
             var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitEvaluate);
@@ -292,7 +299,7 @@ namespace KylinService
             int waitDoneMinutes = GetMinutes(waitDone.Value, waitDone.ValueUnit);
             int waitEvalMimutes = GetMinutes(waitEval.Value, waitEval.ValueUnit);
 
-            return new MerchantOrderLateConfig
+            MerchantOrderConfig = new MerchantOrderLateConfig
             {
                 WaitPaymentMinutes = waitPayMinutes,
                 WaitReceiptGoodsDays = waitDoneMinutes / (24 * 60),
@@ -305,11 +312,13 @@ namespace KylinService
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        static CircleConfig GetCircleConfig(List<SystemGolbalConfigCacheModel> values)
+        public static void UpdateCircleConfig(List<SystemGolbalConfigCacheModel> values = null)
         {
+            values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
+
             var remindTime = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.CircleEventRemind);
 
-            return new CircleConfig
+            CircleConfig = new CircleConfig
             {
                 BeforeRemindMinutes = GetMinutes(remindTime.Value, remindTime.ValueUnit)
             };
@@ -320,11 +329,13 @@ namespace KylinService
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        static WelfareConfig GetWelfareConfig(List<SystemGolbalConfigCacheModel> values)
+        public static void UpdateWelfareConfig(List<SystemGolbalConfigCacheModel> values = null)
         {
+            values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
+
             var remindTime = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.WelfareApplyRemind);
 
-            return new WelfareConfig
+            WelfareConfig = new WelfareConfig
             {
                 BeforeRemindMinutes = GetMinutes(remindTime.Value, remindTime.ValueUnit)
             };
@@ -356,62 +367,62 @@ namespace KylinService
         /// <summary>
         /// 服务程序相关描述信息
         /// </summary>
-        public static ProductInfo ProductInfo;
+        public static ProductInfo ProductInfo { get; private set; }
 
         /// <summary>
         /// 数据库类型
         /// </summary>
-        public static SqlProviderType SqlType;
+        public static SqlProviderType SqlType { get; private set; }
 
         /// <summary>
         /// Kylin数据库连接字符串
         /// </summary>
-        public static string KylinDBConnectionString;
+        public static string KylinDBConnectionString { get; private set; }
 
         /// <summary>
         /// 数据缓存Redis连接字符串
         /// </summary>
-        public static string DataCacheRedisConnectionString;
+        public static string DataCacheRedisConnectionString { get; private set; }
 
         /// <summary>
         /// 社区配置
         /// </summary>
-        public static CircleConfig CircleConfig;
+        public static CircleConfig CircleConfig { get; private set; }
 
         /// <summary>
         /// 福利配置
         /// </summary>
-        public static WelfareConfig WelfareConfig;
+        public static WelfareConfig WelfareConfig { get; private set; }
 
         /// <summary>
         /// 上门预约订单自动服务配置
         /// </summary>
-        public static AppointLateConfig AppointConfig;
+        public static AppointLateConfig AppointConfig { get; private set; }
 
         /// <summary>
         /// B2C订单逾期自动服务配置
         /// </summary>
-        public static B2COrderLateConfig B2COrderConfig;
+        public static B2COrderLateConfig B2COrderConfig { get; private set; }
 
         /// <summary>
         /// 商家订单逾期自动服务配置
         /// </summary>
-        public static MerchantOrderLateConfig MerchantOrderConfig;
+        public static MerchantOrderLateConfig MerchantOrderConfig { get; private set; }
 
         /// <summary>
         /// 任务计划数据在Redis缓存中的配置
         /// </summary>
-        public static ScheduleRedisCollection ScheduleRedisConfigs;
+        public static ScheduleRedisCollection ScheduleRedisConfigs { get; private set; }
 
         /// <summary>
         /// 推送消息 Redis缓存配置 
         /// </summary>
-        public static PushRedisCollection PushRedisConfigs;
+        public static PushRedisCollection PushRedisConfigs { get; private set; }
 
         /// <summary>
         /// 缓存维护参数配置
         /// </summary>
-        public static List<CacheMaintainConfig> CacheMaintainConfigs;
+        public static List<CacheMaintainConfig> CacheMaintainConfigs { get; private set; }
 
         #endregion
     }

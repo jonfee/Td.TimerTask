@@ -184,8 +184,8 @@
       <HintPath>..\packages\Td.CoreLibrary.1.1.3.1-beta\lib\net46\Td.CoreLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.DataCache, Version=1.0.9.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.DataCache.1.0.9.1-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
+    <Reference Include="Td.Kylin.DataCache, Version=1.0.10.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.DataCache.1.0.10.1-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -196,8 +196,8 @@
       <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.33.7-bata\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.Redis, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.Redis.1.0.5-alpha\lib\net46\Td.Kylin.Redis.dll</HintPath>
+    <Reference Include="Td.Kylin.Redis, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.Redis.1.0.8-alpha\lib\net46\Td.Kylin.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -309,6 +309,12 @@
     <Compile Include="SysEnums\CacheTimeOption.cs" />
     <Compile Include="SysEnums\RedisPushType.cs" />
     <Compile Include="SysEnums\ScheduleType.cs" />
+    <Compile Include="UpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateForm.Designer.cs">
+      <DependentUpon>UpdateForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="ConfigForm.resx">
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -325,6 +331,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UpdateForm.resx">
+      <DependentUpon>UpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

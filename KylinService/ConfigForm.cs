@@ -225,6 +225,16 @@ namespace KylinService
             {
                 sb.AppendLine("缓存维护参数配置：");
 
+                string server = null;
+                Regex regServer = new Regex(@"(?<server>[0-9a-z\-]+(\.[0-9a-z\-]+)+)", RegexOptions.IgnoreCase);
+                var dcoll = regServer.Match(Startup.DataCacheRedisConnectionString);
+                if (null != dcoll)
+                {
+                    server = dcoll.Groups["server"].Value;
+                }
+
+                sb.AppendLine(string.Format(@"   缓存Redis服务器：{0}", server));
+
                 foreach (var config in Startup.CacheMaintainConfigs)
                 {
                     string levelDesc = "";

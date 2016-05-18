@@ -799,7 +799,7 @@ namespace KylinService
                 CacheTimeOption option = CacheTimeOption.Day;
                 if (null != combTimeOption)
                 {
-                    string strOption = combTimeOption.SelectedText.Trim();
+                    string strOption = combTimeOption.SelectedItem.ToString();
 
                     var _tempOption = SysData.CacheTimeOptionList.FirstOrDefault(p => p.Description.Equals(strOption));
 
@@ -953,6 +953,23 @@ namespace KylinService
                 var cacheName = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());
 
                 WriteMessage(string.Format("缓存“{0}”已更新！", cacheName));
+
+                var data = cache.GetCacheData();
+
+                StringBuilder sb = new StringBuilder();
+                
+                sb.AppendLine(string.Format("缓存{0}更新后的源数据为：", cacheName));
+
+                if (null != data)
+                {
+                    foreach (var item in data)
+                    {
+                        string temp = (item ?? string.Empty).ToString();
+                        sb.AppendLine(temp);
+                    }
+                }
+
+                WriteMessage(sb.ToString());
             }
         }
 
@@ -972,6 +989,8 @@ namespace KylinService
             CacheItemType itemType = (CacheItemType)Enum.Parse(typeof(CacheItemType), tag);
 
             var cache = CacheCollection.GetCache(itemType);
+
+            var db = CacheCollection.MyRedisDB();
 
             if (null != cache)
             {
@@ -1094,9 +1113,8 @@ namespace KylinService
         /// <param name="e"></param>
         private void btnUpdateConfig_Click(object sender, EventArgs e)
         {
-            Startup.UpdateQueueConfig();
-
-            WriteMessage("配置已更新！");
+            UpdateForm form = new UpdateForm();
+            form.Show();
         }
 
         /// <summary>
@@ -1169,13 +1187,13 @@ namespace KylinService
         /// <param name="e"></param>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //this.Hide();
-            //e.Cancel = true;
+            this.Hide();
+            e.Cancel = true;
 
-            //if (null == notifyIcon)
-            //{
-            //    InitialTray();
-            //}
+            if (null == notifyIcon)
+            {
+                InitialTray();
+            }
         }
 
         /// <summary>
