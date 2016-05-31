@@ -123,16 +123,21 @@ namespace KylinService
         public static void UpdateDataCacheRedis(string cacheRedisConn)
         {
             DataCacheRedisConnectionString = cacheRedisConn;
-            InjectionDataCache();
+            InjectionDataCache(true);
         }
 
         /// <summary>
         /// 注入数据缓存
         /// </summary>
-        public static void InjectionDataCache()
+        public static void InjectionDataCache(bool isreset = false)
         {
             //注入数据缓存组件
             DataCacheInjection.UseDataCache(DataCacheRedisConnectionString, SqlType, KylinDBConnectionString);
+
+            if (isreset)
+            {
+                CacheCollection.Reset();
+            }
         }
 
         /// <summary>
@@ -146,7 +151,7 @@ namespace KylinService
 
             SqlType = sqlType;
 
-            InjectionDataCache();
+            InjectionDataCache(true);
         }
 
         /// <summary>

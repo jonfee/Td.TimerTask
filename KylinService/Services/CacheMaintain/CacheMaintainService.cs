@@ -23,7 +23,11 @@ namespace KylinService.Services.CacheMaintain
             ServiceName = serviceName;
         }
 
-        public override void OnStart()
+        /// <summary>
+        /// 执行单次请求并返回是否需要继续指示信号
+        /// </summary>
+        /// <returns></returns>
+        protected override bool SingleRequest()
         {
             var levelList = typeof(CacheLevel).GetEnumDesc<CacheLevel>();
 
@@ -50,6 +54,8 @@ namespace KylinService.Services.CacheMaintain
                     Schedulers.Add(level.Name, clocker);
                 }
             }
+
+            return true;
         }
 
         /// <summary>

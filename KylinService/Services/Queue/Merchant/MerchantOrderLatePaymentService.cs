@@ -31,36 +31,35 @@ namespace KylinService.Services.Queue.Merchant
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.MerchantOrderLatePayment];
         }
 
-        public override void OnStart()
+        /// <summary>
+        /// 执行单次请求并返回是否需要继续指示信号
+        /// </summary>
+        /// <returns></returns>
+        protected override bool SingleRequest()
         {
-            ThreadPool.QueueUserWorkItem((item) =>
+            //获取一条待处理数据
+            var model = null != config ? config.DataBase.ListLeftPop<MerchantOrderLateNoPaymentModel>(config.Key) : null;
+
+            if (null != model)
             {
-                while (true)
-                {
-                    //获取一条待处理数据
-                    var model = null != config ? config.DataBase.ListLeftPop<MerchantOrderLateNoPaymentModel>(config.Key) : null;
+                DateTime lastTime = model.CreateTime.AddMinutes(Startup.MerchantOrderConfig.WaitPaymentMinutes);
 
-                    if (null != model)
-                    {
-                        DateTime lastTime = model.CreateTime.AddMinutes(Startup.MerchantOrderConfig.WaitPaymentMinutes);
+                TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                        TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+                if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                        if (duetime.Ticks < 0) duetime = TimeoutZero;
+                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
-                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+                //输出消息
+                string message = string.Format("附近购订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                OutputMessage(message);
 
-                        //输出消息
-                        string message = string.Format("附近购订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                        OutputMessage(message);
+                Schedulers.Add(model.OrderID, timer);
 
-                        Schedulers.Add(model.OrderID, timer);
-                    }
+                return true;
+            }
 
-                    //休眠100毫秒，避免CPU空转
-                    Thread.Sleep(100);
-                }
-            });
+            return false;
         }
 
         protected override void Execute(object state)

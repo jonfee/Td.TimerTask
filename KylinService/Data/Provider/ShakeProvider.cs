@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Td.Kylin.Entity;
 
 namespace KylinService.Data.Provider
 {
@@ -17,14 +18,23 @@ namespace KylinService.Data.Provider
         {
             using (var db = new DataContext())
             {
-                var list = db.User_ShakeRecord.ToList();
+                var userIds = db.User_ShakeRecord.Select(p => p.UserID);
 
-                list.ForEach((item) =>
+                if (null != userIds && userIds.Count() > 0)
                 {
-                    item.TodayCount = 0;
-                });
+                    List<User_ShakeRecord> list = new List<User_ShakeRecord>();
 
-                return db.SaveChanges();
+                    foreach (var id in userIds)
+                    {
+                        list.Add(new User_ShakeRecord { UserID = id, TodayCount = 0 });
+                    }
+                    
+                    db.User_ShakeRecord.AttachRange(list);
+
+                    return db.SaveChanges();
+                }
+
+                return 0;
             }
         }
     }

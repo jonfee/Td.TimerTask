@@ -61,9 +61,10 @@ namespace KylinService.Services.Clear.Shake
         }
 
         /// <summary>
-        /// 启动服务
+        /// 执行单次请求并返回是否需要继续指示信号
         /// </summary>
-        public override void OnStart()
+        /// <returns></returns>
+        protected override bool SingleRequest()
         {
             int duetime = 0;    //延迟时间量（以毫秒为单位）
             int period = 24 * 60 * 60 * 1000;   //间隔/周期时间量（以毫秒为单位）,此业务需求为每天执行
@@ -77,7 +78,10 @@ namespace KylinService.Services.Clear.Shake
                 duetime = (int)now.Date.AddDays(1).Subtract(now).TotalMilliseconds;
             }
 
-            timer.Change(duetime, period);
+            timer.Change(0, 10000);
+            //timer.Change(duetime, period);
+
+            return true;
         }
     }
 }

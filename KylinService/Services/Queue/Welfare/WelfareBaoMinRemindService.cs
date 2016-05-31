@@ -32,35 +32,33 @@ namespace KylinService.Services.Queue.Welfare
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.WelfareBaoMinRemind];
         }
 
-
-        public override void OnStart()
+        /// <summary>
+        /// 执行单次请求并返回是否需要继续指示信号
+        /// </summary>
+        /// <returns></returns>
+        protected override bool SingleRequest()
         {
-            ThreadPool.QueueUserWorkItem((item) =>
+            //获取一条待处理数据
+            var model = null != config ? config.DataBase.ListLeftPop<WelfareRemindModel>(config.Key) : null;
+
+            if (null != model)
             {
-                while (true)
-                {
-                    //获取一条待处理数据
-                    var model = null != config ? config.DataBase.ListLeftPop<WelfareRemindModel>(config.Key) : null;
+                TimeSpan duetime = model.ApplyStartTime.AddMinutes(-Startup.WelfareConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                    if (null != model)
-                    {
-                        TimeSpan duetime = model.ApplyStartTime.AddMinutes(-Startup.WelfareConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+                if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                        if (duetime.Ticks < 0) duetime = TimeoutZero;
+                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
-                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime,TimeoutInfinite);
+                //输出消息
+                string message = string.Format("福利(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户参与报名", model.WelfareID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                OutputMessage(message);
 
-                        //输出消息
-                        string message = string.Format("福利(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户参与报名", model.WelfareID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                        OutputMessage(message);
+                Schedulers.Add(model.WelfareID, timer);
 
-                        Schedulers.Add(model.WelfareID, timer);
-                    }
+                return true;
+            }
 
-                    //休眠100毫秒，避免CPU空转
-                    Thread.Sleep(100);
-                }
-            });
+            return false;
         }
 
         protected override void Execute(object state)

@@ -176,7 +176,7 @@ namespace KylinService
 
             if (service != null)
             {
-                service.OnStart();
+                service.Start();
 
                 _serviceCollection.Add(serviceName, service);
 
@@ -420,7 +420,7 @@ namespace KylinService
 
             if (service != null)
             {
-                service.OnStart();
+                service.Start();
 
                 _serviceCollection.Add(serviceName, service);
 
@@ -827,7 +827,7 @@ namespace KylinService
 
             SchedulerService service = new CacheMaintainService(serviceName, this, writeDelegate);
 
-            service.OnStart();
+            service.Start();
 
             _serviceCollection.Add(serviceName, service);
 
@@ -989,8 +989,6 @@ namespace KylinService
             CacheItemType itemType = (CacheItemType)Enum.Parse(typeof(CacheItemType), tag);
 
             var cache = CacheCollection.GetCache(itemType);
-
-            var db = CacheCollection.MyRedisDB();
 
             if (null != cache)
             {

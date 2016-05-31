@@ -15,7 +15,7 @@ namespace KylinService.Services
         /// <summary>
         /// 服务开始
         /// </summary>
-        void OnStart();
+        void Start();
 
         /// <summary>
         /// 释放资源

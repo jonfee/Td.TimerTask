@@ -47,6 +47,21 @@ namespace KylinService.Services
         /// </summary>
         public TimeSpan TimeoutZero { get { return new TimeSpan(0); } }
 
+        /// <summary>
+        /// 是否已暂停（暂停服务，但不影响已经开始工作的任务执行）
+        /// </summary>
+        public bool IsPaused { get; private set; }
+
+        /// <summary>
+        /// 是否循环处理
+        /// </summary>
+        private bool _isLoop;
+
+        /// <summary>
+        /// 循环队列为空时等待下次执行的等待时间（毫秒）
+        /// </summary>
+        private int _loopMillisecondsTimeout;
+
         #region 初始化
 
         /// <summary>
@@ -59,13 +74,19 @@ namespace KylinService.Services
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public SchedulerService(Form form, DelegateTool.WriteMessageDelegate writeDelegate)
+        /// <param name="isLoop">是否循环处理</param>
+        /// <param name="loopMillisecondsTimeout">循环队列为空时等待下次执行的等待时间</param>
+        public SchedulerService(Form form, DelegateTool.WriteMessageDelegate writeDelegate, bool isLoop = false, int loopMillisecondsTimeout = 0)
         {
             Schedulers = new SchedulerCollection();
 
             this.CurrentForm = form;
 
             this.WriteDelegate = writeDelegate;
+
+            this._isLoop = isLoop;
+
+            this._loopMillisecondsTimeout = loopMillisecondsTimeout;
         }
 
         #endregion
@@ -109,13 +130,75 @@ namespace KylinService.Services
         /// <summary>
         /// 服务启动
         /// </summary>
-        public abstract void OnStart();
+        public void Start()
+        {
+            this.IsPaused = false;
+
+            OnStart();
+        }
+
+        /// <summary>
+        /// 开始处理
+        /// </summary>
+        private void OnStart()
+        {
+            ThreadPool.QueueUserWorkItem((item) =>
+            {
+                if (_isLoop)
+                {
+                    while (true)
+                    {
+                        bool onContinue = false;
+
+                        //未暂停时
+                        if (!IsPaused)
+                        {
+                            //执行单次请求并返回是否需要继续指示信号
+                            onContinue = SingleRequest();
+                        }
+
+                        //不继续时
+                        if (!onContinue)
+                        {
+                            //休眠_loopMillisecondsTimeout毫秒，避免CPU空转
+                            Thread.Sleep(_loopMillisecondsTimeout);
+                        }
+                    }
+                }
+                else
+                {
+                    SingleRequest();
+                }
+            });
+        }
+
+        /// <summary>
+        /// 执行单次请求并返回是否需要继续指示信号
+        /// </summary>
+        /// <returns></returns>
+        protected abstract bool SingleRequest();
 
         /// <summary>
         /// 执行事务
         /// </summary>
         /// <param name="state"></param>
         protected abstract void Execute(object state);
+
+        /// <summary>
+        /// 暂停服务
+        /// </summary>
+        public virtual void Pause()
+        {
+            this.IsPaused = true;
+        }
+
+        /// <summary>
+        /// 继续服务
+        /// </summary>
+        public void Continue()
+        {
+            this.IsPaused = false;
+        }
 
         /// <summary>
         /// 异常 处理

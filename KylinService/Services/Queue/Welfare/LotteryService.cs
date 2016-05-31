@@ -33,36 +33,32 @@ namespace KylinService.Services.Queue.Welfare
         }
 
         /// <summary>
-        /// 服务开始
+        /// 执行单次请求并返回是否需要继续指示信号
         /// </summary>
-        public override void OnStart()
+        /// <returns></returns>
+        protected override bool SingleRequest()
         {
-            ThreadPool.QueueUserWorkItem((item) =>
+            //获取一条待处理数据
+            var model = null != config ? config.DataBase.ListLeftPop<WelfareLotteryModel>(config.Key) : null;
+
+            if (null != model)
             {
-                while (true)
-                {
-                    //获取一条待处理数据
-                    var model = null != config ? config.DataBase.ListLeftPop<WelfareLotteryModel>(config.Key) : null;
+                TimeSpan duetime = model.LotteryTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                    if (null != model)
-                    {
-                        TimeSpan duetime = model.LotteryTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+                if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                        if (duetime.Ticks < 0) duetime = TimeoutZero;
+                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
-                        System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+                //输出消息
+                string message = string.Format("福利“{0}”将于{2}天{3}小时{4}分{5}秒后（{1}）开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"), duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                OutputMessage(message);
 
-                        //输出消息
-                        string message = string.Format("福利“{0}”将于{2}天{3}小时{4}分{5}秒后（{1}）开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"), duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                        OutputMessage(message);
+                Schedulers.Add(model.WelfareID, timer);
 
-                        Schedulers.Add(model.WelfareID, timer);
-                    }
+                return true;
+            }
 
-                    //休眠100毫秒，避免CPU空转
-                    Thread.Sleep(100);
-                }
-            });
+            return false;
         }
 
         /// <summary>
