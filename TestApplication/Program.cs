@@ -16,13 +16,18 @@ namespace TestApplication
 
             //Console.WriteLine(dutTime.Ticks);
 
-           
-
-            for(var i = 0; i < 100; i++)
+            DateTime dd = Convert.ToDateTime("2016-06-01 10:40:00");
+            dd = dd.AddSeconds(60);
+            if (dd == DateTime.Now)
             {
-                int code = new Random(Guid.NewGuid().GetHashCode()).Next(0, 2);
-                Console.WriteLine(code);
+                Console.WriteLine(DateTime.Now);
             }
+
+            //for(var i = 0; i < 100; i++)
+            //{
+            //    int code = new Random(Guid.NewGuid().GetHashCode()).Next(0, 2);
+            //    Console.WriteLine(code);
+            //}
 
             Console.ReadLine();
         }

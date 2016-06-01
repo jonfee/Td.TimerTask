@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Internal;
 using Td.Kylin.Entity;
 using Td.Kylin.EnumLibrary;
 
@@ -770,6 +771,15 @@ namespace KylinService.Data
                 entity.HasKey(p => p.TransactionCode);
             });
             #endregion
+            #region 跑腿订单
+
+            modelBuilder.Entity<Legwork_Order>(entity =>
+            {
+                entity.Property(q => q.OrderID).ValueGeneratedNever();
+                entity.HasKey(q => q.OrderID);
+            });
+
+            #endregion
         }
 
         #region DbSet
@@ -1306,7 +1316,7 @@ namespace KylinService.Data
         /// 服务职员认证信息
         /// </summary>
         public DbSet<User_Certification> User_Certification { get { return Set<User_Certification>(); } }
-        
+
         /// <summary>
         /// 服务职员所服务的企业（商家）
         /// </summary>
@@ -1404,6 +1414,15 @@ namespace KylinService.Data
         public DbSet<Platform_MoneyTransaction> Platform_MoneyTransaction { get { return Set<Platform_MoneyTransaction>(); } }
         #endregion
 
+        #region 跑腿订单
+        public DbSet<Legwork_Order> Legwork_Order
+        {
+            get
+            {
+                return Set<Legwork_Order>();
+            }
+        }
+        #endregion
         #endregion
     }
 }
