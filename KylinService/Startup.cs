@@ -71,9 +71,11 @@ namespace KylinService
             ScheduleRedisConfigs = ScheduleConfigManager.Collection;
             #endregion
 
+            legworkGlobalConfigCacheModel = Td.Kylin.DataCache.CacheCollection.LegworkGlobalConfigCache.Value()?.FirstOrDefault();
             #region //推送消息 Redis配置
             PushRedisConfigs = PushRedisConfigManager.Collection;
             #endregion
+
 
             //更新队列服务配置
             UpdateQueueConfig();
@@ -312,6 +314,7 @@ namespace KylinService
             };
         }
 
+
         /// <summary>
         /// 社区相关配置
         /// </summary>
@@ -429,6 +432,14 @@ namespace KylinService
         /// </summary>
         public static List<CacheMaintainConfig> CacheMaintainConfigs { get; private set; }
 
+        /// <summary>
+        /// 跑腿业务全局配置
+        /// </summary>
+        public static LegworkGlobalConfigCacheModel legworkGlobalConfigCacheModel
+        {
+            get;
+            private set;
+        }
         #endregion
     }
 }

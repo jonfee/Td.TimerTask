@@ -229,6 +229,7 @@
     <Compile Include="Core\Tools.cs" />
     <Compile Include="Data\Model\AppointOrderModel.cs" />
     <Compile Include="Data\Model\CircleEventModel.cs" />
+    <Compile Include="Data\Model\LegworkOrderModel.cs" />
     <Compile Include="Data\Model\MallOrderModel.cs" />
     <Compile Include="Data\Model\MerchantOrderModel.cs" />
     <Compile Include="Data\Provider\AppointOrderProvider.cs" />
@@ -282,6 +283,12 @@
     <Compile Include="Services\Queue\Circle\CircleConfig.cs" />
     <Compile Include="Services\Queue\Circle\EventRemindService.cs" />
     <Compile Include="Services\IService.cs" />
+    <Compile Include="Services\Queue\Legwork\Legwork_PaymentTimeoutService.cs" />
+    <Compile Include="Services\Queue\Legwork\Legwork_AutoConfirmTimeService.cs" />
+    <Compile Include="Services\Queue\Legwork\Legwork_OrderTimeoutService.cs" />
+    <Compile Include="Services\Queue\Legwork\Model\AutoConfirmTimeModel.cs" />
+    <Compile Include="Services\Queue\Legwork\Model\OrderTimeoutModel.cs" />
+    <Compile Include="Services\Queue\Legwork\Model\PaymentTimeoutModel.cs" />
     <Compile Include="Services\Queue\Mall\B2COrderLateConfig.cs" />
     <Compile Include="Services\Queue\Mall\MallOrderLatePaymentService.cs" />
     <Compile Include="Services\Queue\Mall\MallOrderLateReceiveService.cs" />
