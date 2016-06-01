@@ -38,14 +38,20 @@ namespace KylinService.Data.Provider
         /// </summary>
         /// <param name="_legworkOrder"></param>
         /// <returns></returns>
-        public static int Update(Legwork_Order _legworkOrder)
+        public async static Task<bool> Update(Legwork_Order _legworkOrder)
         {
             using (var db = new DataContext())
             {
                 db.Legwork_Order.Attach(_legworkOrder);
-                return db.SaveChanges();
+                db.Entry(_legworkOrder).Property(q => new
+                {
+                    q.Status,
+                    q.ActualDeliveryTime,
+                    q.OfferAcceptTime,
+                    q.CancelTime
+                }).IsModified = true;
+                return await db.SaveChangesAsync() > 0;
             }
         }
-
     }
 }

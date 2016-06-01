@@ -41,6 +41,14 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Td.CoreLibrary, Version=1.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.CoreLibrary.1.1.4-beta\lib\net46\Td.CoreLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.35.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.37-bata\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -49,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Td.Task.Framework\Td.Task.Framework.csproj">

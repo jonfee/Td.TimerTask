@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using KylinService.Services.Queue.Legwork;
 using Td.Kylin.DataCache;
 
 namespace KylinService
@@ -411,6 +412,18 @@ namespace KylinService
                 //预约订单超时未确认服务完成
                 case QueueScheduleType.ReservationOrderLateConfirmDone:
                     service = new ReservationOrderLateConfirmDoneService(this, writeDelegate);
+                    break;
+                //跑腿业务员接单超时时间
+                case QueueScheduleType.LegworkOrderTimeout:
+                    service = new Legwork_OrderTimeoutService(this, writeDelegate);
+                    break;
+                //跑腿业务员自动确认收货时间
+                case QueueScheduleType.LegworkAutoConfirmTime:
+                    service = new Legwork_AutoConfirmTimeService(this, writeDelegate);
+                    break;
+                //跑腿业务员支付超时时间
+                case QueueScheduleType.LegworkPaymentTimeout:
+                    service = new Legwork_PaymentTimeoutService(this, writeDelegate);
                     break;
             }
 
@@ -957,7 +970,7 @@ namespace KylinService
                 var data = cache.GetCacheData();
 
                 StringBuilder sb = new StringBuilder();
-                
+
                 sb.AppendLine(string.Format("缓存{0}更新后的源数据为：", cacheName));
 
                 if (null != data)
@@ -993,18 +1006,18 @@ namespace KylinService
             if (null != cache)
             {
                 var data = cache.GetCacheData();
-                
+
                 StringBuilder sb = new StringBuilder();
 
                 var cacheName = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());
 
-                sb.AppendLine(string.Format("缓存{0}的源数据为：",cacheName));
+                sb.AppendLine(string.Format("缓存{0}的源数据为：", cacheName));
 
                 if (null != data)
                 {
                     foreach (var item in data)
                     {
-                        string temp = (item??string.Empty).ToString();
+                        string temp = (item ?? string.Empty).ToString();
                         sb.AppendLine(temp);
                     }
                 }

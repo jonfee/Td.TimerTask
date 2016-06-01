@@ -63,20 +63,20 @@ namespace KylinService.SysEnums
         [Description("预约订单超时未确认完成")]
         ReservationOrderLateConfirmDone,
         /// <summary>
-        /// 接单超时时间
+        /// 跑腿业务员接单超时时间
         /// </summary>
-        [Description("接单超时时间")]
-        OrderTimeout,
+        [Description("跑腿业务员接单超时时间")]
+        LegworkOrderTimeout,
         /// <summary>
-        /// 支付超时时间
+        /// 跑腿业务员支付超时时间
         /// </summary>
-        [Description("支付超时时间")]
-        PaymentTimeout,
+        [Description("跑腿业务员支付超时时间")]
+        LegworkPaymentTimeout,
         /// <summary>
-        /// 自动确认收货时间
+        /// 跑腿业务员自动确认收货时间
         /// </summary>
-        [Description("自动确认收货时间")]
-        AutoConfirmTime
+        [Description("跑腿业务员自动确认收货时间")]
+        LegworkAutoConfirmTime
     }
 
     /// <summary>

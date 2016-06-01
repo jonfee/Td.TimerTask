@@ -30,9 +30,9 @@ namespace KylinService.Services.Queue.Legwork
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public Legwork_AutoConfirmTimeService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.AutoConfirmTime, form, writeDelegate)
+        public Legwork_AutoConfirmTimeService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.LegworkAutoConfirmTime, form, writeDelegate)
         {
-            config = Startup.ScheduleRedisConfigs[QueueScheduleType.AutoConfirmTime];
+            config = Startup.ScheduleRedisConfigs[QueueScheduleType.LegworkAutoConfirmTime];
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace KylinService.Services.Queue.Legwork
 
         protected override void Execute(object state)
         {
-            var model = state as LegworkOrderModel;
+            var model = state as AutoConfirmTimeModel;
 
             if (null == model) return;
 
@@ -87,7 +87,7 @@ namespace KylinService.Services.Queue.Legwork
 
                 string message = string.Empty;
 
-                if (settlement > 0)
+                if (settlement.Result)
                 {
                     message = string.Format("〖订单（{0}）〗自动确认收货完成！", lastOrder.OrderCode);
                 }

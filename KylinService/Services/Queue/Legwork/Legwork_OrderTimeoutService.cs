@@ -28,9 +28,9 @@ namespace KylinService.Services.Queue.Legwork
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public Legwork_OrderTimeoutService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.OrderTimeout, form, writeDelegate)
+        public Legwork_OrderTimeoutService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.LegworkOrderTimeout, form, writeDelegate)
         {
-            config = Startup.ScheduleRedisConfigs[QueueScheduleType.OrderTimeout];
+            config = Startup.ScheduleRedisConfigs[QueueScheduleType.LegworkOrderTimeout];
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace KylinService.Services.Queue.Legwork
 
         protected override void Execute(object state)
         {
-            var model = state as LegworkOrderModel;
+            var model = state as OrderTimeoutModel;
 
             if (null == model) return;
 
@@ -84,7 +84,7 @@ namespace KylinService.Services.Queue.Legwork
 
                 string message = string.Empty;
 
-                if (settlement > 0)
+                if (settlement.Result)
                 {
                     message = string.Format("〖订单（{0}）〗自动取消订单完成！", lastOrder.OrderCode);
                 }
