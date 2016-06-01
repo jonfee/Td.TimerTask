@@ -77,9 +77,8 @@ namespace KylinService.Services.Clear.Shake
             {
                 duetime = (int)now.Date.AddDays(1).Subtract(now).TotalMilliseconds;
             }
-
-            timer.Change(0, 10000);
-            //timer.Change(duetime, period);
+            
+            timer.Change(duetime, period);
 
             return true;
         }

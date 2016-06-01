@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Td.Kylin.Entity;
+﻿using System.Linq;
 
 namespace KylinService.Data.Provider
 {
@@ -18,23 +13,18 @@ namespace KylinService.Data.Provider
         {
             using (var db = new DataContext())
             {
-                var userIds = db.User_ShakeRecord.Select(p => p.UserID);
+                //return db.User_ShakeRecord.Where(p => p.TodayCount > 0).Update(p => new User_ShakeRecord { TodayCount = 0 });
 
-                if (null != userIds && userIds.Count() > 0)
+                var users = db.User_ShakeRecord.ToList();//.Where(p => p.TodayCount > 0)
+
+                users.ForEach((item) =>
                 {
-                    List<User_ShakeRecord> list = new List<User_ShakeRecord>();
+                    db.User_ShakeRecord.Attach(item);
+                    db.Entry(item).Property(p => p.TodayCount).IsModified = true;
+                    item.TodayCount = 0;
+                });
 
-                    foreach (var id in userIds)
-                    {
-                        list.Add(new User_ShakeRecord { UserID = id, TodayCount = 0 });
-                    }
-                    
-                    db.User_ShakeRecord.AttachRange(list);
-
-                    return db.SaveChanges();
-                }
-
-                return 0;
+                return db.SaveChanges();
             }
         }
     }
