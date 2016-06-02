@@ -14,6 +14,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using KylinService.Services.Clear.Shake;
 using Td.Kylin.DataCache;
 using Td.Kylin.DataCache.CacheModel;
 using Td.Kylin.EnumLibrary;
@@ -22,6 +23,9 @@ namespace KylinService
 {
     internal sealed class Startup
     {
+
+        #region 公共方法
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -75,7 +79,6 @@ namespace KylinService
             #region //推送消息 Redis配置
             PushRedisConfigs = PushRedisConfigManager.Collection;
             #endregion
-
 
             //更新队列服务配置
             UpdateQueueConfig();
@@ -440,6 +443,14 @@ namespace KylinService
             get;
             private set;
         }
+        #endregion
+
+        //public static void RegisterServices(Form form, DelegateTool.WriteMessageDelegate writeMessage)
+        //{
+        //    // 注册摇一摇
+        //    SchedulerServiceFactory.Register(ClearScheduleType.ShakeDayTimesClear, new ShakeService(form, writeMessage));
+        //}
+
         #endregion
     }
 }

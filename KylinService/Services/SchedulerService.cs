@@ -190,6 +190,7 @@ namespace KylinService.Services
         public virtual void Pause()
         {
             this.IsPaused = true;
+            OnStart();
         }
 
         /// <summary>
@@ -198,6 +199,7 @@ namespace KylinService.Services
         public void Continue()
         {
             this.IsPaused = false;
+            OnStart();
         }
 
         /// <summary>

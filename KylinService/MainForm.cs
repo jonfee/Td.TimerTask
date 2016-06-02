@@ -67,10 +67,23 @@ namespace KylinService
         private string _serTstatus = "lb_Status_";  //服务运行状态展示控件标识
         private string _serTstartbtn = "btnStart_"; //服务启用按钮标识
         private string _serTstopbtn = "btnStop_";   //服务停止按钮标识
+        private string _serTpausebtn = "btnPause_";//服务暂停按钮标识
         //private string _serTtime = "time_";         //服务运行时间控件标识
 
         //定义消息输出委托
         private DelegateTool.WriteMessageDelegate writeDelegate;
+
+        #endregion
+
+        #region 公共属性
+
+        internal DelegateTool.WriteMessageDelegate WriteMessageDelegate
+        {
+            get
+            {
+                return writeDelegate;
+            }
+        }
 
         #endregion
 
@@ -108,7 +121,7 @@ namespace KylinService
 
                 #region//服务运行状态Label
                 Label lbStatus = new Label();
-                lbStatus.Width = 100;
+                lbStatus.Width = 50;
                 lbStatus.Text = "未运行";
                 lbStatus.Name = _serTstatus + serv.Name;
                 lbStatus.Location = new System.Drawing.Point(180, 5);
@@ -120,9 +133,20 @@ namespace KylinService
                 startButton.Text = "启动";
                 startButton.Name = _serTstartbtn + serv.Name;
                 startButton.Tag = serv.Name;
-                startButton.Location = new System.Drawing.Point(300, 0);
+                startButton.Location = new System.Drawing.Point(250, 0);
                 startButton.Click += new EventHandler(BtnClearStart_Click);
                 panel.Controls.Add(startButton);
+                #endregion
+
+                #region//服务暂停按钮
+                Button pauseButton = new Button();
+                pauseButton.Text = "暂停";
+                pauseButton.Name = _serTpausebtn + serv.Name;
+                pauseButton.Tag = serv.Name;
+                pauseButton.Enabled = false;
+                pauseButton.Location = new System.Drawing.Point(350, 0);
+                pauseButton.Click += new EventHandler(BtnClearPause_Click);
+                panel.Controls.Add(pauseButton);
                 #endregion
 
                 #region//服务停止按钮
@@ -130,7 +154,7 @@ namespace KylinService
                 stopButton.Text = "停止";
                 stopButton.Name = _serTstopbtn + serv.Name;
                 stopButton.Tag = serv.Name;
-                stopButton.Location = new System.Drawing.Point(400, 0);
+                stopButton.Location = new System.Drawing.Point(450, 0);
                 stopButton.Enabled = false;
                 stopButton.Click += new EventHandler(BtnClearStop_Click);
                 panel.Controls.Add(stopButton);
@@ -170,7 +194,6 @@ namespace KylinService
                     service = new ShakeService(this, writeDelegate);
                     break;
             }
-
             #endregion
 
             #region 
@@ -190,7 +213,8 @@ namespace KylinService
                 //找到停止按钮并启用交互
                 var btnStop = Find<Button>(parent, _serTstopbtn, serviceName);
                 btnStop.Enabled = true;
-
+                var btnPause = Find<Button>(parent, _serTpausebtn, serviceName);
+                btnPause.Enabled = true;
                 //找到状态Label，并更新状态为：运行中
                 var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
                 lbStatus.Text = "运行中";
@@ -205,6 +229,78 @@ namespace KylinService
                 //记录启动日志
                 var loger = new ServerLoger(servName);
                 loger.Write("服务已启动！");
+            }
+            #endregion
+        }
+
+
+        /// <summary>
+        /// 清理服务暂停
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnClearPause_Click(object sender, EventArgs e)
+        {
+            #region 获取当前正在操作的服务类型
+
+            var btn = (Button)sender;
+
+            var serviceName = (btn.Tag ?? string.Empty).ToString();
+
+            #endregion
+
+            #region 启动服务
+
+            //当前服务的计划类型
+            SchedulerService service = _serviceCollection[serviceName]; //SchedulerServiceFactory.GetService<SchedulerService>(ClearScheduleType.ShakeDayTimesClear);
+
+            #endregion
+
+            #region 
+
+            if (service != null)
+            {
+                //父控件
+                var parent = btn.Parent;
+
+                //找到停止按钮并启用交互
+                var btnStop = Find<Button>(parent, _serTstopbtn, serviceName);
+                btnStop.Enabled = true;
+                var btnStart = Find<Button>(parent, _serTstartbtn, serviceName);
+                btnStart.Enabled = false;
+                //找到状态Label，并更新状态为：运行中
+                var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
+
+                lbStatus.ForeColor = System.Drawing.Color.Green;
+
+                //服务已启动
+                var servName = SysData.GetClearServiceName(serviceName);
+                var msg = "";
+
+
+                if (service.IsPaused)
+                {
+                    btn.Text = "暂停";
+                    msg = "运行中";
+                    lbStatus.Text = msg;
+                    service.Continue();
+                }
+                else
+                {
+                    btn.Text = "继续";
+                    msg = "暂停中";
+                    lbStatus.Text = msg;
+                    service.Pause();
+                }
+
+                _serviceCollection.Add(serviceName, service);
+                string message = string.Format("【{0}】 服务{1}！", servName, msg);
+                WriteMessage(message);
+
+
+                //记录暂停日志
+                var loger = new ServerLoger(servName);
+                loger.Write("服务已暂停！");
             }
             #endregion
         }
@@ -240,6 +336,9 @@ namespace KylinService
                 //找到启用按钮并启用交互
                 var btnStart = Find<Button>(parent, _serTstartbtn, serviceName);
                 btnStart.Enabled = true;
+                var btnPause = Find<Button>(parent, _serTpausebtn, serviceName);
+                btnPause.Enabled = false;
+                btnPause.Text = "暂停";
 
                 //找到状态Label，并更新状态为：已停止
                 var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
@@ -295,7 +394,7 @@ namespace KylinService
 
                 #region//服务运行状态Label
                 Label lbStatus = new Label();
-                lbStatus.Width = 100;
+                lbStatus.Width = 50;
                 lbStatus.Text = "未运行";
                 lbStatus.Name = _serTstatus + serv.Name;
                 lbStatus.Location = new System.Drawing.Point(180, 5);
@@ -307,9 +406,19 @@ namespace KylinService
                 startButton.Text = "启动";
                 startButton.Name = _serTstartbtn + serv.Name;
                 startButton.Tag = serv.Name;
-                startButton.Location = new System.Drawing.Point(300, 0);
+                startButton.Location = new System.Drawing.Point(250, 0);
                 startButton.Click += new EventHandler(BtnQueueStart_Click);
                 panel.Controls.Add(startButton);
+                #endregion
+                #region//服务暂停按钮
+                Button pauseButton = new Button();
+                pauseButton.Text = "暂停";
+                pauseButton.Name = _serTpausebtn + serv.Name;
+                pauseButton.Tag = serv.Name;
+                pauseButton.Enabled = false;
+                pauseButton.Location = new System.Drawing.Point(350, 0);
+                pauseButton.Click += new EventHandler(BtnQueuePause_Click);
+                panel.Controls.Add(pauseButton);
                 #endregion
 
                 #region//服务停止按钮
@@ -317,7 +426,7 @@ namespace KylinService
                 stopButton.Text = "停止";
                 stopButton.Name = _serTstopbtn + serv.Name;
                 stopButton.Tag = serv.Name;
-                stopButton.Location = new System.Drawing.Point(400, 0);
+                stopButton.Location = new System.Drawing.Point(450, 0);
                 stopButton.Enabled = false;
                 stopButton.Click += new EventHandler(BtnQueueStop_Click);
                 panel.Controls.Add(stopButton);
@@ -446,6 +555,8 @@ namespace KylinService
                 //找到停止按钮并启用交互
                 var btnStop = Find<Button>(parent, _serTstopbtn, serviceName);
                 btnStop.Enabled = true;
+                var btnPause = Find<Button>(parent, _serTpausebtn, serviceName);
+                btnPause.Enabled = true;
 
                 //找到状态Label，并更新状态为：运行中
                 var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
@@ -486,6 +597,77 @@ namespace KylinService
         }
 
         /// <summary>
+        /// 队列服务暂停
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnQueuePause_Click(object sender, EventArgs e)
+        {
+            #region 获取当前正在操作的服务类型
+
+            var btn = (Button)sender;
+
+            var serviceName = (btn.Tag ?? string.Empty).ToString();
+
+            #endregion
+
+            #region 启动服务
+
+            //当前服务的计划类型
+            SchedulerService service = _serviceCollection[serviceName]; //SchedulerServiceFactory.GetService<SchedulerService>(ClearScheduleType.ShakeDayTimesClear);
+
+            #endregion
+
+            #region 
+
+            if (service != null)
+            {
+                //父控件
+                var parent = btn.Parent;
+
+                //找到停止按钮并启用交互
+                var btnStop = Find<Button>(parent, _serTstopbtn, serviceName);
+                btnStop.Enabled = true;
+                var btnStart = Find<Button>(parent, _serTstartbtn, serviceName);
+                btnStart.Enabled = false;
+                //找到状态Label，并更新状态为：运行中
+                var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
+
+                lbStatus.ForeColor = System.Drawing.Color.Green;
+
+                //服务已启动
+                var servName = SysData.GetQueueServiceName(serviceName);
+                var msg = "";
+
+
+                if (service.IsPaused)
+                {
+                    btn.Text = "暂停";
+                    msg = "运行中";
+                    lbStatus.Text = msg;
+                    service.Continue();
+                }
+                else
+                {
+                    btn.Text = "继续";
+                    msg = "暂停中";
+                    lbStatus.Text = msg;
+                    service.Pause();
+                }
+
+                _serviceCollection.Add(serviceName, service);
+                string message = string.Format("【{0}】 服务{1}！", servName, msg);
+                WriteMessage(message);
+
+
+                //记录暂停日志
+                var loger = new ServerLoger(servName);
+                loger.Write("服务已暂停！");
+            }
+            #endregion
+        }
+
+        /// <summary>
         /// 队列服务停止
         /// </summary>
         /// <param name="sender"></param>
@@ -513,7 +695,10 @@ namespace KylinService
                 //找到启用按钮并启用交互
                 var btnStart = Find<Button>(parent, _serTstartbtn, serviceName);
                 btnStart.Enabled = true;
-
+                //找到启用按钮并启用交互
+                var btnPause = Find<Button>(parent, _serTpausebtn, serviceName);
+                btnPause.Enabled = false;
+                btnPause.Text = "暂停";
                 //找到状态Label，并更新状态为：已停止
                 var lbStatus = Find<Label>(parent, _serTstatus, serviceName);
                 lbStatus.Text = "已停止";
@@ -647,7 +832,7 @@ namespace KylinService
 
             #region//服务类型名称Lable
             Label ser_lbType = new Label();
-            ser_lbType.Width = 180;
+            ser_lbType.Width = 120;
             ser_lbType.Text = "小地方缓存维护服务";
             ser_lbType.Name = "cacheService";
             ser_lbType.Location = new System.Drawing.Point(0, 5);
@@ -656,10 +841,10 @@ namespace KylinService
 
             #region//服务运行状态Label
             Label ser_lbStatus = new Label();
-            ser_lbStatus.Width = 100;
+            ser_lbStatus.Width = 80;
             ser_lbStatus.Text = "未运行";
             ser_lbStatus.Name = "cacheServiceStatus";
-            ser_lbStatus.Location = new System.Drawing.Point(180, 5);
+            ser_lbStatus.Location = new System.Drawing.Point(150, 5);
             serPanel.Controls.Add(ser_lbStatus);
             #endregion
 
@@ -668,11 +853,20 @@ namespace KylinService
             ser_startButton.Text = "启动";
             ser_startButton.Name = "btnCacheStart";
             ser_startButton.Tag = "cache";
-            ser_startButton.Location = new System.Drawing.Point(300, 0);
+            ser_startButton.Location = new System.Drawing.Point(240, 0);
             ser_startButton.Click += new EventHandler(BtnCacheStart_Click);
             serPanel.Controls.Add(ser_startButton);
             #endregion
-
+            #region//服务暂停按钮
+            Button ser_pauseButton = new Button();
+            ser_pauseButton.Text = "暂停";
+            ser_pauseButton.Name = "btnCachePause";
+            ser_pauseButton.Tag = "cache";
+            ser_pauseButton.Location = new System.Drawing.Point(320, 0);
+            ser_pauseButton.Enabled = false;
+            ser_pauseButton.Click += new EventHandler(BtnCachePause_Click);
+            serPanel.Controls.Add(ser_pauseButton);
+            #endregion
             #region//服务停止按钮
             Button ser_stopButton = new Button();
             ser_stopButton.Text = "停止";
@@ -850,7 +1044,8 @@ namespace KylinService
             //找到停止按钮并启用交互
             var btnStop = Find<Button>(this.tabCache, "btnCacheStop");
             btnStop.Enabled = true;
-
+            var btnCachePause = Find<Button>(this.tabCache, "btnCachePause");
+            btnCachePause.Enabled = true;
             //找到状态Label，并更新状态为：运行中
             var lbStatus = Find<Label>(this.tabCache, "cacheServiceStatus");
             lbStatus.Text = "运行中";
@@ -862,6 +1057,64 @@ namespace KylinService
             //记录启动日志
             var loger = new ServerLoger(serviceName);
             loger.Write("服务已启动！");
+
+            #endregion
+        }
+
+        /// <summary>
+        /// 缓存更新服务暂停
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param> 
+        private void BtnCachePause_Click(object sender, EventArgs e)
+        {
+            var btn = (Button)sender;
+
+            #region 停止服务
+
+            //服务名称
+            var serviceName = "缓存维护服务";
+
+            //任务计划服务
+            SchedulerService service = _serviceCollection[serviceName];
+
+            if (null != service)
+            {
+                service.Dispose();
+
+               
+
+                //找到启用按钮并启用交互
+                var btnStart = Find<Button>(this.tabCache, "btnCacheStart");
+                btnStart.Enabled = false;
+
+                //找到状态Label，并更新状态为：已暂停
+                var lbStatus = Find<Label>(this.tabCache, "cacheServiceStatus");
+                lbStatus.ForeColor = System.Drawing.Color.Red;
+                var msg = "";
+
+                if (service.IsPaused)
+                {
+                    btn.Text = "暂停";
+                    msg = "运行中";
+                    lbStatus.Text = msg;
+                    service.Continue();
+                }
+                else
+                {
+                    btn.Text = "继续";
+                    msg = "暂停中";
+                    lbStatus.Text = msg;
+                    service.Pause();
+                }
+
+                string message = string.Format("【{0}】 服务{1}！", serviceName, msg);
+                WriteMessage(message);
+
+                //记录停止日志
+                var loger = new ServerLoger(serviceName);
+                loger.Write("服务已停止！");
+            }
 
             #endregion
         }
@@ -893,6 +1146,10 @@ namespace KylinService
                 var btnStart = Find<Button>(this.tabCache, "btnCacheStart");
                 btnStart.Enabled = true;
 
+                //找到启用按钮并启用交互
+                var btnCachePause = Find<Button>(this.tabCache, "btnCachePause");
+                btnCachePause.Enabled = false;
+                btnCachePause.Text = "暂停";
                 //找到状态Label，并更新状态为：已停止
                 var lbStatus = Find<Label>(this.tabCache, "cacheServiceStatus");
                 lbStatus.Text = "已停止";

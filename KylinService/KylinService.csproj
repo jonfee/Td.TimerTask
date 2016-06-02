@@ -224,6 +224,7 @@
     <Compile Include="Core\Loger\ExceptionLoger.cs" />
     <Compile Include="Core\Loger\RunLoger.cs" />
     <Compile Include="Core\Loger\ServerLoger.cs" />
+    <Compile Include="Core\SchedulerServiceFactory.cs" />
     <Compile Include="Core\Tools.cs" />
     <Compile Include="Data\Model\AppointOrderModel.cs" />
     <Compile Include="Data\Model\CircleEventModel.cs" />

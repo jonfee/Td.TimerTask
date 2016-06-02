@@ -16,7 +16,12 @@ namespace KylinService
 
             Startup.Init();
 
-            Application.Run(new MainForm());
+            var mainForm = new MainForm();
+
+            //// 注册所有调度服务。
+            //Startup.RegisterServices(mainForm, mainForm.WriteMessageDelegate);
+
+            Application.Run(mainForm);
         }
     }
 }
