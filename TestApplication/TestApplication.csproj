@@ -45,10 +45,6 @@
       <HintPath>..\packages\Td.CoreLibrary.1.1.4-beta\lib\net46\Td.CoreLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.35.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.37-bata\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

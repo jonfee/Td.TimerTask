@@ -132,6 +132,9 @@
       <HintPath>..\packages\Microsoft.Extensions.WebEncoders.Core.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.WebEncoders.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -193,8 +196,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.35.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\yk\.dnx\packages\Td.Kylin.EnumLibrary\1.0.37-bata\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
+      <HintPath>..\packages\Td.Kylin.EnumLibrary.1.0.38-bata\lib\net46\Td.Kylin.EnumLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Td.Kylin.EnumLibrary.1.0.35.0.Fakes">
+      <HintPath>FakesAssemblies\Td.Kylin.EnumLibrary.1.0.35.0.Fakes.dll</HintPath>
     </Reference>
     <Reference Include="Td.Kylin.Redis, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Td.Kylin.Redis.1.0.8-alpha\lib\net46\Td.Kylin.Redis.dll</HintPath>
@@ -342,6 +348,7 @@
     <EmbeddedResource Include="UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>
     </EmbeddedResource>
+    <Fakes Include="Fakes\Td.Kylin.EnumLibrary.fakes" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
