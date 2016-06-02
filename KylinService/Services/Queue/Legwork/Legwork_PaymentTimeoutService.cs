@@ -80,7 +80,7 @@ namespace KylinService.Services.Queue.Legwork
 
 
                 //结算并自动收货
-                var settlement = LegworkOrderProvder.Update(new Legwork_Order() { OrderID = model.OrderID, Status = (int)LegworkOrderStatus.Invalid, CancelTime = DateTime.Now });
+                var settlement = LegworkOrderProvder.UpdatePaymentTimeout(lastOrder);
 
                 string message = string.Empty;
 

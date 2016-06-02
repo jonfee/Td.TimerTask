@@ -83,7 +83,7 @@ namespace KylinService.Services.Queue.Legwork
                 //if (model.ShipTime != model.ShipTime) throw new CustomException(string.Format("订单(编号{0})不能确定发货时间，不能自动完成收货！", lastOrder.OrderCode));
 
                 //结算并自动收货
-                var settlement = LegworkOrderProvder.Update(new Legwork_Order() { OrderID = model.OrderID, Status = (int)LegworkOrderStatus.Complete, CompleteTime = DateTime.Now });
+                var settlement = LegworkOrderProvder.UpdateAutoConfirmTime(lastOrder);
 
                 string message = string.Empty;
 
