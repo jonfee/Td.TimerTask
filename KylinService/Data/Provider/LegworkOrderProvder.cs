@@ -45,11 +45,6 @@ namespace KylinService.Data.Provider
                 var model = db.Legwork_Order.FirstOrDefault(q => q.OrderID == _legworkOrder.OrderID);
                 model.Status = (int)LegworkOrderStatus.Canceled;
                 model.CancelTime = DateTime.Now;
-                db.Entry(model).Property(q => new
-                {
-                    q.Status,
-                    q.CancelTime
-                }).IsModified = true;
                 return await db.SaveChangesAsync() > 0;
             }
         }
@@ -66,11 +61,6 @@ namespace KylinService.Data.Provider
                 var model = db.Legwork_Order.FirstOrDefault(q => q.OrderID == _legworkOrder.OrderID);
                 model.Status = (int)LegworkOrderStatus.Complete;
                 model.CompleteTime = DateTime.Now;
-                db.Entry(model).Property(q => new
-                {
-                    q.Status,
-                    q.CompleteTime
-                }).IsModified = true;
                 return await db.SaveChangesAsync() > 0;
             }
         }
@@ -87,11 +77,6 @@ namespace KylinService.Data.Provider
                 var model = db.Legwork_Order.FirstOrDefault(q => q.OrderID == _legworkOrder.OrderID);
                 model.Status = (int)LegworkOrderStatus.Invalid;
                 model.CancelTime = DateTime.Now;
-                db.Entry(model).Property(q => new
-                {
-                    q.Status,
-                    q.CancelTime
-                }).IsModified = true;
                 return await db.SaveChangesAsync() > 0;
             }
         }
