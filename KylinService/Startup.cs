@@ -182,7 +182,7 @@ namespace KylinService
             UpdateB2COrderConfig(sysConfigs);
             #endregion
 
-            #region //商家商品订单自动服务参数配置
+             #region //商家商品订单自动服务参数配置
             UpdateMerchantOrderConfig(sysConfigs);
             #endregion
         }

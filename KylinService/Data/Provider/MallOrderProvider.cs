@@ -35,7 +35,7 @@ namespace KylinService.Data.Provider
                     ShipTime = order.ShipTime,
                     SourceDataID = order.SourceDataID,
                     UserID = order.UserID,
-                    AreaID=order.AreaID
+                    AreaID = order.AreaID
                 } : null;
             }
         }
@@ -49,93 +49,126 @@ namespace KylinService.Data.Provider
         {
             using (var db = new DataContext())
             {
-                int realRows = 100;
-                int rows = 0;
+                //预期影响行数
+                int expectRows = 0;
+                //实际影响行数
+                int actualRows = 0;
 
-                //只许成功，不许失败
-                while (rows != realRows)
+                //剩余可执行次数（即失败时最多剩余的重执行次数）
+                int remainTimes = 5;
+
+                do
                 {
                     var order = db.Mall_Order.SingleOrDefault(p => p.OrderID == orderID);
 
+                    if (null == order) throw new Exception("订单数据不存在！");
+
                     if (order.OrderStatus != (int)B2COrderStatus.WaitingPayment) throw new Exception("订单状态已被更改，本次操作失败！");
 
+                    //是否为摇一摇订单
+                    bool isShakeOrder = order.OrderType == (int)B2COrderType.ShakeOrder;
+
+                    //订单状态变更
                     order.OrderStatus = (int)B2COrderStatus.Canceled;
                     order.CancelTime = DateTime.Now;
+                    expectRows++;
 
                     #region 获取订单中商品（SKU）的购买数，以便退回库存
 
-                    //订单中商品 （SKU）的购买数
-                    var productSkuQuery = from p in db.Mall_ProductSKU
-                                          join o in db.Mall_OrderProductSnapshot
-                                          on p.SkuID equals o.SkuID
-                                          where o.OrderID == orderID
-                                          select new
-                                          {
-                                              ProductID = p.ProductID,
-                                              SkuID = p.SkuID,
-                                              RowVersion = p.RowVersion,
-                                              SoldNumber = p.SoldNumber,
-                                              Inventory = p.Inventory,
-                                              BuyCount = o.BuyCounts
-                                          };
-
-                    var skuList = productSkuQuery.ToList();
-
-                    //商品及总数量
-                    Dictionary<long, int> proCountDic = new Dictionary<long, int>();
-
-                    foreach (var item in skuList)
+                    //摇一摇订单处理
+                    if (isShakeOrder)
                     {
-                        //库存加，销量减
-                        var sku = new Mall_ProductSKU { SkuID = item.SkuID, SoldNumber = item.SoldNumber - item.BuyCount, Inventory = item.Inventory + item.BuyCount, RowVersion = item.RowVersion };
+                        //抽中记录
+                        var shakeRecord = db.Shake_UserRecord.SingleOrDefault(p => p.RecordID == order.SourceDataID);
 
-                        db.Attach(sku);
-                        db.Entry(sku).Property(p => p.SoldNumber).IsModified = true;
-                        db.Entry(sku).Property(p => p.Inventory).IsModified = true;
-
-                        //记录商品数量
-                        if (proCountDic.ContainsKey(item.ProductID))
+                        if (null != shakeRecord)
                         {
-                            proCountDic[item.ProductID] += item.BuyCount;
-                        }
-                        else
-                        {
-                            proCountDic.Add(item.ProductID, item.BuyCount);
+                            //摇一摇数据内容
+                            var shakeContent = db.Shake_Content.SingleOrDefault(p => p.ContentID == shakeRecord.ContentID);
+                            //返回销量
+                            if (null != shakeContent)
+                            {
+                                shakeContent.ConfirmCount -= 1;
+                                expectRows++;
+                            }
                         }
                     }
-
-                    var productQuery = from p in db.Mall_Product
-                                       where proCountDic.Keys.Contains(p.ProductID)
-                                       select new
-                                       {
-                                           ProductID = p.ProductID,
-                                           Inventory = p.Inventory,
-                                           SoldNumber = p.SoldNumber,
-                                           RowVersion = p.RowVersion
-                                       };
-
-                    var productList = productQuery.ToList();
-
-                    foreach (var item in productList)
+                    //普通订单处理
+                    else
                     {
-                        var buyCount = proCountDic[item.ProductID];
-                        var pro = new Mall_Product { ProductID = item.ProductID, SoldNumber = item.SoldNumber - buyCount, Inventory = item.Inventory + buyCount, RowVersion = item.RowVersion };
+                        //订单中商品 （SKU）的购买数
+                        var productSkuQuery = from o in db.Mall_OrderProductSnapshot
+                                              where o.OrderID == orderID
+                                              select new
+                                              {
+                                                  ProductID = o.ProductID,
+                                                  SkuID = o.SkuID,
+                                                  BuyCount = o.BuyCounts
+                                              };
 
-                        db.Attach(pro);
-                        db.Entry(pro).Property(p => p.Inventory).IsModified = true;
-                        db.Entry(pro).Property(p => p.SoldNumber).IsModified = true;
+                        var skuList = productSkuQuery.ToList();
+
+                        //商品及总数量
+                        Dictionary<long, int> proCountDic = new Dictionary<long, int>();
+
+                        foreach (var item in skuList)
+                        {
+                            //当前SKU
+                            var sku = db.Mall_ProductSKU.SingleOrDefault(p => p.SkuID == item.SkuID);
+                            // new Mall_ProductSKU { SkuID = item.SkuID, SoldNumber = item.SoldNumber - item.BuyCount, Inventory = item.Inventory + item.BuyCount, RowVersion = item.RowVersion };
+
+                            if (null == sku) continue;
+
+                            db.Mall_ProductSKU.Attach(sku);
+                            db.Entry(sku).Property(p => p.SoldNumber).IsModified = true;
+                            db.Entry(sku).Property(p => p.Inventory).IsModified = true;
+                            //库存加，销量减
+                            sku.SoldNumber -= item.BuyCount;
+                            sku.Inventory += item.BuyCount;
+                            expectRows++;
+
+                            //记录商品数量
+                            if (proCountDic.ContainsKey(item.ProductID))
+                            {
+                                proCountDic[item.ProductID] += item.BuyCount;
+                            }
+                            else
+                            {
+                                proCountDic.Add(item.ProductID, item.BuyCount);
+                            }
+                        }
+
+                        foreach (var kv in proCountDic)
+                        {
+                            var pro = db.Mall_Product.SingleOrDefault(p => p.ProductID == kv.Key);
+                            //new Mall_Product { ProductID = item.ProductID, SoldNumber = item.SoldNumber - buyCount, Inventory = item.Inventory + buyCount, RowVersion = item.RowVersion };
+
+                            if (null == pro) continue;
+
+                            db.Mall_Product.Attach(pro);
+                            db.Entry(pro).Property(p => p.Inventory).IsModified = true;
+                            db.Entry(pro).Property(p => p.SoldNumber).IsModified = true;
+                            //商品主记录库存加，销量减
+                            pro.Inventory += kv.Value;
+                            pro.SoldNumber -= kv.Value;
+                            expectRows++;
+                        }
                     }
 
                     #endregion
 
-                    realRows = skuList.Count() + proCountDic.Count() + 1;
+                    actualRows = await db.SaveChangesAsync();
 
-                    rows = await db.SaveChangesAsync();
+                    //未达到预期，线程休眠1000毫秒
+                    if (actualRows != expectRows)
+                    {
+                        remainTimes--;
+                        Thread.Sleep(1000);
+                    }
 
-                    Thread.Sleep(1000);
-                }
+                } while (actualRows != expectRows && remainTimes > 0);
 
-                return true;
+                return actualRows == expectRows;
             }
         }
     }

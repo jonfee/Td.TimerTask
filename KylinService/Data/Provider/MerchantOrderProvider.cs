@@ -45,55 +45,68 @@ namespace KylinService.Data.Provider
         {
             using (var db = new DataContext())
             {
-                int realRows = 100;
-                int rows = 0;
+                //预期影响行数
+                int expectRows = 0;
+                //实际影响行数
+                int actualRows = 0;
 
-                //只许成功，不许失败
-                while (rows != realRows)
+                //剩余可执行次数（即失败时最多剩余的重执行次数）
+                int remainTimes = 5;
+
+                do
                 {
                     var order = db.Merchant_Order.SingleOrDefault(p => p.OrderID == orderID);
+
+                    if (null == order) throw new Exception("订单数据不存在！");
 
                     if (order.OrderStatus != (int)MerchantOrderStatus.WaitingPayment) throw new Exception("订单状态已被更改，本次操作失败！");
 
                     order.OrderStatus = (int)MerchantOrderStatus.Canceled;
                     order.CancelTime = DateTime.Now;
+                    expectRows++;
 
                     #region 获取订单中商品的购买数，以便退回库存
 
-                    var productQuery = from p in db.MerchGoods_Goods
-                                       join o in db.Merchant_OrderSnapshot
-                                       on p.GoodsID equals o.GoodsID
+                    var productQuery = from o in db.Merchant_OrderSnapshot
                                        where o.OrderID == orderID
                                        select new
                                        {
-                                           GoodsID = p.GoodsID,
-                                           Inventory = p.Inventory,
-                                           SaleNumber = p.SaleNumber,
-                                           BuyCount = o.BuyCounts,
-                                           RowVersion = p.RowVersion
+                                           GoodsID = o.GoodsID,
+                                           BuyCount = o.BuyCounts
                                        };
 
                     var productList = productQuery.ToList();
 
                     foreach (var item in productList)
                     {
-                        var pro = new MerchGoods_Goods { GoodsID = item.GoodsID, SaleNumber = item.SaleNumber - item.BuyCount, Inventory = item.Inventory + item.BuyCount, RowVersion = item.RowVersion };
+                        var pro = db.MerchGoods_Goods.SingleOrDefault(p => p.GoodsID == item.GoodsID);
+                        //new MerchGoods_Goods { GoodsID = item.GoodsID, SaleNumber = item.SaleNumber - item.BuyCount, Inventory = item.Inventory + item.BuyCount, RowVersion = item.RowVersion };
 
-                        db.Attach(pro);
+                        if (null == pro) continue;
+
+                        db.MerchGoods_Goods.Attach(pro);
                         db.Entry(pro).Property(p => p.Inventory).IsModified = true;
                         db.Entry(pro).Property(p => p.SaleNumber).IsModified = true;
+                        //库存加，销量减
+                        pro.SaleNumber -= item.BuyCount;
+                        pro.Inventory += item.BuyCount;
+                        expectRows++;
                     }
 
                     #endregion
 
-                    realRows = productList.Count() + 1;
+                    actualRows = await db.SaveChangesAsync();
 
-                    rows = await db.SaveChangesAsync();
+                    //未达到预期，线程休眠1000毫秒
+                    if (actualRows != expectRows)
+                    {
+                        remainTimes--;
+                        Thread.Sleep(1000);
+                    }
 
-                    Thread.Sleep(1000);
-                }
+                } while (expectRows != actualRows && remainTimes > 0);
 
-                return true;
+                return expectRows == actualRows;
             }
         }
     }
