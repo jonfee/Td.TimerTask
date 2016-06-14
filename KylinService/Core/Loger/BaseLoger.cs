@@ -58,9 +58,9 @@ namespace KylinService.Core.Loger
                     sw.Close();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-
+                //异常处理
             }
         }
     }

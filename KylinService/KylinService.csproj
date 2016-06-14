@@ -187,12 +187,12 @@
       <HintPath>..\packages\Td.CoreLibrary.1.1.7-beta\lib\net46\Td.CoreLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.DataCache, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.DataCache.1.0.15-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
+    <Reference Include="Td.Kylin.DataCache, Version=1.1.107.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.DataCache.1.1.107-rc1\lib\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.Entity.1.0.0-rc1-37\lib\net46\Td.Kylin.Entity.dll</HintPath>
+      <HintPath>..\packages\Td.Kylin.Entity.1.0.0-rc1-38\lib\net46\Td.Kylin.Entity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.EnumLibrary, Version=1.0.35.0, Culture=neutral, processorArchitecture=MSIL">
@@ -202,8 +202,8 @@
     <Reference Include="Td.Kylin.EnumLibrary.1.0.35.0.Fakes">
       <HintPath>FakesAssemblies\Td.Kylin.EnumLibrary.1.0.35.0.Fakes.dll</HintPath>
     </Reference>
-    <Reference Include="Td.Kylin.Redis, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.Redis.1.0.8-alpha\lib\net46\Td.Kylin.Redis.dll</HintPath>
+    <Reference Include="Td.Kylin.Redis, Version=1.1.100.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.Redis.1.1.100-alpha\lib\net46\Td.Kylin.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

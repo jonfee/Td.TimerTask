@@ -31,13 +31,20 @@ namespace KylinService.Data.Settlement
         /// </summary>
         private UserActivityType _activityType;
 
-        private int _score;
+        private int _score = -1;
         /// <summary>
         /// 业务活动影响的积分
         /// </summary>
         public int Score
         {
-            get { return _score; }
+            get
+            {
+                if (_score < 0)
+                {
+                    Calc();
+                }
+                return _score;
+            }
         }
 
         /// <summary>
@@ -83,6 +90,7 @@ namespace KylinService.Data.Settlement
                     }
                 }
             }
+            this._score = score;
         }
 
         /// <summary>

@@ -137,7 +137,15 @@ namespace KylinService
         public static void InjectionDataCache(bool isreset = false)
         {
             //注入数据缓存组件
-            DataCacheInjection.UseDataCache(DataCacheRedisConnectionString, SqlType, KylinDBConnectionString);
+            DataCacheInjection.UseDataCache(new CacheInjectionConfig
+            {
+                CacheItems = null,
+                InitIfNull = true,
+                KeepAlive = true,
+                RedisConnectionString = DataCacheRedisConnectionString,
+                SqlConnectionString = KylinDBConnectionString,
+                SqlType = SqlType
+            });
 
             if (isreset)
             {
@@ -182,7 +190,7 @@ namespace KylinService
             UpdateB2COrderConfig(sysConfigs);
             #endregion
 
-             #region //商家商品订单自动服务参数配置
+            #region //商家商品订单自动服务参数配置
             UpdateMerchantOrderConfig(sysConfigs);
             #endregion
         }
