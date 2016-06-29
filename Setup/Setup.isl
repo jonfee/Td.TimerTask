@@ -225,6 +225,7 @@
 	<table name="AppSearch">
 		<col key="yes" def="s72">Property</col>
 		<col key="yes" def="s72">Signature_</col>
+		<row><td>DOTNETVERSION35SP1</td><td>DotNet35SP1</td></row>
 	</table>
 
 	<table name="BBControl">
@@ -2622,9 +2623,11 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>2052</td><td>Kylin</td><td>0</td><td/><td>-635146445</td></row>
+		<row><td>COMPANY_NAME</td><td>2052</td><td>Kylin</td><td>0</td><td/><td>-484176021</td></row>
 		<row><td>DN_AlwaysInstall</td><td>2052</td><td>始终安装</td><td>0</td><td/><td>-2136689711</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>2052</td><td>系统颜色设置不足以运行 [ProductName]。</td><td>0</td><td/><td>-2136689711</td></row>
+		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION35SP1</td><td>1033</td><td>Microsoft .NET Framework 3.5 SP1 needs to be installed for this installation to continue.</td><td>0</td><td/><td>-484139311</td></row>
+		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION35SP1</td><td>2052</td><td>Microsoft .NET Framework 3.5 SP1 needs to be installed for this installation to continue.</td><td>0</td><td/><td>-484139311</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_OS</td><td>2052</td><td>操作系统不足以运行 [ProductName]。</td><td>0</td><td/><td>-2136689711</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_PROCESSOR</td><td>2052</td><td>处理器不足以运行 [ProductName]。</td><td>0</td><td/><td>-2136689711</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_RAM</td><td>2052</td><td>RAM 量不足以运行 [ProductName]。</td><td>0</td><td/><td>-2136689711</td></row>
@@ -3726,8 +3729,8 @@
 		<row><td>IDS__TargetReq_DESC_PROCESSOR</td><td>2052</td><td>对于运行 [ProductName] 处理器不足。</td><td>0</td><td/><td>-2136689711</td></row>
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>2052</td><td>对于运行 [ProductName] 内存量不足。</td><td>0</td><td/><td>-2136689711</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>2052</td><td>对于运行 [ProductName] 屏幕分辨率不足。</td><td>0</td><td/><td>-2136689711</td></row>
-		<row><td>ID_STRING1</td><td>2052</td><td>http://www.Kylin.com</td><td>0</td><td/><td>-635146445</td></row>
-		<row><td>ID_STRING2</td><td>2052</td><td>Kylin</td><td>0</td><td/><td>-635146445</td></row>
+		<row><td>ID_STRING1</td><td>2052</td><td>http://www.Kylin.com</td><td>0</td><td/><td>-484176021</td></row>
+		<row><td>ID_STRING2</td><td>2052</td><td>Kylin</td><td>0</td><td/><td>-484176021</td></row>
 		<row><td>ID_STRING3</td><td>1033</td><td/><td>0</td><td/><td>-2136716271</td></row>
 		<row><td>ID_STRING3</td><td>2052</td><td/><td>0</td><td/><td>-2136716271</td></row>
 		<row><td>ID_STRING4</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>-2136706031</td></row>
@@ -3984,7 +3987,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{6F215CB0-7225-45A1-AA66-B206132CD1E5}</td></row>
 		<row><td>ISUSSignature</td><td>{77504D8F-F623-4E59-9414-1783E96E8FCB}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewRelease,viewObjects,viewUI,viewISToday</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewRelease,viewObjects,viewUI,viewISToday,viewServices</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4042,6 +4045,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 	<table name="LaunchCondition">
 		<col key="yes" def="s255">Condition</col>
 		<col def="l255">Description</col>
+		<row><td>DOTNETVERSION35SP1&gt;="#1"</td><td>##IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION35SP1##</td></row>
 	</table>
 
 	<table name="ListBox">
@@ -4370,7 +4374,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>RestartManagerOption</td><td>CloseRestart</td><td/></row>
 		<row><td>SERIALNUMBER</td><td/><td/></row>
 		<row><td>SERIALNUMVALSUCCESSRETVAL</td><td>1</td><td/></row>
-		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR</td><td/></row>
+		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR;DOTNETVERSION35SP1</td><td/></row>
 		<row><td>SelectedSetupType</td><td>##IDS__DisplayName_Typical##</td><td/></row>
 		<row><td>SetupType</td><td>Typical</td><td/></row>
 		<row><td>UpgradeCode</td><td>{D9FC9057-03E0-4343-9589-00D045614B2A}</td><td/></row>
@@ -4415,6 +4419,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="s255">Key</col>
 		<col def="S255">Name</col>
 		<col def="I2">Type</col>
+		<row><td>DotNet35SP1</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5</td><td>SP</td><td>2</td></row>
 	</table>
 
 	<table name="Registry">

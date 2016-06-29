@@ -12,9 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using KylinService.Services.Clear.Shake;
 using Td.Kylin.DataCache;
 using Td.Kylin.DataCache.CacheModel;
 using Td.Kylin.EnumLibrary;
@@ -31,6 +29,17 @@ namespace KylinService
         /// </summary>
         public static void Init()
         {
+            #region //定时操作时间误差范围
+            string strRange = ConfigurationManager.AppSettings["timerErrorRange"];
+            int errorRange = 0;
+            int.TryParse(strRange, out errorRange);
+            if (errorRange < 1)
+            {
+                errorRange = 5000;
+            }
+            ErrorRangeMillisecond = errorRange;
+            #endregion
+
             #region//产品信息及维护人员信息
             ProductInfo = new ProductInfo
             {
@@ -383,6 +392,12 @@ namespace KylinService
         #endregion
 
         #region 成员
+
+        /// <summary>
+        /// 定时操作时间误差范围（单位：毫秒）
+        /// </summary>
+        public static int ErrorRangeMillisecond { get; private set; }
+
         /// <summary>
         /// 服务程序相关描述信息
         /// </summary>

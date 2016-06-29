@@ -87,7 +87,9 @@ namespace KylinService.Services.Queue.Welfare
 
                 if (model.LotteryTime != lastWelfare.LotteryTime) throw new CustomException(string.Format("〖福利：{0}〗不明确的开奖时间（在{1}与{2}之间不明确）！", lastWelfare.WelfareName, model.LotteryTime, lastWelfare.LotteryTime));
 
-                if (DateTime.Now < lastWelfare.LotteryTime) throw new CustomException(string.Format("〖福利：{0}〗开奖时间（{1}）未到！", lastWelfare.WelfareName, lastWelfare.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss")));
+                bool timeRight = DateTime.Now.AddMilliseconds(-Startup.ErrorRangeMillisecond) <= lastWelfare.LotteryTime && lastWelfare.LotteryTime <= DateTime.Now.AddMilliseconds(Startup.ErrorRangeMillisecond);
+
+                if (!timeRight) throw new CustomException(string.Format("〖福利：{0}〗开奖时间（{1}）无效！", lastWelfare.WelfareName, lastWelfare.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss")));
 
                 if (lastWelfare.WinNumber > 0) throw new CustomException(string.Format("〖福利：{0}〗活动不能重复开奖！", lastWelfare.WelfareName));
 
