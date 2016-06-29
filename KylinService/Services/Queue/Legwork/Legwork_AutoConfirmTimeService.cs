@@ -46,7 +46,7 @@ namespace KylinService.Services.Queue.Legwork
 
             if (null != model)
             {
-                DateTime lastTime = model.ActualDeliveryTime.Value.AddSeconds(Startup.legworkGlobalConfigCacheModel.AutoConfirmTime);
+                DateTime lastTime = model.ActualDeliveryTime.Value.AddSeconds(Startup.LegworkGlobalConfig.AutoConfirmTime);
 
                 TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 

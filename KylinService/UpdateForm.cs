@@ -146,14 +146,15 @@ namespace KylinService
             MessageBox.Show("更新成功");
         }
 
-        private void btnLegworkConfigUpdate_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("未实现……");
-        }
-
         private void btnAppointOrderConfigUpdate_Click(object sender, EventArgs e)
         {
             Startup.UpdateAppointConfig();
+            MessageBox.Show("更新成功");
+        }
+
+        private void btnLegworkConfigUpdate_Click(object sender, EventArgs e)
+        {
+            Startup.UpdateLegworkGlobalConfig();
             MessageBox.Show("更新成功");
         }
     }

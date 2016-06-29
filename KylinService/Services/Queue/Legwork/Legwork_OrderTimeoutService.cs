@@ -44,7 +44,7 @@ namespace KylinService.Services.Queue.Legwork
 
             if (null != model)
             {
-                DateTime lastTime = model.CreateTime.AddSeconds(Startup.legworkGlobalConfigCacheModel.OrderTimeout);
+                DateTime lastTime = model.CreateTime.AddSeconds(Startup.LegworkGlobalConfig.OrderTimeout);
 
                 TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 

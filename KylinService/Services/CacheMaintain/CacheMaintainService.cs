@@ -89,6 +89,9 @@ namespace KylinService.Services.CacheMaintain
                     //更新当前级别的缓存
                     CacheCollection.Update(level);
 
+                    //更新相关配置
+                    Startup.UpdateQueueConfig();
+
                     if (null != list && list.Count > 0)
                     {
                         StringBuilder sb = new StringBuilder();

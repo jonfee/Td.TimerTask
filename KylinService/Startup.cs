@@ -72,19 +72,15 @@ namespace KylinService
 
             #endregion
 
-            #region  //注入
-
+            #region  //缓存注入
             DataCacheRedisConnectionString = ConfigurationManager.ConnectionStrings["RedisDataCacheConnectionString"].ConnectionString;
-            //注入数据缓存组件
             InjectionDataCache();
-
             #endregion
 
             #region //任务计划数据在Redis中的配置
             ScheduleRedisConfigs = ScheduleConfigManager.Collection;
             #endregion
 
-            legworkGlobalConfigCacheModel = Td.Kylin.DataCache.CacheCollection.LegworkGlobalConfigCache.Value()?.FirstOrDefault();
             #region //推送消息 Redis配置
             PushRedisConfigs = PushRedisConfigManager.Collection;
             #endregion
@@ -202,6 +198,10 @@ namespace KylinService
             #region //商家商品订单自动服务参数配置
             UpdateMerchantOrderConfig(sysConfigs);
             #endregion
+
+            #region //跑腿订单自动服务参数配置
+            UpdateLegworkGlobalConfig();
+            #endregion
         }
 
         /// <summary>
@@ -272,9 +272,9 @@ namespace KylinService
             var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserDone);
             var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserEvaluate);
 
-            int waitPayMinutes = GetMinutes(waitPay.Value, waitPay.ValueUnit);
-            int waitDoneMinutes = GetMinutes(waitDone.Value, waitDone.ValueUnit);
-            int waitEvalMimutes = GetMinutes(waitEval.Value, waitEval.ValueUnit);
+            int waitPayMinutes = waitPay != null ? GetMinutes(waitPay.Value, waitPay.ValueUnit) : 30;
+            int waitDoneMinutes = waitDone != null ? GetMinutes(waitDone.Value, waitDone.ValueUnit) : 7 * 24 * 60;
+            int waitEvalMimutes = waitEval != null ? GetMinutes(waitEval.Value, waitEval.ValueUnit) : 7 * 24 * 60;
 
             AppointConfig = new AppointLateConfig
             {
@@ -297,9 +297,9 @@ namespace KylinService
             var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderWaitReceive);
             var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderEvaluate);
 
-            int waitPayMinutes = GetMinutes(waitPay.Value, waitPay.ValueUnit);
-            int waitDoneMinutes = GetMinutes(waitDone.Value, waitDone.ValueUnit);
-            int waitEvalMimutes = GetMinutes(waitEval.Value, waitEval.ValueUnit);
+            int waitPayMinutes = waitPay != null ? GetMinutes(waitPay.Value, waitPay.ValueUnit) : 30;
+            int waitDoneMinutes = waitDone != null ? GetMinutes(waitDone.Value, waitDone.ValueUnit) : 7 * 24 * 60;
+            int waitEvalMimutes = waitEval != null ? GetMinutes(waitEval.Value, waitEval.ValueUnit) : 7 * 24 * 60;
 
             B2COrderConfig = new B2COrderLateConfig
             {
@@ -322,9 +322,9 @@ namespace KylinService
             var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitReceive);
             var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitEvaluate);
 
-            int waitPayMinutes = GetMinutes(waitPay.Value, waitPay.ValueUnit);
-            int waitDoneMinutes = GetMinutes(waitDone.Value, waitDone.ValueUnit);
-            int waitEvalMimutes = GetMinutes(waitEval.Value, waitEval.ValueUnit);
+            int waitPayMinutes = waitPay != null ? GetMinutes(waitPay.Value, waitPay.ValueUnit) : 30;
+            int waitDoneMinutes = waitDone != null ? GetMinutes(waitDone.Value, waitDone.ValueUnit) : 7 * 24 * 60;
+            int waitEvalMimutes = waitEval != null ? GetMinutes(waitEval.Value, waitEval.ValueUnit) : 7 * 24 * 60;
 
             MerchantOrderConfig = new MerchantOrderLateConfig
             {
@@ -332,6 +332,17 @@ namespace KylinService
                 WaitReceiptGoodsDays = waitDoneMinutes / (24 * 60),
                 WaitEvaluateDays = waitEvalMimutes / (24 * 60)
             };
+        }
+
+        /// <summary>
+        /// 更新跑腿配置
+        /// </summary>
+        /// <param name="values"></param>
+        public static void UpdateLegworkGlobalConfig(List<LegworkGlobalConfigCacheModel> values = null)
+        {
+            values = values ?? CacheCollection.LegworkGlobalConfigCache.Value();
+
+            LegworkGlobalConfig = values.FirstOrDefault();
         }
 
 
@@ -461,8 +472,8 @@ namespace KylinService
         /// <summary>
         /// 跑腿业务全局配置
         /// </summary>
-        public static LegworkGlobalConfigCacheModel legworkGlobalConfigCacheModel
-        {
+        public static LegworkGlobalConfigCacheModel LegworkGlobalConfig
+        {//Td.Kylin.DataCache.CacheCollection.LegworkGlobalConfigCache.Value()?.FirstOrDefault()
             get;
             private set;
         }

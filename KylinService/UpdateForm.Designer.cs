@@ -42,12 +42,12 @@
             this.btnPushRedisUpdate = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnB2COrderConfigUpdate = new System.Windows.Forms.Button();
-            this.btnMerchantOrderConfigUpdate = new System.Windows.Forms.Button();
-            this.btnWelfareConfigUpdate = new System.Windows.Forms.Button();
-            this.btnCircleEventConfigUpdate = new System.Windows.Forms.Button();
-            this.btnLegworkConfigUpdate = new System.Windows.Forms.Button();
             this.btnAppointOrderConfigUpdate = new System.Windows.Forms.Button();
+            this.btnCircleEventConfigUpdate = new System.Windows.Forms.Button();
+            this.btnMerchantOrderConfigUpdate = new System.Windows.Forms.Button();
+            this.btnLegworkConfigUpdate = new System.Windows.Forms.Button();
+            this.btnWelfareConfigUpdate = new System.Windows.Forms.Button();
+            this.btnB2COrderConfigUpdate = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.comboSqlType = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -188,40 +188,20 @@
             this.groupBox2.Controls.Add(this.btnB2COrderConfigUpdate);
             this.groupBox2.Location = new System.Drawing.Point(15, 371);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(657, 175);
+            this.groupBox2.Size = new System.Drawing.Size(657, 170);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "其它";
             // 
-            // btnB2COrderConfigUpdate
+            // btnAppointOrderConfigUpdate
             // 
-            this.btnB2COrderConfigUpdate.Location = new System.Drawing.Point(22, 34);
-            this.btnB2COrderConfigUpdate.Name = "btnB2COrderConfigUpdate";
-            this.btnB2COrderConfigUpdate.Size = new System.Drawing.Size(277, 23);
-            this.btnB2COrderConfigUpdate.TabIndex = 0;
-            this.btnB2COrderConfigUpdate.Text = "精品汇订单处理配置 [更新]";
-            this.btnB2COrderConfigUpdate.UseVisualStyleBackColor = true;
-            this.btnB2COrderConfigUpdate.Click += new System.EventHandler(this.btnB2COrderConfigUpdate_Click);
-            // 
-            // btnMerchantOrderConfigUpdate
-            // 
-            this.btnMerchantOrderConfigUpdate.Location = new System.Drawing.Point(356, 34);
-            this.btnMerchantOrderConfigUpdate.Name = "btnMerchantOrderConfigUpdate";
-            this.btnMerchantOrderConfigUpdate.Size = new System.Drawing.Size(278, 23);
-            this.btnMerchantOrderConfigUpdate.TabIndex = 1;
-            this.btnMerchantOrderConfigUpdate.Text = "附近购订单处理配置 [更新]";
-            this.btnMerchantOrderConfigUpdate.UseVisualStyleBackColor = true;
-            this.btnMerchantOrderConfigUpdate.Click += new System.EventHandler(this.btnMerchantOrderConfigUpdate_Click);
-            // 
-            // btnWelfareConfigUpdate
-            // 
-            this.btnWelfareConfigUpdate.Location = new System.Drawing.Point(22, 80);
-            this.btnWelfareConfigUpdate.Name = "btnWelfareConfigUpdate";
-            this.btnWelfareConfigUpdate.Size = new System.Drawing.Size(277, 23);
-            this.btnWelfareConfigUpdate.TabIndex = 0;
-            this.btnWelfareConfigUpdate.Text = "限时福利业务处理配置 [更新]";
-            this.btnWelfareConfigUpdate.UseVisualStyleBackColor = true;
-            this.btnWelfareConfigUpdate.Click += new System.EventHandler(this.btnWelfareConfigUpdate_Click);
+            this.btnAppointOrderConfigUpdate.Location = new System.Drawing.Point(356, 125);
+            this.btnAppointOrderConfigUpdate.Name = "btnAppointOrderConfigUpdate";
+            this.btnAppointOrderConfigUpdate.Size = new System.Drawing.Size(278, 23);
+            this.btnAppointOrderConfigUpdate.TabIndex = 1;
+            this.btnAppointOrderConfigUpdate.Text = "上门预约订单处理配置 [更新]";
+            this.btnAppointOrderConfigUpdate.UseVisualStyleBackColor = true;
+            this.btnAppointOrderConfigUpdate.Click += new System.EventHandler(this.btnAppointOrderConfigUpdate_Click);
             // 
             // btnCircleEventConfigUpdate
             // 
@@ -233,6 +213,16 @@
             this.btnCircleEventConfigUpdate.UseVisualStyleBackColor = true;
             this.btnCircleEventConfigUpdate.Click += new System.EventHandler(this.btnCircleEventConfigUpdate_Click);
             // 
+            // btnMerchantOrderConfigUpdate
+            // 
+            this.btnMerchantOrderConfigUpdate.Location = new System.Drawing.Point(356, 34);
+            this.btnMerchantOrderConfigUpdate.Name = "btnMerchantOrderConfigUpdate";
+            this.btnMerchantOrderConfigUpdate.Size = new System.Drawing.Size(278, 23);
+            this.btnMerchantOrderConfigUpdate.TabIndex = 1;
+            this.btnMerchantOrderConfigUpdate.Text = "附近购订单处理配置 [更新]";
+            this.btnMerchantOrderConfigUpdate.UseVisualStyleBackColor = true;
+            this.btnMerchantOrderConfigUpdate.Click += new System.EventHandler(this.btnMerchantOrderConfigUpdate_Click);
+            // 
             // btnLegworkConfigUpdate
             // 
             this.btnLegworkConfigUpdate.Location = new System.Drawing.Point(22, 125);
@@ -243,15 +233,25 @@
             this.btnLegworkConfigUpdate.UseVisualStyleBackColor = true;
             this.btnLegworkConfigUpdate.Click += new System.EventHandler(this.btnLegworkConfigUpdate_Click);
             // 
-            // btnAppointOrderConfigUpdate
+            // btnWelfareConfigUpdate
             // 
-            this.btnAppointOrderConfigUpdate.Location = new System.Drawing.Point(356, 125);
-            this.btnAppointOrderConfigUpdate.Name = "btnAppointOrderConfigUpdate";
-            this.btnAppointOrderConfigUpdate.Size = new System.Drawing.Size(278, 23);
-            this.btnAppointOrderConfigUpdate.TabIndex = 1;
-            this.btnAppointOrderConfigUpdate.Text = "上门预约订单处理配置 [更新]";
-            this.btnAppointOrderConfigUpdate.UseVisualStyleBackColor = true;
-            this.btnAppointOrderConfigUpdate.Click += new System.EventHandler(this.btnAppointOrderConfigUpdate_Click);
+            this.btnWelfareConfigUpdate.Location = new System.Drawing.Point(22, 80);
+            this.btnWelfareConfigUpdate.Name = "btnWelfareConfigUpdate";
+            this.btnWelfareConfigUpdate.Size = new System.Drawing.Size(277, 23);
+            this.btnWelfareConfigUpdate.TabIndex = 0;
+            this.btnWelfareConfigUpdate.Text = "限时福利业务处理配置 [更新]";
+            this.btnWelfareConfigUpdate.UseVisualStyleBackColor = true;
+            this.btnWelfareConfigUpdate.Click += new System.EventHandler(this.btnWelfareConfigUpdate_Click);
+            // 
+            // btnB2COrderConfigUpdate
+            // 
+            this.btnB2COrderConfigUpdate.Location = new System.Drawing.Point(22, 34);
+            this.btnB2COrderConfigUpdate.Name = "btnB2COrderConfigUpdate";
+            this.btnB2COrderConfigUpdate.Size = new System.Drawing.Size(277, 23);
+            this.btnB2COrderConfigUpdate.TabIndex = 0;
+            this.btnB2COrderConfigUpdate.Text = "精品汇订单处理配置 [更新]";
+            this.btnB2COrderConfigUpdate.UseVisualStyleBackColor = true;
+            this.btnB2COrderConfigUpdate.Click += new System.EventHandler(this.btnB2COrderConfigUpdate_Click);
             // 
             // label5
             // 
@@ -288,7 +288,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(688, 560);
+            this.ClientSize = new System.Drawing.Size(688, 553);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);

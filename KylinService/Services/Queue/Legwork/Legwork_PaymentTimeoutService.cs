@@ -44,7 +44,7 @@ namespace KylinService.Services.Queue.Legwork
 
             if (null != model)
             {
-                DateTime lastTime = model.OfferAcceptTime.Value.AddSeconds(Startup.legworkGlobalConfigCacheModel.PaymentTimeout);
+                DateTime lastTime = model.OfferAcceptTime.Value.AddSeconds(Startup.LegworkGlobalConfig.PaymentTimeout);
 
                 TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
