@@ -141,16 +141,23 @@ namespace KylinService
         /// </summary>
         public static void InjectionDataCache(bool isreset = false)
         {
-            //注入数据缓存组件
-            DataCacheInjection.UseDataCache(new CacheInjectionConfig
+            try
             {
-                CacheItems = null,
-                InitIfNull = true,
-                KeepAlive = true,
-                RedisConnectionString = DataCacheRedisConnectionString,
-                SqlConnectionString = KylinDBConnectionString,
-                SqlType = SqlType
-            });
+                //注入数据缓存组件
+                DataCacheInjection.UseDataCache(new CacheInjectionConfig
+                {
+                    CacheItems = null,
+                    InitIfNull = true,
+                    KeepAlive = true,
+                    RedisConnectionString = DataCacheRedisConnectionString,
+                    SqlConnectionString = KylinDBConnectionString,
+                    SqlType = SqlType
+                });
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             if (isreset)
             {
@@ -212,7 +219,7 @@ namespace KylinService
             var _list = new List<CacheMaintainConfig>();
 
             //缓存级别列表
-            var levelList = typeof(CacheLevel).GetEnumDesc<CacheLevel>();
+            var levelList =  EnumExtensions.GetEnumDesc<CacheLevel>(typeof(CacheLevel));
 
             foreach (var item in levelList)
             {

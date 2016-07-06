@@ -913,7 +913,7 @@ namespace KylinService
                     #region//缓存名称 Lable
                     Label lbType = new Label();
                     lbType.Width = 200;
-                    lbType.Text = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());// cache.CacheKey;
+                    lbType.Text = EnumExtensions.GetDescription<CacheItemType>(cache.ItemType.ToString());// cache.CacheKey;
                     lbType.Location = new System.Drawing.Point(0, 5);
                     panel.Controls.Add(lbType);
                     #endregion
@@ -989,7 +989,7 @@ namespace KylinService
             List<CacheMaintainConfig> configs = new List<CacheMaintainConfig>();
 
             //缓存级别列表
-            var levelList = typeof(CacheLevel).GetEnumDesc<CacheLevel>();
+            var levelList = EnumExtensions.GetEnumDesc<CacheLevel>(typeof(CacheLevel));
 
             foreach (var lv in levelList)
             {
@@ -1220,7 +1220,7 @@ namespace KylinService
             {
                 cache.Update();
 
-                var cacheName = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());
+                var cacheName = EnumExtensions.GetDescription<CacheItemType>(cache.ItemType.ToString());
 
                 WriteMessage(string.Format("缓存“{0}”已更新！", cacheName));
 
@@ -1266,7 +1266,7 @@ namespace KylinService
 
                 StringBuilder sb = new StringBuilder();
 
-                var cacheName = Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(cache.ItemType.ToString());
+                var cacheName = EnumExtensions.GetDescription<CacheItemType>(cache.ItemType.ToString());
 
                 sb.AppendLine(string.Format("缓存{0}的源数据为：", cacheName));
 

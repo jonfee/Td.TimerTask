@@ -29,7 +29,7 @@ namespace KylinService.Services.CacheMaintain
         /// <returns></returns>
         protected override bool SingleRequest()
         {
-            var levelList = typeof(CacheLevel).GetEnumDesc<CacheLevel>();
+            var levelList = EnumExtensions.GetEnumDesc<CacheLevel>(typeof(CacheLevel));
 
             foreach (var level in levelList)
             {
@@ -97,7 +97,7 @@ namespace KylinService.Services.CacheMaintain
                         StringBuilder sb = new StringBuilder();
                         foreach (var item in list)
                         {
-                            sb.AppendLine(string.Format("{0}缓存“{1}”已更新！", levelName, Td.Common.EnumUtility.GetEnumDescription<CacheItemType>(item.ItemType)));
+                            sb.AppendLine(string.Format("{0}缓存“{1}”已更新！", levelName, EnumExtensions.GetDescription<CacheItemType>(item.ItemType)));
                         }
 
                         message = sb.ToString();

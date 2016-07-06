@@ -24,7 +24,7 @@ namespace KylinService.Core
             {
                 if (null == _queueServiceList)
                 {
-                    _queueServiceList = typeof(QueueScheduleType).GetEnumDesc<QueueScheduleType>();
+                    _queueServiceList = EnumExtensions.GetEnumDesc<QueueScheduleType>(typeof(QueueScheduleType));
                 }
                 return _queueServiceList;
             }
@@ -83,7 +83,7 @@ namespace KylinService.Core
             {
                 if (null == _clearServiceList)
                 {
-                    _clearServiceList = typeof(ClearScheduleType).GetEnumDesc<ClearScheduleType>();
+                    _clearServiceList = EnumExtensions.GetEnumDesc<ClearScheduleType>(typeof(ClearScheduleType));
                 }
                 return _clearServiceList;
             }
@@ -142,7 +142,7 @@ namespace KylinService.Core
             {
                 if (null == _cacheTimeOptionList)
                 {
-                    _cacheTimeOptionList = typeof(CacheTimeOption).GetEnumDesc<CacheTimeOption>();
+                    _cacheTimeOptionList = EnumExtensions.GetEnumDesc<CacheTimeOption>(typeof(CacheTimeOption));
                 }
                 return _cacheTimeOptionList;
             }
@@ -201,7 +201,7 @@ namespace KylinService.Core
             {
                 if (null == _cacheLevelList)
                 {
-                    _cacheLevelList = typeof(CacheLevel).GetEnumDesc<CacheLevel>();
+                    _cacheLevelList = EnumExtensions.GetEnumDesc<CacheLevel>(typeof(CacheLevel));
                 }
                 return _cacheLevelList;
             }
@@ -260,7 +260,7 @@ namespace KylinService.Core
             {
                 if (null == _cacheItemTypeList)
                 {
-                    _cacheItemTypeList = typeof(CacheItemType).GetEnumDesc<CacheItemType>();
+                    _cacheItemTypeList = EnumExtensions.GetEnumDesc<CacheItemType>(typeof(CacheItemType));
                 }
                 return _cacheItemTypeList;
             }

@@ -24,7 +24,7 @@ namespace KylinService
 
         private void Init()
         {
-            var sqlTypeDic = typeof(SqlProviderType).GetEnumDesc<SqlProviderType>();
+            var sqlTypeDic = EnumExtensions.GetEnumDesc<SqlProviderType>(typeof(SqlProviderType));
             foreach (var sql in sqlTypeDic)
             {
                 this.comboSqlType.Items.Add(sql.Name);

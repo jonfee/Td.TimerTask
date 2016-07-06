@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Internal;
+﻿using Microsoft.EntityFrameworkCore;
 using Td.Kylin.Entity;
 using Td.Kylin.EnumLibrary;
 
@@ -12,7 +11,7 @@ namespace KylinService.Data
             switch (Startup.SqlType)
             {
                 case SqlProviderType.NpgSQL:
-                    optionBuilder.UseNpgsql(Startup.KylinDBConnectionString);
+                   // optionBuilder.UseNpgsql(Startup.KylinDBConnectionString);
                     break;
                 case SqlProviderType.SqlServer:
                 default:

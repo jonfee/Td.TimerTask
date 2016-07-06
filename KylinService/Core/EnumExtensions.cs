@@ -46,7 +46,7 @@ namespace KylinService.Core
         /// </summary>
         /// <param name="enumType"></param>
         /// <returns></returns>
-        public static List<EnumDesc<T>> GetEnumDesc<T>(this Type enumType) where T : struct
+        public static List<EnumDesc<T>> GetEnumDesc<T>(Type enumType) where T : struct
         {
             List<EnumDesc<T>> list = new List<EnumDesc<T>>();
 
@@ -76,6 +76,61 @@ namespace KylinService.Core
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// 获取枚举成员
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="valueOrName"></param>
+        /// <returns></returns>
+        public static string GetDescription<T>(object valueOrName)
+        {
+            if (valueOrName == null) return null;
+
+            string description = "";
+
+            string val = valueOrName.ToString();
+
+            Type enumType = typeof(T);
+
+            if (enumType.IsEnum)
+            {
+                foreach (FieldInfo field in enumType.GetFields(BindingFlags.Static | BindingFlags.Public))
+                {
+                    bool find = false;
+
+                    if (field.Name.Equals(val, StringComparison.OrdinalIgnoreCase))
+                    {
+                        find = true;
+                    }
+                    else
+                    {
+                        int enumVal = (int)System.Enum.Parse(enumType, field.Name, true);
+
+                        if (val == enumVal.ToString())
+                        {
+                            find = true;
+                        }
+                    }
+
+                    if (find)
+                    {
+                        // 获取描述的属性。
+                        DescriptionAttribute attr = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute), false) as DescriptionAttribute;
+                        if (attr != null)
+                        {
+                            description = attr.Description;
+                        }
+
+                        if (string.IsNullOrWhiteSpace(description)) description = field.Name;
+
+                        break;
+                    }
+                }
+            }
+
+            return description;
         }
 
         /// <summary>
