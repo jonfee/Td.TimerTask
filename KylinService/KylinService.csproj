@@ -52,7 +52,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>kylin.ico</ApplicationIcon>
+    <ApplicationIcon>icon\kylin.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Authorization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
@@ -523,8 +523,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="kylin.ico" />
+    <Content Include="icon\kylin.ico" />
     <Content Include="libs\System.IO.dll" />
+    <Content Include="libs\System.Linq.dll" />
     <Content Include="libs\System.Reflection.dll" />
     <Content Include="libs\System.Reflection.Emit.dll" />
     <Content Include="libs\System.Reflection.Emit.Lightweight.dll" />
@@ -535,7 +536,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /e /s /k /v /i /y "$(ProjectDir)libs\*.*" "$(ProjectDir)$(OutDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /e /s /k /v /i /y "$(ProjectDir)libs\*.*" "$(ProjectDir)$(OutDir)"
+xcopy /e /s /k /v /i /y "$(ProjectDir)icon\*.*" "$(ProjectDir)$(OutDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
