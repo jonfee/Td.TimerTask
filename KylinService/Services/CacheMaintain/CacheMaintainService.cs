@@ -85,12 +85,12 @@ namespace KylinService.Services.CacheMaintain
 
                     //获取本次需要更新的缓存
                     var list = CacheCollection.GetCacheList(level);
-
-                    //更新当前级别的缓存
-                    CacheCollection.Update(level);
-
-                    //更新相关配置
-                    Startup.UpdateQueueConfig();
+                    
+                    lock (Startup.uploadCacheObjectLock)
+                    {
+                        //更新当前级别的缓存
+                        CacheCollection.Update(level);
+                    }
 
                     if (null != list && list.Count > 0)
                     {

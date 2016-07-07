@@ -24,6 +24,10 @@ namespace KylinService
 {
     internal sealed class Startup
     {
+        /// <summary>
+        /// 更新缓存对象锁
+        /// </summary>
+        internal static readonly object uploadCacheObjectLock = new object();
 
         #region 公共方法
 
@@ -190,31 +194,11 @@ namespace KylinService
         /// </summary>
         public static void UpdateQueueConfig()
         {
-            var sysConfigs = CacheCollection.SystemGolbalConfigCache.Value();
+            //从系统全局配置缓存中更新数据
+            UpdateFromGlobalConfigCache();
 
-            #region //社区配置
-            UpdateCircleConfig(sysConfigs);
-            #endregion
-
-            #region //福利配置
-            UpdateWelfareConfig(sysConfigs);
-            #endregion
-
-            #region //上门预约订单自动服务参数配置
-            UpdateAppointConfig(sysConfigs);
-            #endregion
-
-            #region //B2C商城订单自动服务参数配置
-            UpdateB2COrderConfig(sysConfigs);
-            #endregion
-
-            #region //商家商品订单自动服务参数配置
-            UpdateMerchantOrderConfig(sysConfigs);
-            #endregion
-
-            #region //跑腿订单自动服务参数配置
+            //从跑腿全局参数配置缓存中更新数据
             UpdateLegworkGlobalConfig();
-            #endregion
         }
 
         /// <summary>
@@ -270,7 +254,48 @@ namespace KylinService
             CacheMaintainConfigs = _list;
         }
 
+        #endregion
+
         #region 私有方法
+
+        /// <summary>
+        /// 从系统全局配置缓存中更新数据
+        /// </summary>
+        public static void UpdateFromGlobalConfigCache()
+        {
+            var sysConfigs = CacheCollection.SystemGolbalConfigCache.Value();
+
+            #region //社区配置
+            UpdateCircleConfig(sysConfigs);
+            #endregion
+
+            #region //福利配置
+            UpdateWelfareConfig(sysConfigs);
+            #endregion
+
+            #region //上门预约订单自动服务参数配置
+            UpdateAppointConfig(sysConfigs);
+            #endregion
+
+            #region //B2C商城订单自动服务参数配置
+            UpdateB2COrderConfig(sysConfigs);
+            #endregion
+
+            #region //商家商品订单自动服务参数配置
+            UpdateMerchantOrderConfig(sysConfigs);
+            #endregion
+        }
+
+        /// <summary>
+        /// 更新跑腿全局配置
+        /// </summary>
+        /// <param name="values"></param>
+        public static void UpdateLegworkGlobalConfig(List<LegworkGlobalConfigCacheModel> values = null)
+        {
+            values = values ?? CacheCollection.LegworkGlobalConfigCache.Value();
+
+            LegworkGlobalConfig = values.FirstOrDefault();
+        }
 
         /// <summary>
         /// 上门预约订单自动服务参数配置
@@ -346,18 +371,6 @@ namespace KylinService
                 WaitEvaluateDays = waitEvalMimutes / (24 * 60)
             };
         }
-
-        /// <summary>
-        /// 更新跑腿配置
-        /// </summary>
-        /// <param name="values"></param>
-        public static void UpdateLegworkGlobalConfig(List<LegworkGlobalConfigCacheModel> values = null)
-        {
-            values = values ?? CacheCollection.LegworkGlobalConfigCache.Value();
-
-            LegworkGlobalConfig = values.FirstOrDefault();
-        }
-
 
         /// <summary>
         /// 社区相关配置
@@ -490,14 +503,6 @@ namespace KylinService
             get;
             private set;
         }
-        #endregion
-
-        //public static void RegisterServices(Form form, DelegateTool.WriteMessageDelegate writeMessage)
-        //{
-        //    // 注册摇一摇
-        //    SchedulerServiceFactory.Register(ClearScheduleType.ShakeDayTimesClear, new ShakeService(form, writeMessage));
-        //}
-
         #endregion
     }
 }

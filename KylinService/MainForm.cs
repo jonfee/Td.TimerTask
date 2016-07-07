@@ -1082,7 +1082,7 @@ namespace KylinService
             {
                 service.Dispose();
 
-               
+
 
                 //找到启用按钮并启用交互
                 var btnStart = Find<Button>(this.tabCache, "btnCacheStart");
@@ -1221,6 +1221,16 @@ namespace KylinService
                 cache.Update();
 
                 var cacheName = EnumExtensions.GetDescription<CacheItemType>(cache.ItemType.ToString());
+
+                switch (cache.ItemType)
+                {
+                    case CacheItemType.SystemGolbalConfig:
+                        Startup.UpdateFromGlobalConfigCache();
+                        break;
+                    case CacheItemType.LegworkGlobalConfig:
+                        Startup.UpdateLegworkGlobalConfig();
+                        break;
+                }
 
                 WriteMessage(string.Format("缓存“{0}”已更新！", cacheName));
 

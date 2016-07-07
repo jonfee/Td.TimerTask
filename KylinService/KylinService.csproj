@@ -355,7 +355,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.DataCache, Version=1.2.5.300, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.DataCache.1.2.5.300\lib\net46\Td.Kylin.DataCache.dll</HintPath>
+      <HintPath>..\..\Td.Kylin.DataCache\Td.Kylin.DataCache\bin\Debug\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.1.8.0, Culture=neutral, processorArchitecture=MSIL">
