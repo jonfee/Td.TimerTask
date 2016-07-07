@@ -1,8 +1,0 @@
-D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Release\TestApplication.exe.config
-D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Release\TestApplication.exe
-D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Release\TestApplication.pdb
-D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Release\Td.Task.Framework.dll
-D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Release\Td.Task.Framework.pdb
-D:\Work\01-Projects\Td.TimerTask\TestApplication\obj\Release\TestApplication.csprojResolveAssemblyReference.cache
-D:\Work\01-Projects\Td.TimerTask\TestApplication\obj\Release\TestApplication.exe
-D:\Work\01-Projects\Td.TimerTask\TestApplication\obj\Release\TestApplication.pdb

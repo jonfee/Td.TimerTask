@@ -1,6 +1,0 @@
-D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\bin\Release\Td.Task.Framework.dll
-D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\bin\Release\Td.Task.Framework.pdb
-D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\bin\Release\Td.CoreLibrary.dll
-D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\bin\Release\Td.CoreLibrary.xml
-D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\obj\Release\Td.Task.Framework.dll
-D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\obj\Release\Td.Task.Framework.pdb
