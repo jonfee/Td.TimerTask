@@ -59,26 +59,24 @@ namespace KylinService.Redis.Schedule
                                 config.DbIndex = defaultConfig.DbIndex;
                             }
 
-                            //如果当前redis连接跟默认连接一致，则初始化Database
-                            if (defaultConfig.ConnectionString == config.ConnectionString)
-                            {
-                                try
-                                {
-                                    config.DataBase = defaultRedisContext[config.DbIndex];
-                                }
-                                catch (Exception ex)
-                                {
-                                    //写入异常日志
-                                    var loger = new ExceptionLoger();
-                                    loger.Write("异常", ex);
-                                }
-                            }
-
                             _collection[config.ScheduleName] = config;
                         }
                     }
                 }
             }
+
+            _collection.Items.ForEach((item) =>
+            {
+                //如果当前redis连接跟默认连接一致，则初始化Database
+                if (defaultConfig.ConnectionString == item.ConnectionString)
+                {
+                    item.RedisContext = defaultRedisContext;
+                }
+                else
+                {
+                    item.RedisContext = new RedisContext(item.ConnectionString);
+                }
+            });
 
             Collection = _collection;
 

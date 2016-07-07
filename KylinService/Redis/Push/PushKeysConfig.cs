@@ -29,7 +29,11 @@ namespace KylinService.Redis.Push
         /// </summary>
         public string ConnectionString { get; set; }
 
-        private IDatabase _database;
+        /// <summary>
+        /// RedisContext
+        /// </summary>
+        public RedisContext RedisContext { get; set; }
+
         /// <summary>
         /// 数据库
         /// </summary>
@@ -37,17 +41,12 @@ namespace KylinService.Redis.Push
         {
             get
             {
-                if (null == _database || !_database.Multiplexer.IsConnected)
+                if (null == RedisContext || RedisContext.IsConnected == false)
                 {
-                    var options = ConfigurationOptions.Parse(ConnectionString);
-
-                    _database = ConnectionMultiplexer.Connect(options).GetDatabase(DbIndex);
+                    RedisContext = new RedisContext(ConnectionString);
                 }
-                return _database;
-            }
-            set
-            {
-                _database = value;
+
+                return RedisContext[DbIndex];
             }
         }
     }

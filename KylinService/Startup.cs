@@ -107,20 +107,11 @@ namespace KylinService
 
                 RedisContext context = new RedisContext(options);
 
-                try
+                foreach (var item in ScheduleRedisConfigs.Items)
                 {
-                    foreach (var item in ScheduleRedisConfigs.Items)
-                    {
-                        item.ConnectionString = scheduleRedisConn;
+                    item.ConnectionString = scheduleRedisConn;
 
-                        item.DataBase = context[item.DbIndex];
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //写入异常日志
-                    var loger = new ExceptionLoger();
-                    loger.Write("异常", ex);
+                    item.RedisContext = context;
                 }
             }
         }
@@ -137,20 +128,11 @@ namespace KylinService
 
                 RedisContext context = new RedisContext(options);
 
-                try
+                foreach (var item in PushRedisConfigs.Items)
                 {
-                    foreach (var item in PushRedisConfigs.Items)
-                    {
-                        item.ConnectionString = pushRedisConn;
+                    item.ConnectionString = pushRedisConn;
 
-                        item.DataBase = context[item.DbIndex];
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //写入异常日志
-                    var loger = new ExceptionLoger();
-                    loger.Write("异常", ex);
+                    item.RedisContext = context;
                 }
             }
         }

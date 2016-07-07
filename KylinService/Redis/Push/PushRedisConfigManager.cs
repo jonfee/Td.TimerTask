@@ -50,25 +50,14 @@ namespace KylinService.Redis.Push
                 }
             }
 
-            var options = ConfigurationOptions.Parse(connectionString);
+            RedisContext context = new RedisContext(connectionString);
 
-            RedisContext context = new RedisContext(options);
-            
-            try
+            _collection.Items.ForEach((item) =>
             {
-                _collection.Items.ForEach((item) =>
-                {
-                    item.ConnectionString = connectionString;
+                item.ConnectionString = connectionString;
 
-                    item.DataBase = context[item.DbIndex];
-                });
-            }
-            catch (Exception ex)
-            {
-                //写入异常日志
-                var loger = new ExceptionLoger();
-                loger.Write("异常", ex);
-            }
+                item.RedisContext = context;
+            });
 
             Collection = _collection;
 

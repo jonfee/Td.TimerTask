@@ -36,7 +36,7 @@ namespace KylinService.Services.CacheMaintain
                 //更新周期（以毫秒为单位）
                 TimeSpan period = new TimeSpan(0);
 
-                var levelConfig = new CacheMaintainConfig(Startup.CacheMaintainConfigs.FirstOrDefault(p => p.Level == level.EnumItem));
+                var levelConfig = Startup.CacheMaintainConfigs.FirstOrDefault(p => p.Level == level.EnumItem);
 
                 if (null != levelConfig && levelConfig.PeriodTime > 0)
                 {

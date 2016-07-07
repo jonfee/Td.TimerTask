@@ -9,17 +9,7 @@ namespace KylinService.Services.CacheMaintain
     public class CacheMaintainConfig
     {
         public CacheMaintainConfig() { }
-
-        public CacheMaintainConfig(CacheMaintainConfig config)
-        {
-            if (null != config)
-            {
-                Level = config.Level;
-                PeriodTime = config.PeriodTime;
-                TimeOption = config.TimeOption;
-            }
-        }
-
+      
         /// <summary>
         /// 缓存级别
         /// </summary>
