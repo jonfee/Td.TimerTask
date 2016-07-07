@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using KylinService.Core.Loger;
+using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Xml;
+using Td.Kylin.Redis;
 
 namespace KylinService.Redis.Schedule
 {
@@ -22,6 +26,8 @@ namespace KylinService.Redis.Schedule
 
             ScheduleRedisConfig defaultConfig = null;
 
+            RedisContext defaultRedisContext = null;
+
             foreach (XmlNode node in section.ChildNodes)
             {
                 if (node.NodeType == XmlNodeType.Element)
@@ -35,6 +41,10 @@ namespace KylinService.Redis.Schedule
                         if (config.ScheduleName.ToLower() == "default")
                         {
                             defaultConfig = config;
+
+                            var options = ConfigurationOptions.Parse(defaultConfig.ConnectionString);
+
+                            defaultRedisContext = new RedisContext(options);
                         }
                         else
                         {
@@ -48,6 +58,22 @@ namespace KylinService.Redis.Schedule
                             {
                                 config.DbIndex = defaultConfig.DbIndex;
                             }
+
+                            //如果当前redis连接跟默认连接一致，则初始化Database
+                            if (defaultConfig.ConnectionString == config.ConnectionString)
+                            {
+                                try
+                                {
+                                    config.DataBase = defaultRedisContext[config.DbIndex];
+                                }
+                                catch (Exception ex)
+                                {
+                                    //写入异常日志
+                                    var loger = new ExceptionLoger();
+                                    loger.Write("异常", ex);
+                                }
+                            }
+
                             _collection[config.ScheduleName] = config;
                         }
                     }

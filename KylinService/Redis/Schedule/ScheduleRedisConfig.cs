@@ -48,21 +48,17 @@ namespace KylinService.Redis.Schedule
         {
             get
             {
-                if (null == _database)
+                if (null == _database || !_database.Multiplexer.IsConnected)
                 {
                     var options = ConfigurationOptions.Parse(ConnectionString);
                     _database = ConnectionMultiplexer.Connect(options).GetDatabase(DbIndex);
                 }
                 return _database;
             }
-        }
-
-        /// <summary>
-        /// 更新
-        /// </summary>
-        public void Update()
-        {
-            _database = null;
+            set
+            {
+                _database = value;
+            }
         }
     }
 }

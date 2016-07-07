@@ -1,8 +1,12 @@
-﻿using KylinService.SysEnums;
+﻿using KylinService.Core.Loger;
+using KylinService.SysEnums;
+using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Xml;
+using Td.Kylin.Redis;
 
 namespace KylinService.Redis.Push
 {
@@ -46,10 +50,25 @@ namespace KylinService.Redis.Push
                 }
             }
 
-            _collection.Items.ForEach((item) =>
+            var options = ConfigurationOptions.Parse(connectionString);
+
+            RedisContext context = new RedisContext(options);
+            
+            try
             {
-                item.ConnectionString = connectionString;
-            });
+                _collection.Items.ForEach((item) =>
+                {
+                    item.ConnectionString = connectionString;
+
+                    item.DataBase = context[item.DbIndex];
+                });
+            }
+            catch (Exception ex)
+            {
+                //写入异常日志
+                var loger = new ExceptionLoger();
+                loger.Write("异常", ex);
+            }
 
             Collection = _collection;
 

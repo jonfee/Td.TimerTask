@@ -251,6 +251,7 @@
       <HintPath>..\packages\System.Interactive.Async.3.0.0\lib\net45\System.Interactive.Async.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IO, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.IO.Compression, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Compression.4.1.0\lib\net46\System.IO.Compression.dll</HintPath>
       <Private>True</Private>
@@ -293,11 +294,15 @@
       <HintPath>..\packages\System.Reflection.TypeExtensions.4.1.0\lib\net46\System.Reflection.TypeExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.2.0\lib\net46\System.Security.Cryptography.Algorithms.dll</HintPath>
       <Private>True</Private>
@@ -318,6 +323,7 @@
       <HintPath>..\packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.Threading.Thread, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Thread.4.0.0\lib\net46\System.Threading.Thread.dll</HintPath>
       <Private>True</Private>
@@ -348,8 +354,8 @@
       <HintPath>..\packages\Td.Kylin.DataCache.1.2.4\lib\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.Entity, Version=1.1.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.Entity.1.1.5\lib\net46\Td.Kylin.Entity.dll</HintPath>
+    <Reference Include="Td.Kylin.Entity, Version=1.1.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.Entity.1.1.8\lib\net46\Td.Kylin.Entity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.EnumLibrary, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -359,8 +365,8 @@
     <Reference Include="Td.Kylin.EnumLibrary.1.0.35.0.Fakes">
       <HintPath>FakesAssemblies\Td.Kylin.EnumLibrary.1.0.35.0.Fakes.dll</HintPath>
     </Reference>
-    <Reference Include="Td.Kylin.Redis, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.Redis.1.2.3\lib\net46\Td.Kylin.Redis.dll</HintPath>
+    <Reference Include="Td.Kylin.Redis, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.Redis.1.2.4\lib\net46\Td.Kylin.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

@@ -27,6 +27,11 @@
             </summary>
             <param name="log"></param>
         </member>
+        <member name="P:Td.Kylin.Redis.RedisContext.IsConnected">
+            <summary>
+            是否已连接
+            </summary>
+        </member>
         <member name="P:Td.Kylin.Redis.RedisContext.Item(System.Int32)">
             <summary>
             当前Redis上下文中数据库索引器

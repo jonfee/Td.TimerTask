@@ -1,4 +1,5 @@
 ﻿using KylinService.Core;
+using KylinService.Core.Loger;
 using KylinService.Redis.Push;
 using KylinService.Redis.Schedule;
 using KylinService.Services.CacheMaintain;
@@ -8,6 +9,7 @@ using KylinService.Services.Queue.Mall;
 using KylinService.Services.Queue.Merchant;
 using KylinService.Services.Queue.Welfare;
 using KylinService.SysEnums;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,6 +18,7 @@ using System.Windows.Forms;
 using Td.Kylin.DataCache;
 using Td.Kylin.DataCache.CacheModel;
 using Td.Kylin.EnumLibrary;
+using Td.Kylin.Redis;
 
 namespace KylinService
 {
@@ -100,10 +103,24 @@ namespace KylinService
         {
             if (null != ScheduleRedisConfigs)
             {
-                foreach (var item in ScheduleRedisConfigs.Items)
+                var options = ConfigurationOptions.Parse(scheduleRedisConn);
+
+                RedisContext context = new RedisContext(options);
+
+                try
                 {
-                    item.ConnectionString = scheduleRedisConn;
-                    item.Update();
+                    foreach (var item in ScheduleRedisConfigs.Items)
+                    {
+                        item.ConnectionString = scheduleRedisConn;
+
+                        item.DataBase = context[item.DbIndex];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //写入异常日志
+                    var loger = new ExceptionLoger();
+                    loger.Write("异常", ex);
                 }
             }
         }
@@ -116,10 +133,24 @@ namespace KylinService
         {
             if (null != PushRedisConfigs)
             {
-                foreach (var item in PushRedisConfigs.Items)
+                var options = ConfigurationOptions.Parse(pushRedisConn);
+
+                RedisContext context = new RedisContext(options);
+
+                try
                 {
-                    item.ConnectionString = pushRedisConn;
-                    item.Update();
+                    foreach (var item in PushRedisConfigs.Items)
+                    {
+                        item.ConnectionString = pushRedisConn;
+
+                        item.DataBase = context[item.DbIndex];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //写入异常日志
+                    var loger = new ExceptionLoger();
+                    loger.Write("异常", ex);
                 }
             }
         }
@@ -212,7 +243,7 @@ namespace KylinService
             var _list = new List<CacheMaintainConfig>();
 
             //缓存级别列表
-            var levelList =  EnumExtensions.GetEnumDesc<CacheLevel>(typeof(CacheLevel));
+            var levelList = EnumExtensions.GetEnumDesc<CacheLevel>(typeof(CacheLevel));
 
             foreach (var item in levelList)
             {
