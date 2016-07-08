@@ -1,0 +1,3398 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Td.CoreLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:Td.CoreLibrary.Resources">
+            <summary>
+               强类型资源类，用于查找本地化字符串，等等。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.ResourceManager">
+            <summary>
+               返回此类使用的缓存 ResourceManager 实例。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Culture">
+            <summary>
+               重写所有项的当前线程的 CurrentUICulture 属性
+               使用此强类型资源类进行资源查找。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.InvalidCommandOption">
+            <summary>
+               查找与 &apos;{0}&apos;是一个无效的命令选项。 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.InvalidCommandOptionValue">
+            <summary>
+               查找与 &apos;{1}&apos;是一个无效的&apos;{0}&apos;命令选项值。 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.MissingCommandOption">
+            <summary>
+               查找与 缺失&apos;{0}&apos;命令选项，该选项为必须项。 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_CollectionRemovedReason_Expired">
+            <summary>
+               查找与 缓存过期 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_CollectionRemovedReason_Other">
+            <summary>
+               查找与 其他原因 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_CollectionRemovedReason_Overflow">
+            <summary>
+               查找与 集合溢出 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_CollectionRemovedReason_Remove">
+            <summary>
+               查找与 手动删除 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_WorkerState_Paused">
+            <summary>
+               查找与 已暂停 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_WorkerState_Pausing">
+            <summary>
+               查找与 暂停中 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_WorkerState_Resuming">
+            <summary>
+               查找与 恢复中 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_WorkerState_Running">
+            <summary>
+               查找与 运行中 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_WorkerState_Starting">
+            <summary>
+               查找与 启动中 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_WorkerState_Stopped">
+            <summary>
+               查找与 未运行 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:Td.CoreLibrary.Resources.Text_WorkerState_Stopping">
+            <summary>
+               查找与 停止中 类似的本地化字符串。
+            </summary>
+        </member>
+        <member name="T:Td.Caching.CacheChangedReason">
+            <summary>
+            表示缓存项发生改变的原因。
+            </summary>
+        </member>
+        <member name="F:Td.Caching.CacheChangedReason.None">
+            <summary>
+            系统内部原因。
+            </summary>
+        </member>
+        <member name="F:Td.Caching.CacheChangedReason.Removed">
+            <summary>
+            被手动删除的。
+            </summary>
+        </member>
+        <member name="F:Td.Caching.CacheChangedReason.Updated">
+            <summary>
+            被手动更新的。
+            </summary>
+        </member>
+        <member name="F:Td.Caching.CacheChangedReason.Expired">
+            <summary>
+            因为过期被删除。
+            </summary>
+        </member>
+        <member name="F:Td.Caching.CacheChangedReason.Dependented">
+            <summary>
+            因为依赖被删除。
+            </summary>
+        </member>
+        <member name="E:Td.Caching.ICache.Changed">
+            <summary>
+            表示缓存发生改变的事件。
+            </summary>
+        </member>
+        <member name="P:Td.Caching.ICache.Name">
+            <summary>
+            获取当前缓存容器的名字。
+            </summary>
+        </member>
+        <member name="P:Td.Caching.ICache.Count">
+            <summary>
+            获取一个值，表示缓存字典内的记录总数。
+            </summary>
+        </member>
+        <member name="P:Td.Caching.ICache.Creator">
+            <summary>
+            获取或设置一个缓存项的创建器。
+            </summary>
+        </member>
+        <member name="M:Td.Caching.ICache.Exists(System.String)">
+            <summary>
+            检测指定键的缓存项是否存在。
+            </summary>
+            <param name="key">指定要检测的键。</param>
+            <returns>如果存在则返回真(True)，否则返回假(False)。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.GetDuration(System.String)">
+            <summary>
+            获取指定键的缓存项的剩下的生存时长。
+            </summary>
+            <param name="key">指定要设置的键。</param>
+            <returns>返回指定缓存项的生成时长，如果为空则表示该缓存项为永久缓存项。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.SetDuration(System.String,System.TimeSpan)">
+            <summary>
+            设置指定键的缓存项的生存时长。
+            </summary>
+            <param name="key">指定要设置的键。</param>
+            <param name="duration">指定要设置的生存时长，如果为零则将该缓存项设置成永不过期。</param>
+        </member>
+        <member name="M:Td.Caching.ICache.GetValue``1(System.String)">
+            <summary>
+            从缓存字典中获取指定键的缓存值。
+            </summary>
+            <param name="key">指定要获取的键。</param>
+            <returns>如果指定的键存在则返回对应的值，如果不存在则通过<seealso cref="P:Td.Caching.ICache.Creator"/>属性指定的创建器去创建一个缓存项，并将该新建的缓存项保存并返回；如果<seealso cref="P:Td.Caching.ICache.Creator"/>属性值为空，则返回<typeparam name="T" />泛型的默认值。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.GetValue(System.String)">
+            <summary>
+            从缓存字典中获取指定键的缓存值。
+            </summary>
+            <param name="key">指定要获取的键。</param>
+            <returns>如果指定的键存在则返回对应的值，如果不存在则通过<seealso cref="P:Td.Caching.ICache.Creator"/>属性指定的创建器去创建一个缓存项，并将该新建的缓存项保存并返回；如果<seealso cref="P:Td.Caching.ICache.Creator"/>属性值为空，则返回空(null)。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.GetValue(System.String,System.Func{System.String,System.Tuple{System.Object,System.DateTime}})">
+            <summary>
+            从缓存字典中获取指定键的缓存值。
+            </summary>
+            <param name="key">指定要获取的键。</param>
+            <param name="valueCreator">如果指定的键不存在则使用该委托进行创建它，如果该参数为空则当指定的键不存在时返回空(null)。</param>
+            <returns>返回指定键的值或新增并保存的缓存项的值。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.GetValue(System.String,System.Func{System.String,System.Tuple{System.Object,System.TimeSpan}})">
+            <summary>
+            从缓存字典中获取指定键的缓存值。
+            </summary>
+            <param name="key">指定要获取的键。</param>
+            <param name="valueCreator">如果指定的键不存在则使用该委托进行创建它，如果该参数为空则当指定的键不存在时返回空(null)。</param>
+            <returns>返回指定键的值或新增并保存的缓存项的值。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.SetValue(System.String,System.Object)">
+            <summary>
+            设置指定的值保存到缓存字典中。
+            </summary>
+            <param name="key">指定要保存的键。</param>
+            <param name="value">指定要保存的值。</param>
+            <returns>如果设置成功则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.SetValue(System.String,System.Object,System.TimeSpan,System.Boolean)">
+            <summary>
+            设置指定的值保存到缓存字典中。
+            </summary>
+            <param name="key">指定要保存的键。</param>
+            <param name="value">指定要保存的值。</param>
+            <param name="duration">指定缓存项的生存时长，如果为零则表示永不过期。</param>
+            <param name="requiredNotExists">设置一个值，当指定的<paramref name="key"/>是不存在的则设置该缓存项，否则不执行任何动作。</param>
+            <returns>如果设置成功则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.SetValue(System.String,System.Object,System.DateTime,System.Boolean)">
+            <summary>
+            设置指定的值保存到缓存字典中。
+            </summary>
+            <param name="key">指定要保存的键。</param>
+            <param name="value">指定要保存的值。</param>
+            <param name="expires">指定缓存项的过期时间，如果小于当前时间则表示永不过期。</param>
+            <param name="requiredNotExists">设置一个值，当指定的<paramref name="key"/>是不存在的则设置该缓存项，否则不执行任何动作。</param>
+            <returns>如果设置成功则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.Rename(System.String,System.String)">
+            <summary>
+            修改指定键的缓存项的键名。
+            </summary>
+            <param name="key">指定要更名的键。</param>
+            <param name="newKey">要更改的新键。</param>
+            <returns>如果设置成功则返回真(True)，否则返回假(False)。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.Remove(System.String)">
+            <summary>
+            从缓存字典中删除指定键的缓存项。
+            </summary>
+            <param name="key">指定要删除的键。</param>
+            <returns>如果指定的键存在则返回真(True)，否则返回假(False)。</returns>
+        </member>
+        <member name="M:Td.Caching.ICache.Clear">
+            <summary>
+            清空缓存字典中的所有数据。
+            </summary>
+        </member>
+        <member name="T:Td.Caching.ICacheProvider">
+            <summary>
+            表示缓存容器的提供程序的接口。
+            </summary>
+        </member>
+        <member name="M:Td.Caching.ICacheProvider.GetCache(System.String,System.Boolean)">
+            <summary>
+            获取指定名称的缓存容器。
+            </summary>
+            <param name="name">指定要获取的缓存容器的名称，如果为空(null)或空字符串则返回默认缓存容器。</param>
+            <param name="createNotExists">指示如果指定名称的缓存容器不存在时是否要自动创建它。</param>
+            <returns>
+            	<para>返回指定名称的缓存容。</para>
+            	<para>如果指定名称的缓存容器不存在并且<paramref name="createNotExists"/>参数为假(False)则返回空(null)；</para>
+            	<para>如果指定名称的缓存容器不存在并且<paramref name="createNotExists"/>参数为真(True)则创建一个指定名称的缓存容器并返回它。</para>
+            </returns>
+        </member>
+        <member name="T:Td.Collections.BinaryComparer">
+            <summary>
+            定义方法以支持二进制数据的相等比较。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.CollectionRemovedEventArgs.Reason">
+            <summary>
+            获取被删除的原因。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.CollectionRemovedEventArgs.Item">
+            <summary>
+            获取被删除的集合元素。
+            </summary>
+        </member>
+        <member name="T:Td.Collections.CollectionRemovedReason">
+            <summary>
+            表示集合元素被删除的原因。
+            </summary>
+        </member>
+        <member name="F:Td.Collections.CollectionRemovedReason.Remove">
+            <summary>
+            通过删除方法。
+            </summary>
+        </member>
+        <member name="F:Td.Collections.CollectionRemovedReason.Overflow">
+            <summary>
+            因为集合溢出而激发的自动删除。
+            </summary>
+        </member>
+        <member name="F:Td.Collections.CollectionRemovedReason.Expired">
+            <summary>
+            因为缓存项过期而被删除。
+            </summary>
+        </member>
+        <member name="F:Td.Collections.CollectionRemovedReason.Other">
+            <summary>
+            其他原因。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.DequeuedEventArgs.Value">
+            <summary>
+            获取出队的内容值。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.DequeuedEventArgs.IsMultiple">
+            <summary>
+            获取一个指示本次出队是否为批量出队操作，如果为批量出队则<see cref="P:Td.Collections.DequeuedEventArgs.Value"/>属性返回的则是多值。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.DequeuedEventArgs.Reason">
+            <summary>
+            获取出队事件被激发的原因。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.EnqueuedEventArgs.Value">
+            <summary>
+            获取入队的内容值。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.EnqueuedEventArgs.IsMultiple">
+            <summary>
+            获取一个指示本次入队是否为批量出队操作，如果为批量入队则 <see cref="P:Td.Collections.EnqueuedEventArgs.Value"/> 属性返回的则是多值。
+            </summary>
+        </member>
+        <member name="T:Td.Collections.HierarchicalNode">
+            <summary>
+            表示层次结构的节点类。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.HierarchicalNode.Name">
+            <summary>
+            获取层次结构节点的名称，名称不可为空或空字符串，根节点的名称固定为斜杠(即“/”)。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.HierarchicalNode.Path">
+            <summary>
+            获取层次结构节点的路径。
+            </summary>
+            <remarks>
+            	<para>如果为根节点则返回空字符串("")，否则即为父节点的全路径。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Collections.HierarchicalNode.FullPath">
+            <summary>
+            获取层次结构节点的完整路径，即节点路径与名称的组合。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.HierarchicalNode.InnerParent">
+            <summary>
+            获取或设置层次结构节点的父节点，根节点的父节点为空(null)。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.HierarchicalNode.EnsureChildren">
+            <summary>
+            确认子节点集合是否被加载，如果未曾被加载则加载子节点集合。
+            </summary>
+            <returns>如果子节点集合未曾被加载则加载当前子节点集合并返回真(true)，否则返回假(false)。</returns>
+            <remarks>
+            	<para>在<seealso cref="M:Td.Collections.HierarchicalNode.LoadChildren"/>方法中会调用该方法以确保子节点被加载。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.HierarchicalNode.LoadChildren">
+            <summary>
+            加载当前节点的子节点集合。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.HierarchicalNode.GetChild(System.String)">
+            <summary>
+            获取指定名称的子节点对象。
+            </summary>
+            <param name="name">指定要查找的子节点名称。</param>
+            <returns>如果找到指定名称的子节点则返回它，否则返回空(null)。</returns>
+        </member>
+        <member name="T:Td.Collections.IQueue">
+            <summary>
+            队列，表示先进先出的数据容器。
+            </summary>
+        </member>
+        <member name="E:Td.Collections.IQueue.Enqueued">
+            <summary>
+            当入队成功后激发的事件。
+            </summary>
+        </member>
+        <member name="E:Td.Collections.IQueue.Dequeued">
+            <summary>
+            当出队成功后激发的事件。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.IQueue.Name">
+            <summary>
+            获取队列的名称，该名称应该为队列的唯一标识。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.IQueue.Capacity">
+            <summary>
+            获取队列容量值，即队列中已分配的可用元素数，该值在扩容时可能会增加。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.IQueue.Clear">
+            <summary>
+            移除队列中的所有元素。
+            </summary>
+            <remarks>
+            	<para><seealso cref="P:System.Collections.ICollection.Count"/>被设置为零，并且对来自该集合元素的其他对象的引用也被释放。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.IQueue.Enqueue(System.Object,System.Object)">
+            <summary>
+            将对象添加到队列的结尾处。
+            </summary>
+            <param name="item">要入队的对象，该值可以为空(null)。</param>
+            <param name="settings">指定入队的一些选项参数，具体内容请参考特定实现者的规范。</param>
+            <remarks>
+            	<para>有些队列实现者可能忽略当<paramref name="item"/>参数为空的入队操作。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.IQueue.EnqueueMany``1(System.Collections.Generic.IEnumerable{``0},System.Object)">
+            <summary>
+            将指定集合中的所有元素依次添加到队列的结尾处。
+            </summary>
+            <param name="items">要入队的集合。</param>
+            <param name="settings">指定入队的一些选项参数，具体内容请参考特定实现者的规范。</param>
+            <remarks>
+            	<para>有些队列实现者可能忽略当<paramref name="items"/>参数集合中那些为空的元素的入队操作。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.IQueue.Dequeue">
+            <summary>
+            移除并返回位于队列开始处的对象。
+            </summary>
+            <returns>从队列的开头处移除的对象。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<seealso cref="P:System.Collections.ICollection.Count"/>属性为零。</exception>
+        </member>
+        <member name="M:Td.Collections.IQueue.Dequeue(System.Int32)">
+            <summary>
+            移除并返回从开始处的由<paramref name="count"/>参数指定的连续多个对象。
+            </summary>
+            <param name="count">指定要连续移除的元素数。</param>
+            <returns>从队列的开头处指定的连续对象集。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<seealso cref="P:System.Collections.ICollection.Count"/>属性等于零。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="count"/>参数小于壹(1)。</exception>
+            <remarks>如果<paramref name="count"/>参数指定的数值超出队列中可用的元素数，则忽略该参数值，而应用可用的元素数。</remarks>
+        </member>
+        <member name="M:Td.Collections.IQueue.Peek">
+            <summary>
+            返回位于队列开始处的对象但不将其移除。
+            </summary>
+            <returns>位于队列开头处的对象。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<seealso cref="P:System.Collections.ICollection.Count"/>属性等于零。</exception>
+            <remarks>
+            	<para>此方法类似于<seealso cref="M:Td.Collections.IQueue.Dequeue"/>出队方法，但本方法不修改<seealso cref="T:Td.Collections.Queue"/>队列。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.IQueue.Peek(System.Int32)">
+            <summary>
+            返回从开始处的由<paramref name="count"/>参数指定的连续多个对象。
+            </summary>
+            <param name="count">指定要连续查看的元素数。</param>
+            <returns>从队列的开头处指定的连续对象集。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<seealso cref="P:System.Collections.ICollection.Count"/>属性等于零。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="count"/>参数小于壹(1)。</exception>
+            <remarks>如果<paramref name="count"/>参数指定的数值超出队列中可用的元素数，则忽略该参数值，而应用可用的元素数。</remarks>
+        </member>
+        <member name="M:Td.Collections.IQueue.Take(System.Int32)">
+            <summary>
+            返回从队列开头处往后偏移由<paramref name="startOffset"/>参数指定长度后开始的元素值。
+            </summary>
+            <param name="startOffset">从队列开头处往后偏移的长度。</param>
+            <returns>位于开头处偏移后的值。</returns>
+        </member>
+        <member name="M:Td.Collections.IQueue.Take(System.Int32,System.Int32)">
+            <summary>
+            返回从队列开头处往后偏移由<paramref name="startOffset"/>参数指定长度后开始的由<paramref name="count"/>参数指定的连续多个对象。
+            </summary>
+            <param name="startOffset">从队列开头处往后偏移的长度。</param>
+            <param name="count">要连续获取的元素数。</param>
+            <returns>从队列的开头处指定偏移后的连续特定长度的对象集。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<seealso cref="P:System.Collections.ICollection.Count"/>属性等于零。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="count"/>参数小于壹(1)。</exception>
+            <remarks>
+            	<para>如果<paramref name="count"/>参数指定的数值超出队列中可用的元素数，则忽略该参数值，而应用可用的元素数。</para>
+            </remarks>
+        </member>
+        <member name="T:Td.Collections.NamedCollection`1">
+            <summary>
+            表示可按照名称单独访问的一组对象。
+            </summary>
+            <typeparam name="T">列表中元素的类型。</typeparam>
+        </member>
+        <member name="M:Td.Collections.NamedCollection`1.Remove(System.String)">
+            <summary>
+            从 <seealso cref="T:Td.Collections.NamedCollection`1"/> 中移除特定名称的第一个匹配项。
+            </summary>
+            <param name="name">要从 <seealso cref="T:Td.Collections.NamedCollection`1"/> 中移除的对象对应的名称。</param>
+            <returns>如果已从 <seealso cref="T:Td.Collections.NamedCollection`1"/> 中成功移除 <paramref name="name"/> 的匹配项，则为 true；否则为 false。如果没有找到 <paramref name="name"/> 的匹配项，该方法也会返回 false。</returns>
+        </member>
+        <member name="M:Td.Collections.NamedCollection`1.Remove(`0)">
+            <summary>
+            从 <seealso cref="T:Td.Collections.NamedCollection`1"/> 中移除特定对象的第一个匹配项。
+            </summary>
+            <param name="item">要从 <seealso cref="T:Td.Collections.NamedCollection`1"/> 中移除的对象。</param>
+            <returns>如果已从 <seealso cref="T:Td.Collections.NamedCollection`1"/> 中成功移除 <paramref name="item"/>，则为 true；否则为 false。如果没有找到 <paramref name="item"/>，该方法也会返回 false。</returns>
+        </member>
+        <member name="M:Td.Collections.NamedCollection`1.OnItemMatch(System.Object)">
+            <summary>
+            当需要过滤集合元素时调用此方法被调用。
+            </summary>
+            <param name="item">指定要匹配的集合元素。</param>
+            <returns>如果匹配成功则返回真(true)，否则返回假(false)。</returns>
+            <remarks>
+            	<para>对实现者的要求：当该方法返回真(true)，则必须确保参数<paramref name="item"/>是可被直接转换为<typeparamref name="T"/>类型的。</para>
+            </remarks>
+        </member>
+        <member name="T:Td.Collections.ObjectCache`1">
+            <summary>
+            提供了一个线程安全的对象缓存的功能。
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Td.Collections.ObjectCache`1.Count">
+            <summary>
+            获取缓存项目的个数。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.ObjectCache`1.MaximumLimit">
+            <summary>
+            获取缓存容器的最大活动条目的限制数，超过该数量的将自动按顺序覆盖最不活跃的缓存项。
+            </summary>
+            <remarks>
+            	<para>如果最大限制数为零，则表示不做限制。那么该缓存容器将退化成一个线程安全的字典。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.ObjectCache`1.#ctor">
+            <summary>
+            创建一个对象缓存容器，默认限制数为32。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.ObjectCache`1.#ctor(System.Int32)">
+            <summary>
+            创建一个对象缓存容器。
+            </summary>
+            <param name="limit">指定的最大缓存数，如果为零则表示不做限制。</param>
+        </member>
+        <member name="M:Td.Collections.ObjectCache`1.#ctor(System.Collections.Generic.IEqualityComparer{System.String},System.Int32)">
+            <summary>
+            创建一个对象缓存容器。
+            </summary>
+            <param name="comparer">对键进行比较时要使用的字符串比较器。</param>
+            <param name="limit">指定的最大缓存数，如果为零则表示不做限制。</param>
+        </member>
+        <member name="M:Td.Collections.ObjectCache`1.Contains(System.String)">
+            <summary>
+            返回指定的键是否存在。
+            </summary>
+            <param name="name">指定要检测的键。</param>
+            <returns>如果指定键的缓存项是存在的则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="M:Td.Collections.ObjectCache`1.Get(System.String)">
+            <summary>
+            获取指定名称的缓存项。
+            </summary>
+            <param name="name">指定要获取的缓存项名称。</param>
+            <returns>返回获取到的缓存项，如果返回值为空(null)则表示指定的缓存项不存在。</returns>
+        </member>
+        <member name="M:Td.Collections.ObjectCache`1.Get(System.String,System.Func{System.String,`0})">
+            <summary>
+            获取指定名称的缓存项，如果指定的键值不存在则创建它并缓存。
+            </summary>
+            <param name="name">指定要获取的缓存项名称。</param>
+            <param name="valueFactory">用于为指定缓存键生成缓存项的函数，如果该函数返回值为空(null)则不会缓存该空值。</param>
+            <returns>返回获取到的或新加的缓存项，如果返回值为空(null)则表示<paramref name="valueFactory"/>参数指定的生成函数返回值为空。</returns>
+        </member>
+        <member name="M:Td.Collections.ObjectCache`1.Remove(System.String)">
+            <summary>
+            删除指定名称的缓存项。
+            </summary>
+            <param name="name">指定要删除的缓存项名称。</param>
+            <returns>返回删除后的缓存项对象，如果删除失败则返回空(null)。</returns>
+        </member>
+        <member name="M:Td.Collections.ObjectCache`1.Clear">
+            <summary>
+            清空缓存容器中的所有内容。
+            </summary>
+        </member>
+        <member name="T:Td.Collections.ObjectPool`1">
+            <summary>
+            提供了一个线程安全的通用对象池的相关功能。
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Td.Collections.ObjectPool`1.Count">
+            <summary>
+            获取对象池的可用空闲元素数量，负数表示未限定。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.ObjectPool`1.MaximumLimit">
+            <summary>
+            获取对象池的最大容量，零表示不限制。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.ObjectPool`1.#ctor(System.Func{`0},System.Action{`0})">
+            <summary>
+            创建一个新的对象管理池。
+            </summary>
+            <param name="creator">对象的创建方法。</param>
+            <param name="remover">对象移除时的回调，该参数值可以为空(null)。</param>
+        </member>
+        <member name="M:Td.Collections.ObjectPool`1.#ctor(System.Func{`0},System.Action{`0},System.Int32)">
+            <summary>
+            创建一个新的对象管理池。
+            </summary>
+            <param name="creator">对象的创建方法。</param>
+            <param name="remover">对象移除时的回调，该参数值可以为空(null)。</param>
+            <param name="maximumLimit">对象池的最大容量，如果小于一则表示不控制池的大小。</param>
+        </member>
+        <member name="M:Td.Collections.ObjectPool`1.GetObject">
+            <summary>
+            从对象池中获取一个可用对象。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.ObjectPool`1.Release(`0)">
+            <summary>
+            将一个对象释放到池中。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.ObjectPool`1.Clear">
+            <summary>
+            清空对象池，该方法会依次调用池中空闲对象的<see cref="M:Td.Collections.ObjectPool`1.OnRemove(`0)"/>方法。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.ObjectPool`1.OnTakein(`0)">
+            <summary>
+            表示将一个对象放入当前缓存池时该方法被调用。
+            </summary>
+            <param name="value">被放入的那个缓存项对象。</param>
+        </member>
+        <member name="M:Td.Collections.ObjectPool`1.OnTakeout(`0)">
+            <summary>
+            表示当从当前缓存池中取出一个缓存项时该方法被调用。
+            </summary>
+            <param name="value">被取出的那个缓存项对象。</param>
+        </member>
+        <member name="M:Td.Collections.ObjectPool`1.OnRemove(`0)">
+            <summary>
+            表示删除当前缓存池中的一个缓存项时该方法被调用。
+            </summary>
+            <param name="value">被删除的那个缓存项对象。</param>
+        </member>
+        <member name="E:Td.Collections.Queue.Enqueued">
+            <summary>
+            表示入队成功的事件。
+            </summary>
+        </member>
+        <member name="E:Td.Collections.Queue.Dequeued">
+            <summary>
+            表示出队成功的事件。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.Queue.Name">
+            <summary>
+            获取队列名称。
+            </summary>
+            <remarks>该队列名称确保进程范围内的唯一性。</remarks>
+        </member>
+        <member name="P:Td.Collections.Queue.Count">
+            <summary>
+            获取队列中实际包含的元素数。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.Queue.Capacity">
+            <summary>
+            获取队列容量值，即队列中已分配的可用元素数，如果该数值小于<seealso cref="P:Td.Collections.Queue.MaximumLimit"/>属性值，待扩容时会增加此值。
+            </summary>
+        </member>
+        <member name="P:Td.Collections.Queue.MaximumLimit">
+            <summary>
+            获取或设置允许的最大队列元素数，默认值为0x00FFFFFF(十六进制)。
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">当设置的值小于<seealso cref="P:Td.Collections.Queue.Count"/>属性值。</exception>
+            <remarks>该属性值在下次扩容的时候才会生效。</remarks>
+        </member>
+        <member name="P:Td.Collections.Queue.MinimumGrow">
+            <summary>
+            获取或设置每次变化时的最小成长量，默认值为255。
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">当设置值小于壹(1)。</exception>
+            <remarks>
+            	<para>在扩容时，如果根据成长因子计算出来的成长量小于指定的最小成长量，则按此最小成长量增长。</para>
+            	<para>发生队列满溢时系统会自动进行出队，而每次满溢出队的量亦为此最小成长量。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.Queue.#ctor">
+            <summary>
+            初始化<seealso cref="T:Td.Collections.Queue"/>类的新实例，该实例为空，其初始容量为32和2.0f的成长因子。
+            </summary>
+        </member>
+        <member name="M:Td.Collections.Queue.#ctor(System.Int32)">
+            <summary>
+            初始化<seealso cref="T:Td.Collections.Queue"/>类的新实例，该实例为空，具有指定的初始容量和默认为2.0f的成长因子。
+            </summary>
+            <param name="capacity">初始化的队列容量，即包含的初始元素数。</param>
+        </member>
+        <member name="M:Td.Collections.Queue.#ctor(System.Int32,System.Single)">
+            <summary>
+            初始化<seealso cref="T:Td.Collections.Queue"/>类的新实例，该实例为空，具有指定的初始容量并使用指定的成长因子。
+            </summary>
+            <param name="capacity">初始化的队列容量，即包含的初始元素数。</param>
+            <param name="growFactor">扩展队列容量要使用的因子。</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">当<paramref name="capacity"/>参数小于壹(1)，或者<paramref name="growFactor"/>参数小于1.0f或大于10.0f。</exception>
+        </member>
+        <member name="M:Td.Collections.Queue.Clear">
+            <summary>
+            移除队列中的所有元素。
+            </summary>
+            <remarks>
+            	<para><see cref="P:Td.Collections.Queue.Count"/>被设置为零，并且对来自该集合元素的其他对象的引用也被释放。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.Queue.EnqueueMany``1(System.Collections.Generic.IEnumerable{``0},System.Object)">
+            <summary>
+            将指定集合中的所有元素依次添加到<seealso cref="T:Td.Collections.Queue"/>的结尾处。
+            </summary>
+            <param name="items">要入队的集合。</param>
+            <param name="settings">不支持入队的选项参数设置，始终忽略该参数。</param>
+        </member>
+        <member name="M:Td.Collections.Queue.Enqueue(System.String,System.Object)">
+            <summary>
+            将字符串文本添加到<seealso cref="T:Td.Collections.Queue"/>的结尾处。
+            </summary>
+            <param name="text">要入队的字符串文本，该值可以为空(null)。</param>
+            <param name="settings">不支持入队的选项参数设置，始终忽略该参数。</param>
+        </member>
+        <member name="M:Td.Collections.Queue.Enqueue(System.Object,System.Object)">
+            <summary>
+            将对象添加到<seealso cref="T:Td.Collections.Queue"/>的结尾处。
+            </summary>
+            <param name="item">要入队的对象，该值可以为空(null)。</param>
+            <param name="settings">不支持入队的选项参数设置，始终忽略该参数。</param>
+            <remarks>
+            	<para>容量<seealso cref="P:Td.Collections.Queue.Capacity"/>是指队列可以保存的元素数。随着入队操作（即向队列中添加元素），容量通过重新分配按需自动增加。但是增加到最大限制值(<seealso cref="P:Td.Collections.Queue.MaximumLimit"/>)就不再扩容，而是首先导致出队以腾出空间再入队。</para>
+            	<para>成长因子是当需要更大容量时当前容量要乘以的数字。在构造<seealso cref="T:Td.Collections.Queue"/>时确定增长因子。无论增长因子是多少，队列的容量将始终增加一个最小值（即<see cref="P:Td.Collections.Queue.MinimumGrow"/>属性值），即使1.0f的增长因子也不会阻止队列的扩容。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.Queue.Dequeue">
+            <summary>
+            移除并返回位于<see cref="T:Td.Collections.Queue"/>开始处的对象。
+            </summary>
+            <returns>从队列的开头处移除的对象。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<see cref="P:Td.Collections.Queue.Count"/>属性为零。</exception>
+        </member>
+        <member name="M:Td.Collections.Queue.Dequeue(System.Int32)">
+            <summary>
+            移除并返回从开始处的由<paramref name="count"/>参数指定的连续多个对象。
+            </summary>
+            <param name="count">指定要连续移除的元素数。</param>
+            <returns>从队列的开头处指定的连续对象集。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<see cref="P:Td.Collections.Queue.Count"/>属性等于零。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="count"/>参数小于壹(1)。</exception>
+            <remarks>如果<paramref name="count"/>参数指定的数值超出队列中可用的元素数，则忽略该参数值，而应用可用的元素数。</remarks>
+        </member>
+        <member name="M:Td.Collections.Queue.Peek(System.Int32)">
+            <summary>
+            返回从开始处的由<paramref name="count"/>参数指定的连续多个对象。
+            </summary>
+            <param name="count">指定要连续查看的元素数。</param>
+            <returns>从队列的开头处指定的连续对象集。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<see cref="P:Td.Collections.Queue.Count"/>属性等于零。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="count"/>参数小于壹(1)。</exception>
+            <remarks>如果<paramref name="count"/>参数指定的数值超出队列中可用的元素数，则忽略该参数值，而应用可用的元素数。</remarks>
+        </member>
+        <member name="M:Td.Collections.Queue.Peek">
+            <summary>
+            返回位于队列开始处的对象但不将其移除。
+            </summary>
+            <returns>位于队列开头处的对象。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<see cref="P:Td.Collections.Queue.Count"/>属性等于零。</exception>
+            <remarks>
+            	<para>此方法类似于<seealso cref="M:Td.Collections.Queue.Dequeue"/>出队方法，但本方法不修改<seealso cref="T:Td.Collections.Queue"/>队列。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.Queue.Take(System.Int32,System.Int32)">
+            <summary>
+            返回从队列开头处往后偏移由<paramref name="startOffset"/>参数指定长度后开始的由<paramref name="count"/>参数指定的连续多个对象。
+            </summary>
+            <param name="startOffset">从队列开头处往后偏移的长度。</param>
+            <param name="count">要连续获取的元素数。</param>
+            <returns>从队列的开头处指定偏移后的连续特定长度的对象集。</returns>
+            <exception cref="T:System.InvalidOperationException">当队列为空，即<see cref="P:Td.Collections.Queue.Count"/>属性等于零。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="count"/>参数小于壹(1)。</exception>
+            <remarks>
+            	<para>如果<paramref name="count"/>参数指定的数值超出队列中可用的元素数，则忽略该参数值，而应用可用的元素数。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Collections.Queue.Take(System.Int32)">
+            <summary>
+            返回从队列开头处往后偏移由<paramref name="startOffset"/>参数指定长度后开始的元素值。
+            </summary>
+            <param name="startOffset">从队列开头处往后偏移的长度。</param>
+            <returns>位于开头处偏移后的值。</returns>
+        </member>
+        <member name="M:Td.Collections.Queue.ToString">
+            <summary>
+            返回当前队列的信息文本。
+            </summary>
+            <returns>
+            	<para>该方法重写了<seealso cref="T:System.Object"/>的同名方法，该重写返回如下格式的文本信息：</para>
+            	<para>(队头位置-队尾位置)[大小/容量]{最大限制, 最小成长量}</para>
+            </returns>
+        </member>
+        <member name="T:Td.Common.Converter">
+            <summary>
+            提供将一种数据类型与其他各种表示形式相互转换的转换器。
+            </summary>
+        </member>
+        <member name="M:Td.Common.Converter.ToHexString(System.Byte[])">
+            <summary>
+            将指定的字节数组转换为其用十六进制数字编码的等效字符串表示形式。
+            </summary>
+            <param name="buffer">一个 8 位无符号字节数组。</param>
+            <returns>参数中元素的字符串表示形式，以十六进制文本表示。</returns>
+        </member>
+        <member name="M:Td.Common.Converter.ToHexString(System.Byte[],System.Char)">
+            <summary>
+            将指定的字节数组转换为其用十六进制数字编码的等效字符串表示形式。参数指定是否在返回值中插入分隔符。
+            </summary>
+            <param name="buffer">一个 8 位无符号字节数组。</param>
+            <param name="separator">每字节对应的十六进制文本中间的分隔符。</param>
+            <returns>参数中元素的字符串表示形式，以十六进制文本表示。</returns>
+        </member>
+        <member name="M:Td.Common.Converter.FromHexString(System.String)">
+            <summary>
+            将指定的十六进制格式的字符串转换为等效的字节数组。
+            </summary>
+            <param name="text">要转换的十六进制格式的字符串。</param>
+            <returns>与<paramref name="text"/>等效的字节数组。</returns>
+            <exception cref="T:System.FormatException"><paramref name="text"/>参数中含有非空白字符。</exception>
+            <remarks>该方法的实现始终忽略<paramref name="text"/>参数中的空白字符。</remarks>
+        </member>
+        <member name="M:Td.Common.Converter.FromHexString(System.String,System.Char)">
+            <summary>
+            将指定的十六进制格式的字符串转换为等效的字节数组。
+            </summary>
+            <param name="text">要转换的十六进制格式的字符串。</param>
+            <param name="separator">要过滤掉的分隔符字符。</param>
+            <returns>与<paramref name="text"/>等效的字节数组。</returns>
+            <exception cref="T:System.FormatException"><paramref name="text"/>参数中含有非空白字符或非指定的分隔符。</exception>
+            <remarks>该方法的实现始终忽略<paramref name="text"/>参数中的空白字符。</remarks>
+        </member>
+        <member name="M:Td.Common.Converter.FromHexString(System.String,System.Char,System.Boolean)">
+            <summary>
+            将指定的十六进制格式的字符串转换为等效的字节数组。
+            </summary>
+            <param name="text">要转换的十六进制格式的字符串。</param>
+            <param name="separator">要过滤掉的分隔符字符。</param>
+            <param name="throwExceptionOnFormat">指定当输入文本中含有非法字符时是否抛出<seealso cref="T:System.FormatException"/>异常。</param>
+            <returns>与<paramref name="text"/>等效的字节数组。</returns>
+            <exception cref="T:System.FormatException">当<paramref name="throwExceptionOnFormat"/>参数为真，并且<paramref name="text"/>参数中含有非空白字符或非指定的分隔符。</exception>
+            <remarks>该方法的实现始终忽略<paramref name="text"/>参数中的空白字符。</remarks>
+        </member>
+        <member name="T:Td.Common.Converter.ObjectResolvingDirection">
+            <summary>
+            表示对象成员的解析方向。
+            </summary>
+        </member>
+        <member name="F:Td.Common.Converter.ObjectResolvingDirection.Get">
+            <summary>
+            获取对象的成员值。
+            </summary>
+        </member>
+        <member name="F:Td.Common.Converter.ObjectResolvingDirection.Set">
+            <summary>
+            设置对象的成员值。
+            </summary>
+        </member>
+        <member name="T:Td.Common.Converter.ObjectResolvingContext">
+            <summary>
+            表示在对象成员解析程序中的操作上下文。
+            </summary>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.Direction">
+            <summary>
+            获取解析过程中当前处理的方向。
+            </summary>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.Target">
+            <summary>
+            获取解析程序的目标根对象。
+            </summary>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.Container">
+            <summary>
+            获取解析过程中当前成员的容器对象。
+            </summary>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.Text">
+            <summary>
+            获取解析的文本参数值。
+            </summary>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.Value">
+            <summary>
+            获取或设置一个操作的值，该属性在不同场景中所表示的含义和可设置性均不同。详情请参考备注。
+            </summary>
+            <remarks>
+            	<para>当<see cref="P:Td.Common.Converter.ObjectResolvingContext.Direction"/>属性值等于<seealso cref="F:Td.Common.Converter.ObjectResolvingDirection.Get"/>时，表示处理程序所解析出来的成员值。</para>
+            	<para>当<see cref="P:Td.Common.Converter.ObjectResolvingContext.Direction"/>属性值等于<seealso cref="F:Td.Common.Converter.ObjectResolvingDirection.Set"/>时，表示是由用户指定要设置的目标值。</para>
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">当<see cref="P:Td.Common.Converter.ObjectResolvingContext.Direction"/>属性值不等于<seealso cref="F:Td.Common.Converter.ObjectResolvingDirection.Get"/>时激发。</exception>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.MemberName">
+            <summary>
+            获取当前解析的成员名称。
+            </summary>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.Member">
+            <summary>
+            获取当前解析的成员信息。
+            </summary>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.MemberType">
+            <summary>
+            获取当前解析成员的类型。
+            </summary>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.Handled">
+            <summary>
+            获取或设置处理完成标记。
+            </summary>
+            <remarks>
+            	<para>如果设置该属性为真(true)，表示自定义解析程序已经完成对当前成员的解析，则表示告知系统不要再对当前成员的进行解析处理了；</para>
+            	<para>如果设置该属性为假(false)，即默认值。表示自定义自定义解析程序未对当前成员进行解析，则意味将由系统对当前成员进行解析处理。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Common.Converter.ObjectResolvingContext.IsTerminated">
+            <summary>
+            获取或设置是否终止标记。
+            </summary>
+        </member>
+        <member name="T:Td.Common.DateTimeExtension">
+            <summary>
+            提供一系列实用方法用于扩展 DateTime 类。
+            </summary>
+        </member>
+        <member name="M:Td.Common.DateTimeExtension.Format(System.DateTime,System.Int32)">
+            <summary>
+            格式化日期时间。
+            </summary>
+            <param name="dateTime">日期时间实例。</param>
+            <param name="mode">显示模式。</param>
+            <returns>格式化后的字符串。</returns>
+        </member>
+        <member name="T:Td.Common.DateTimeUtility">
+            <summary>
+            处理日期与时间的实用工具类。
+            </summary>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.Random(System.DateTime,System.DateTime)">
+            <summary>
+            生成一个随机日期。
+            </summary>
+            <param name="dateTime1">起始日期。</param>
+            <param name="dateTime2">结束日期。</param>
+            <returns>日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.IsDateTime(System.String)">
+            <summary>
+            判断指定的字符串值是否为一个有效的日期格式。
+            </summary>
+            <param name="value">需要检测的字符串值。</param>
+            <returns>检测结果。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.IsLeapYear(System.Int32)">
+            <summary>
+            判断指定的年份是否为闰年。
+            </summary>
+            <param name="year">年份。</param>
+            <returns>检测结果。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.DateDiff(System.DateTime,System.DateTime)">
+            <summary>
+            获取两个日期时间的间隔。
+            </summary>
+            <param name="dateTime1">第一个日期时间实例。</param>
+            <param name="dateTime2">第二个日期时间实例。</param>
+            <returns>时间间隔。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.DateDiff2(System.DateTime,System.DateTime)">
+            <summary>
+            获取两个日期的时间差描述信息。
+            </summary>
+            <param name="dateTime1">第一个日期时间实例。</param>
+            <param name="dateTime2">第二个日期时间实例。</param>
+            <returns>描述信息。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.ConvertToMinute(System.Int32)">
+            <summary>
+            将秒数转换为分钟数。
+            </summary>
+            <param name="second">秒数。</param>
+            <returns>分钟数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetFirstDayOfMonth(System.Int32,System.Int32)">
+            <summary>
+            获取指定日期月份中的第一天。
+            </summary>
+            <param name="year">年份。</param>
+            <param name="month">月份。</param>
+            <returns>第一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetFirstDayOfMonth(System.DateTime)">
+            <summary>
+            获取指定日期月份中的第一天。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>第一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetLastDayOfMonth(System.Int32,System.Int32)">
+            <summary>
+            获取指定日期月份中的最后一天。
+            </summary>
+            <param name="year">年份。</param>
+            <param name="month">月份。</param>
+            <returns>最后一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetLastDayOfMonth(System.DateTime)">
+            <summary>
+            获取指定日期月份中的最后一天。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>最后一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetFirstDayOfQuarter(System.Int32,System.Int32)">
+            <summary>
+            获取指定日期季度中的第一天。
+            </summary>
+            <param name="year">年份。</param>
+            <param name="quarter">季度。</param>
+            <returns>第一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetFirstDayOfQuarter(System.DateTime)">
+            <summary>
+            获取指定日期季度中的第一天。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>第一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetLastDayOfQuarter(System.Int32,System.Int32)">
+            <summary>
+            获取指定日期季度中的最后一天。
+            </summary>
+            <param name="year">年份。</param>
+            <param name="quarter">季度。</param>
+            <returns>最后一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetLastDayOfQuarter(System.DateTime)">
+            <summary>
+            获取指定日期季度中的最后一天。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>最后一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetFirstDayOfYear(System.Int32)">
+            <summary>
+            获取指定日期年份中的第一天。
+            </summary>
+            <param name="year">年份。</param>
+            <returns>第一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetFirstDayOfYear(System.DateTime)">
+            <summary>
+            获取指定日期年份中的第一天。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>第一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetLastDayOfYear(System.Int32)">
+            <summary>
+            获取指定日期年份中的最后一天。
+            </summary>
+            <param name="year">年份。</param>
+            <returns>最后一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetLastDayOfYear(System.DateTime)">
+            <summary>
+            获取指定日期年份中的最后一天。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>最后一天的日期实例。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetWeekDayName(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            返回一个字符串，表示星期中指定的某一天。
+            </summary>
+            <param name="year">年份。</param>
+            <param name="month">月份。</param>
+            <param name="day">天数。</param>
+            <returns>字符串值。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetWeekDayName(System.DateTime)">
+            <summary>
+            返回一个字符串，表示星期中指定的某一天。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>字符串值。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetWeekDay(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            根据给定的年月日，计算出对应的星期数。
+            </summary>
+            <param name="year">年份。</param>
+            <param name="month">月份。</param>
+            <param name="day">天数。</param>
+            <returns>星期数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetWeekDay(System.DateTime)">
+            <summary>
+            根据给定的年月日，计算出对应的星期数。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>星期数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetDaysOfYear(System.Int32)">
+            <summary>
+            返回指定年份中的天数。
+            </summary>
+            <param name="year">年份。</param>
+            <returns>天数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetDaysOfYear(System.DateTime)">
+            <summary>
+            返回指定日期年份中的天数。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>天数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetDaysOfMonth(System.Int32,System.Int32)">
+            <summary>
+            返回指定月份中的天数。
+            </summary>
+            <param name="year">年份。</param>
+            <param name="month">月份。</param>
+            <returns>天数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetDaysOfMonth(System.DateTime)">
+            <summary>
+            返回指定日期月份中的天数。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>天数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetWeekAmount(System.Int32)">
+            <summary>
+            获取某一年有多少周。
+            </summary>
+            <param name="year">年份</param>
+            <returns>该年周数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetWeekOfYear(System.DateTime)">
+            <summary>
+            获取某一日期是该年中的第几周。
+            </summary>
+            <param name="dateTime">日期实例。</param>
+            <returns>该日期在该年中的周数。</returns>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetWeekRange(System.Int32,System.Int32,System.DateTime@,System.DateTime@)">
+            <summary>
+            根据某年的第几周获取这周的起止日期。
+            </summary>
+            <param name="year">年份。</param>
+            <param name="week">周数。</param>
+            <param name="firstDate">起始日期。</param>
+            <param name="lastDate">结束日期。</param>
+        </member>
+        <member name="M:Td.Common.DateTimeUtility.GetDiffDays(System.DateTime,System.DateTime)">
+            <summary>
+            返回两个日期之间相差的天数。
+            </summary>
+            <param name="from">起始日期。</param>
+            <param name="to">结束日期。</param>
+            <returns>天数</returns>
+        </member>
+        <member name="T:Td.Common.EnumEntry">
+            <summary>
+            表示枚举项的描述。
+            </summary>
+        </member>
+        <member name="P:Td.Common.EnumEntry.Name">
+            <summary>
+            获取枚举项的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Common.EnumEntry.Type">
+            <summary>
+            获取枚举的类型。
+            </summary>
+        </member>
+        <member name="P:Td.Common.EnumEntry.Value">
+            <summary>
+            当前描述的枚举项值，该值有可能为枚举项的值也可能是对应的基元类型值。
+            </summary>
+        </member>
+        <member name="P:Td.Common.EnumEntry.Alias">
+            <summary>
+            获取枚举项的别名，如果未定义建议创建者设置为枚举项的名称。
+            </summary>
+            <remarks>枚举项的别名由<seealso cref="T:Td.ComponentModel.AliasAttribute"/>自定义特性指定。</remarks>
+        </member>
+        <member name="P:Td.Common.EnumEntry.Description">
+            <summary>
+            当前描述枚举项的描述文本，如果未定义建议创建者设置为枚举项的名称。
+            </summary>
+            <remarks>枚举项的描述由<seealso cref="T:Td.ComponentModel.DescriptionAttribute"/>自定义特性指定。</remarks>
+        </member>
+        <member name="T:Td.Common.EnumUtility">
+            <summary>
+            为 <see cref="T:System.Enum"/> 类型扩展的辅助类。
+            </summary>
+        </member>
+        <member name="M:Td.Common.EnumUtility.GetEnumEntry(System.Enum)">
+            <summary>
+            获取指定枚举项对应的 <see cref="T:Td.Common.EnumEntry"/> 描述对象。
+            </summary>
+            <param name="enumValue">要获取的枚举项。</param>
+            <returns>返回指定枚举值对应的<seealso cref="T:Td.Common.EnumEntry"/>对象。</returns>
+        </member>
+        <member name="M:Td.Common.EnumUtility.GetEnumEntry(System.Enum,System.Boolean)">
+            <summary>
+            获取指定枚举项对应的 <see cref="T:Td.Common.EnumEntry"/> 描述对象。 
+            </summary>
+            <param name="enumValue">要获取的枚举项。</param>
+            <param name="underlyingType">是否将生成的 <seealso cref="T:Td.Common.EnumEntry"/> 元素的 <seealso cref="P:Td.Common.EnumEntry.Value"/> 属性值置为 enumType 参数对应的枚举项基类型值。</param>
+            <returns>返回指定枚举值对应的 <seealso cref="T:Td.Common.EnumEntry"/> 对象。</returns>
+        </member>
+        <member name="M:Td.Common.EnumUtility.GetEnumEntries(System.Type,System.Boolean)">
+            <summary>
+            获取指定枚举的描述对象数组。
+            </summary>
+            <param name="enumType">要获取的枚举类型。</param>
+            <param name="underlyingType">是否将生成的 <seealso cref="T:Td.Common.EnumEntry"/> 元素的 <seealso cref="P:Td.Common.EnumEntry.Value"/> 属性值置为 enumType 参数对应的枚举项基类型值。</param>
+            <returns>返回的枚举描述对象数组。</returns>
+        </member>
+        <member name="M:Td.Common.EnumUtility.GetEnumEntries(System.Type,System.Boolean,System.Object)">
+            <summary>
+            获取指定枚举的描述对象数组。
+            </summary>
+            <param name="enumType">要获取的枚举类型，可为<seealso cref="T:System.Nullable"/>类型。</param>
+            <param name="underlyingType">是否将生成的 <seealso cref="T:Td.Common.EnumEntry"/> 元素的 <seealso cref="P:Td.Common.EnumEntry.Value"/> 属性值置为 enumType 参数对应的枚举项基类型值。</param>
+            <param name="nullValue">如果参数<paramref name="enumType"/>为可空类型时，该空值对应的<seealso cref="P:Td.Common.EnumEntry.Value"/>属性的值。</param>
+            <returns>返回的枚举描述对象数组。</returns>
+        </member>
+        <member name="M:Td.Common.EnumUtility.GetEnumEntries(System.Type,System.Boolean,System.Object,System.String)">
+            <summary>
+            获取指定枚举的描述对象数组。
+            </summary>
+            <param name="enumType">要获取的枚举类型，可为<seealso cref="T:System.Nullable"/>类型。</param>
+            <param name="underlyingType">是否将生成的 <seealso cref="T:Td.Common.EnumEntry"/> 元素的 <seealso cref="P:Td.Common.EnumEntry.Value"/> 属性值置为 enumType 参数对应的枚举项基类型值。</param>
+            <param name="nullValue">如果参数<paramref name="enumType"/>为可空类型时，该空值对应的<seealso cref="P:Td.Common.EnumEntry.Value"/>属性的值。</param>
+            <param name="nullText">如果参数<paramref name="enumType"/>为可空类型时，该空值对应的<seealso cref="P:Td.Common.EnumEntry.Description"/>属性的值。</param>
+            <returns>返回的枚举描述对象数组。</returns>
+        </member>
+        <member name="M:Td.Common.EnumUtility.GetEnumDescription``1(System.Object)">
+            <summary>
+            根据枚举成员的数值或名称获取描述信息
+            </summary>
+            <typeparam name="T">要获取的枚举类型</typeparam>
+            <param name="valueOrName">枚举成员的数值或名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:Td.Common.EnumUtility.GetEnumDescriptions(System.Type)">
+            <summary>
+            获取枚举成员基类型值与描述的集合
+            </summary>
+            <param name="enumType">枚举类型</param>
+            <returns>返回枚举成员基类型值与描述的字典集合</returns> 
+        </member>
+        <member name="M:Td.Common.EnumUtility.ContainsEnumItem(System.Int32,System.Enum)">
+            <summary>
+            检测值中是否包含指定枚举成员（值）
+            <para>一般用于以2的N次方定义的枚举中,当对象的属性成员包含多个枚举成员属性时使用</para>
+            </summary>
+            <param name="values">对象的属性，以同一个<seealso cref="T:System.Enum"/>枚举中的一个或多个成员值的和组成 </param>
+            <param name="enumItem">要检测的<seealso cref="T:System.Enum"/>枚举中的成员是否存在</param>
+            <returns></returns>
+        </member>
+        <member name="T:Td.Common.TypeExtension">
+            <summary>
+            基于 <see cref="T:System.Type"/> 的实用扩展类。
+            </summary>
+        </member>
+        <member name="M:Td.Common.TypeExtension.IsAssignableFrom(System.Type,System.Type)">
+            <summary>
+            提供比 <see cref="!:System.Type.IsAssignableFrom"/> 加强的功能，支持对泛型定义接口或类的匹配。
+            </summary>
+            <param name="type">指定的接口或基类的类型。</param>
+            <param name="instanceType">指定的实例类型。</param>
+            <returns>如果当满足如下条件之一则返回真(true)：
+            <list type="bullet">
+            	<item>
+            		<term>如果 <paramref name="type"/> 为泛型定义类型，则 <paramref name="instanceType"/> 实现的接口或基类中有从 <paramref name="type"/> 指定的泛型定义中泛化的版本。</term>
+            	</item>
+            	<item>
+            		<term>如果 <paramref name="type"/> 和当前 <paramref name="instanceType"/> 表示同一类型；</term>
+            	</item>
+            	<item>
+            		<term>当前 <paramref name="instanceType"/> 位于 <paramref name="type"/> 的继承层次结构中；</term>
+            	</item>
+            	<item>
+            		<term>当前 <paramref name="instanceType"/> 是 <paramref name="type"/> 实现的接口；</term>
+            	</item>
+            	<item>
+            		<term><paramref name="type"/> 是泛型类型参数且当前 <paramref name="instanceType"/> 表示 <paramref name="type"/> 的约束之一。</term>
+            	</item>
+            </list>
+            </returns>
+            <remarks>
+            	<para>除了 <see cref="!:System.Type.IsAssignableFrom"/> 支持的特性外，增加了如下特性：</para>
+            	<example>
+            	<code>
+            	TypeExtension.IsAssignableFrom(typeof(IDictionary&lt;,&gt;), typeof(IDictionary&lt;string, object&gt;));	// true
+            	TypeExtension.IsAssignableFrom(typeof(IDictionary&lt;,&gt;), typeof(Dictionary&lt;string, object&gt;));	// true
+            	TypeExtension.IsAssignableFrom(typeof(Dictionary&lt;,&gt;), typeof(Dictioanry&lt;string, int&gt;));		//true
+            	
+            	public class MyNamedCollection&lt;T&gt; : Collection&lt;T&gt;, IDictionary&lt;string, T&gt;
+            	{
+            	}
+            	
+            	TypeExtension.IsAssignableFrom(typeof(IDictionary&lt;,&gt;), typeof(MyNamedCollection&lt;string, object&gt;)); //true
+            	</code>
+            	</example>
+            </remarks>
+        </member>
+        <member name="M:Td.Common.TypeExtension.IsScalarType(System.Type)">
+            <summary>
+            获取一个值，通过该值指示 <paramref name="type"/> 是否为基元类型之一。 
+            </summary>
+            <param name="type">需要检测的 <see cref="T:System.Type"/> 实例。</param>
+            <returns>如果 Type 为基元类型之一，则为 true；否则为 false。</returns>
+        </member>
+        <member name="M:Td.Common.TypeExtension.GetType(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            获取具有指定名称的 <see cref="T:System.Type"/>，指定是否执行区分大小写的搜索，以及在找不到类型时是否引发异常。 
+            </summary>
+            <param name="typeName">要获取的类型的程序集限定名称。</param>
+            <param name="throwOnError">如果为 true，则在找不到该类型时引发异常；如果为 false，则返回 null。</param>
+            <param name="ignoreCase">为 <paramref name="typeName"/> 执行的搜索不区分大小写则为 true，为 <paramref name="typeName"/> 执行的搜索区分大小写则为 false。 </param>
+            <returns>具有指定名称的 <see cref="T:System.Type"/>（如果找到的话）；否则为 null。</returns>
+        </member>
+        <member name="M:Td.Common.TypeExtension.IsNullable(System.Type)">
+            <summary>
+            获取一个值，通过该值指示 type 是否为 Nullable 类型。
+            </summary>
+            <param name="type">类型实例。</param>
+            <returns>一个 bool 值。</returns>
+        </member>
+        <member name="M:Td.Common.TypeExtension.IsConcreteType(System.Type)">
+            <summary>
+            是否是具体类型，凡是能直接实例化的类型都是具体类型。
+            </summary>
+        </member>
+        <member name="M:Td.Common.TypeExtension.CreateInstance``1(System.Type,System.Object[])">
+            <summary>
+            创建 T 类型的实例。
+            </summary>
+        </member>
+        <member name="M:Td.Common.TypeExtension.CreateInstance(System.Type,System.Object[])">
+            <summary>
+            创建 type 类型的实例。
+            </summary>
+        </member>
+        <member name="T:Td.Communication.IPEndPointConverter">
+            <summary>
+            提供将 <see cref="T:System.Net.IPEndPoint"/> 对象与其他各种表示形式相互转换的类型转换器。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.Current">
+            <summary>
+            获取当前应用程序的<see cref="T:Td.ComponentModel.ApplicationContextBase"/>上下文。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.ApplicationId">
+            <summary>
+            获取或设置当前应用程序唯一代号。
+            </summary>
+            <remarks>
+            	<para>注意：本属性一旦被设置则不能被更改。如果已经设置过本属性(即该属性值不为空或全空格字符)，则不能再次设置本属性否则将抛出<see cref="T:System.InvalidOperationException"/>异常。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.ApplicationDirectory">
+            <summary>
+            获取当前应用程序的根目录。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.Title">
+            <summary>
+            获取或设置当前应用程序的标题。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.Description">
+            <summary>
+            获取或设置当前应用程序的描述文本。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.Settings">
+            <summary>
+            获取当前应用程序的自定义设置提供程序。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.OptionManager">
+            <summary>
+            获取当前应用程序的选项管理。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.Configuration">
+            <summary>
+            获取当前应用程序的默认选项配置。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.ServiceFactory">
+            <summary>
+            获取当前应用程序的服务管理对象。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.Modules">
+            <summary>
+            获取当前应用程序的模块集合。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.ApplicationContextBase.Principal">
+            <summary>
+            获取或设置当前应用程序的安全主体。
+            </summary>
+        </member>
+        <member name="M:Td.ComponentModel.ApplicationContextBase.EnsureDirectory(System.String)">
+            <summary>
+            确认指定的当前应用程序的相对目录是否存在，如果不存在则依次创建它们，并返回其对应的完整路径。
+            </summary>
+            <param name="relativePath">相对于应用程序根目录的相对路径，可使用'/'或'\'字符作为相对路径的分隔符。</param>
+            <returns>如果<paramref name="relativePath"/>参数为空或者全空白字符则返回应用程序根目录(即<see cref="P:Td.ComponentModel.ApplicationContextBase.ApplicationDirectory"/>属性值。)，否则返回其相对路径的完整路径。</returns>
+        </member>
+        <member name="T:Td.ComponentModel.CancelEventHandler">
+            <summary>
+            表示处理可取消事件的方法。
+            </summary>
+            <param name="sender">事件源。</param><param name="e">包含事件数据的 <see cref="T:System.ComponentModel.CancelEventArgs"/>。</param>
+        </member>
+        <member name="T:Td.ComponentModel.DescriptionAttribute">
+            <summary>
+            指定属性 (Property) 或事件的说明。
+            </summary>
+        </member>
+        <member name="T:Td.ComponentModel.EnumConverter">
+            <summary>
+            提供将 Enum 对象与其他各种表示形式相互转换的类型转换器。
+            </summary>
+        </member>
+        <member name="T:Td.ComponentModel.IApplicationModule">
+            <summary>
+            向实现类提供应用扩展模块初始化和处置事件。
+            </summary>
+        </member>
+        <member name="P:Td.ComponentModel.IApplicationModule.Name">
+            <summary>
+            获取应用扩展模块名称。
+            </summary>
+        </member>
+        <member name="M:Td.ComponentModel.IApplicationModule.Initialize(Td.ComponentModel.ApplicationContextBase)">
+            <summary>
+            初始化应用扩展模块，并使其为处理请求做好准备。
+            </summary>
+            <param name="context">一个上下文对象，它提供对模块处理应用程序内所有应用程序对象的公用的方法、属性和事件的访问。</param>
+            <remarks>使用 <c>Initialize</c> 将事件处理方法向具体事件进行注册等初始化操作。</remarks>
+        </member>
+        <member name="T:Td.Diagnostics.ExceptionHandlerManager">
+            <summary>
+            提供了异常处理的管理功能，是异常处理的入口。
+            </summary>
+        </member>
+        <member name="P:Td.Diagnostics.ExceptionHandlerManager.Handlers">
+            <summary>
+            当前所支持的异常处理程序集合。
+            </summary>
+        </member>
+        <member name="M:Td.Diagnostics.ExceptionHandlerManager.Handle(System.Exception,System.Object)">
+            <summary>
+            从内部的异常处理程序树中查找最接近于指定异常对象的处理程序，然后指派该处理程序处理指定的异常对象。
+            </summary>
+            <param name="exception">要处理的指定异常对象。</param>
+            <returns>处理成功则返回真(True)，否则返回假(False)。</returns>
+            <exception cref="T:Td.Diagnostics.ExceptionHandlingException">在异常处理程序树中没有找到合适的异常处理程序。</exception>
+            <remarks>如果参数<paramref name="exception"/>为空引用（在 Visual Basic 中为 Nothing），则返回真(True)。</remarks>
+        </member>
+        <member name="T:Td.Diagnostics.ExceptionHandlingException">
+            <summary>
+            异常处理失败时引发的异常。
+            </summary>
+        </member>
+        <member name="P:Td.Diagnostics.FileLogger.FileSize">
+            <summary>
+            获取或设置日志文件的大小，单位为KB，默认为1MB。
+            </summary>
+        </member>
+        <member name="T:Td.Diagnostics.IExceptionHandler">
+            <summary>
+            定义了异常处理的通用功能。
+            </summary>
+        </member>
+        <member name="M:Td.Diagnostics.IExceptionHandler.CanHandle(System.Type)">
+            <summary>
+            判断当前异常处理器是否支持指定的异常类型。
+            </summary>
+            <param name="exceptionType">要判断的异常类型。</param>
+            <returns>支持指定的异常类型则返回真(True)，否则返回假(False)。</returns>
+        </member>
+        <member name="M:Td.Diagnostics.IExceptionHandler.Handle(System.Exception,System.Object)">
+            <summary>
+            处理指定的异常。
+            </summary>
+            <param name="exception">要处理的异常对象。</param>
+            <param name="context">请求上下文信息。</param>
+            <returns>如果当前处理器已经对参数<paramref name="exception"/>指定的异常对象，处理完毕则返回为空，如果当前异常处理器还需要后续的其他处理器对返回的新异常对象继续处理的话，则返回一个新异常。</returns>
+        </member>
+        <member name="P:Td.Diagnostics.IExceptionHandler.CanHandledExceptionTypes">
+            <summary>
+            获取当前异常处理程序支持的所能处理的异常列表。
+            </summary>
+        </member>
+        <member name="F:Td.Diagnostics.LogLevel.Trace">
+            <summary>
+            跟踪(1)
+            </summary>
+        </member>
+        <member name="F:Td.Diagnostics.LogLevel.Debug">
+            <summary>
+            调试(2)
+            </summary>
+        </member>
+        <member name="F:Td.Diagnostics.LogLevel.Info">
+            <summary>
+            信息(3)
+            </summary>
+        </member>
+        <member name="F:Td.Diagnostics.LogLevel.Warn">
+            <summary>
+            警告(4)
+            </summary>
+        </member>
+        <member name="F:Td.Diagnostics.LogLevel.Error">
+            <summary>
+            错误(5)
+            </summary>
+        </member>
+        <member name="F:Td.Diagnostics.LogLevel.Fatal">
+            <summary>
+            崩溃(6)
+            </summary>
+        </member>
+        <member name="P:Td.IO.FileSystem.File">
+            <summary>
+            获取文件服务。
+            </summary>
+        </member>
+        <member name="P:Td.IO.FileSystem.Directory">
+            <summary>
+            获取目录服务。
+            </summary>
+        </member>
+        <member name="P:Td.IO.FileSystem.Providers">
+            <summary>
+            获取或设置一个服务容器，该容器包含文件系统提供程序。
+            </summary>
+        </member>
+        <member name="P:Td.IO.FileSystem.Scheme">
+            <summary>
+            获取文件系统的默认方案。
+            </summary>
+        </member>
+        <member name="T:Td.IO.IDirectory">
+            <summary>
+            公开用于创建、移动和遍历目录和子目录等功能的抽象接口，该接口将提供不同文件系统的目录支持。
+            </summary>
+        </member>
+        <member name="M:Td.IO.IDirectory.GetInfo(System.String)">
+            <summary>
+            获取指定目录路径对应的<see cref="T:Td.IO.DirectoryInfo"/>描述信息。
+            </summary>
+            <param name="path">指定的目录路径。</param>
+            <returns>如果指定的路径是存在的则返回对应的<see cref="T:Td.IO.DirectoryInfo"/>，否则返回空(null)。</returns>
+        </member>
+        <member name="M:Td.IO.IDirectory.Create(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            创建一个指定路径的目录。
+            </summary>
+            <param name="path">指定要创建的目录路径。</param>
+            <param name="properties">目录的扩展属性集，默认为空(null)。</param>
+            <returns>如果创建成功则返回真(True)，否则返回假(False)。</returns>
+            <remarks>
+            	<para>如果<paramref name="path"/>参数指定的路径不存在并且创建成功则返回真；如果指定的路径已存在则返回假。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.IO.IDirectory.GetChildren(System.String)">
+            <summary>
+            获取指定路径中的所有文件和目录信息的可枚举集合。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <returns>指定路径中的所有文件和目录的<seealso cref="T:Td.IO.PathInfo"/>集合。</returns>
+            <remarks>更多功能搜索功能请参考<see cref="M:Td.IO.IDirectory.GetChildren(System.String,System.String,System.Boolean)"/>方法。</remarks>
+        </member>
+        <member name="M:Td.IO.IDirectory.GetChildren(System.String,System.String,System.Boolean)">
+            <summary>
+            获取指定路径中与搜索模式匹配的所有文件和目录信息的可枚举集合，还可以搜索子目录。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <param name="pattern">搜索模式文本，即用于搜索匹配的所有文件或子目录名称的字符串。
+            	<para>注意：不同文件目录系统可能支持的搜索模式能力是不一样的。</para>
+            	<para>搜索模式文本为空(null)或空字符串(“”)或“*”，表示返回指定范围内的所有文件和目录。文件系统的标准搜索模式包括：多字匹配模式(“*”)和单字匹配模式(“?”)，大部分文件目录系统均支持标准搜索模式。</para>
+            	<para>如果搜索模式文本中包含以反斜杠(“\”)或正斜杠(“/”)或竖线符(“|”)字符对括的文本，则表示搜索模式为正则匹配搜索模式；否则为文件系统的标准搜索模式。</para>
+            </param>
+            <param name="recursive">指定搜索操作的范围是应仅包含当前目录还是应包含所有子目录，默认是仅包含当前目录。</param>
+            <returns>匹配指定搜索条件的<seealso cref="T:Td.IO.PathInfo"/>集合。</returns>
+            <remarks>
+            	<list type="bullet">
+            		<item>
+            			<term><c>prefix-/\d+/.log</c></term>
+            			<description>正则匹配搜索模式：两个正斜杠(“/”)字符括起来的部分为正则表达式(“\d+”)，表示查找指定目录范围内的以“prefix-”打头并接一个或多个数字，扩展名为“.log”的所有文件或目录。</description>
+            		</item>
+            		<item>
+            			<term><c>prefix-*.log</c></term>
+            			<description>标准搜索模式：字符“*”表示匹配零个或多个字符，表示查找指定目录范围内的以“prefix-”打头并接零个或多个字符，扩展名为“.log”的所有文件或目录。</description>
+            		</item>
+            	</list>
+            </remarks>
+        </member>
+        <member name="M:Td.IO.IDirectory.GetDirectories(System.String)">
+            <summary>
+            获取指定路径中的所有目录信息的可枚举集合。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <returns>指定路径中的所有目录的<seealso cref="T:Td.IO.DirectoryInfo"/>集合。</returns>
+            <remarks>更多功能搜索功能请参考<see cref="M:Td.IO.IDirectory.GetDirectories(System.String,System.String,System.Boolean)"/>方法。</remarks>
+        </member>
+        <member name="M:Td.IO.IDirectory.GetDirectories(System.String,System.String,System.Boolean)">
+            <summary>
+            获取指定路径中与搜索模式匹配的所有目录信息的可枚举集合，还可以搜索子目录。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <param name="pattern">搜索模式文本，即用于搜索匹配的所有子目录名称的字符串。更多详细功能请参考：<see cref="M:Td.IO.IDirectory.GetChildren(System.String,System.String,System.Boolean)"/>方法。</param>
+            <param name="recursive">指定搜索操作的范围是应仅包含当前目录还是应包含所有子目录，默认是仅包含当前目录。</param>
+            <returns>匹配指定搜索条件的<seealso cref="T:Td.IO.DirectoryInfo"/>集合。</returns>
+        </member>
+        <member name="M:Td.IO.IDirectory.GetFiles(System.String)">
+            <summary>
+            获取指定路径中的所有文件信息的可枚举集合。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <returns>指定路径中的所有目录的<seealso cref="T:Td.IO.FileInfo"/>集合。</returns>
+            <remarks>更多功能搜索功能请参考<see cref="M:Td.IO.IDirectory.GetFiles(System.String,System.String,System.Boolean)"/>方法。</remarks>
+        </member>
+        <member name="M:Td.IO.IDirectory.GetFiles(System.String,System.String,System.Boolean)">
+            <summary>
+            获取指定路径中与搜索模式匹配的所有文件信息的可枚举集合，还可以搜索子目录。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <param name="pattern">搜索模式文本，即用于搜索匹配的所有文件名的字符串。更多详细功能请参考：<see cref="M:Td.IO.IDirectory.GetChildren(System.String,System.String,System.Boolean)"/>方法。</param>
+            <param name="recursive">指定搜索操作的范围是应仅包含当前目录还是应包含所有子目录，默认是仅包含当前目录。</param>
+            <returns>匹配指定搜索条件的<seealso cref="T:Td.IO.FileInfo"/>集合。</returns>
+        </member>
+        <member name="T:Td.IO.IFile">
+            <summary>
+            提供用于创建、复制、删除、移动和打开文件等功能的抽象接口，该接口将提供不同文件系统的文件支持。
+            </summary>
+        </member>
+        <member name="M:Td.IO.IFile.GetInfo(System.String)">
+            <summary>
+            获取指定文件路径对应的<see cref="T:Td.IO.FileInfo"/>描述信息。
+            </summary>
+            <param name="path">指定的文件路径。</param>
+            <returns>如果指定的路径是存在的则返回对应的<see cref="T:Td.IO.FileInfo"/>，否则返回空(null)。</returns>
+        </member>
+        <member name="T:Td.IO.IFileSystem">
+            <summary>
+            表示文件目录系统的接口。
+            </summary>
+        </member>
+        <member name="P:Td.IO.IFileSystem.Scheme">
+            <summary>
+            获取文件目录系统的方案名。
+            </summary>
+        </member>
+        <member name="P:Td.IO.IFileSystem.File">
+            <summary>
+            获取文件操作服务。
+            </summary>
+        </member>
+        <member name="P:Td.IO.IFileSystem.Directory">
+            <summary>
+            获取目录操作服务。
+            </summary>
+        </member>
+        <member name="M:Td.IO.IFileSystem.GetUrl(System.String)">
+            <summary>
+            获取本地路径对应的外部访问Url地址。
+            </summary>
+            <param name="path">要获取的本地路径。</param>
+            <returns>返回对应的Url地址。</returns>
+            <remarks>
+            	<para>本地路径：是指特定的<see cref="T:Td.IO.IFileSystem"/>文件目录系统的路径格式。</para>
+            	<para>外部访问Url地址：是指可通过Web方式访问某个文件或目录的URL。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.IO.LocalFileSystem.Scheme">
+            <summary>
+            获取本地文件目录系统的方案，始终返回“zfs.local”。
+            </summary>
+        </member>
+        <member name="M:Td.IO.LocalFileSystem.LocalDirectoryProvider.GetChildren(System.String,System.String,System.Boolean)">
+            <summary>
+            获取指定路径中与搜索模式匹配的所有文件名称和目录信息的可枚举集合，还可以搜索子目录。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <param name="pattern">用于搜索匹配的所有文件或子目录的字符串。
+            	<para>默认模式为空(null)，如果为空(null)或空字符串(“”)或“*”，即表示返回指定范围内的所有文件和目录。</para>
+            	<para>如果<paramref name="pattern"/>参数以反斜杠(“\”)或正斜杠(“/”)或竖线符(“|”)字符起始和结尾，则表示搜索模式为正则表达式，即进行正则匹配搜索；否则即为本地文件系统的匹配模式。</para>
+            </param>
+            <param name="recursive">指定搜索操作的范围是应仅包含当前目录还是应包含所有子目录，默认是仅包含当前目录。</param>
+            <returns>指定搜索条件匹配的<seealso cref="T:Td.IO.PathInfo"/>集合。</returns>
+        </member>
+        <member name="M:Td.IO.LocalFileSystem.LocalDirectoryProvider.GetDirectories(System.String,System.String,System.Boolean)">
+            <summary>
+            返回指定路径中与搜索模式匹配的目录信息的可枚举集合，还可以搜索子目录。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <param name="pattern">用于搜索匹配的所有子目录的字符串。
+            	<para>默认模式为空(null)，如果为空(null)或空字符串(“”)或“*”，即表示返回指定范围内的所有目录。</para>
+            	<para>如果<paramref name="pattern"/>参数以反斜杠(“\”)或正斜杠(“/”)或竖线符(“|”)字符起始和结尾，则表示搜索模式为正则表达式，即进行正则匹配搜索；否则即为本地文件系统的匹配模式。</para>
+            </param>
+            <param name="recursive">指定搜索操作的范围是应仅包含当前目录还是应包含所有子目录，默认是仅包含当前目录。</param>
+            <returns>指定搜索条件匹配的<seealso cref="T:Td.IO.DirectoryInfo"/>集合。</returns>
+        </member>
+        <member name="M:Td.IO.LocalFileSystem.LocalDirectoryProvider.GetFiles(System.String,System.String,System.Boolean)">
+            <summary>
+            返回指定路径中与搜索模式匹配的文件信息的可枚举集合，还可以搜索子目录。
+            </summary>
+            <param name="path">要搜索的目录。</param>
+            <param name="pattern">用于搜索匹配的所有文件的字符串。
+            	<para>默认模式为空(null)，如果为空(null)或空字符串(“”)或“*”，即表示返回指定范围内的所有文件。</para>
+            	<para>如果<paramref name="pattern"/>参数以反斜杠(“\”)或正斜杠(“/”)或竖线符(“|”)字符起始和结尾，则表示搜索模式为正则表达式，即进行正则匹配搜索；否则即为本地文件系统的匹配模式。</para>
+            </param>
+            <param name="recursive">指定搜索操作的范围是应仅包含当前目录还是应包含所有子目录，默认是仅包含当前目录。</param>
+            <returns>指定搜索条件匹配的<seealso cref="T:Td.IO.FileInfo"/>集合。</returns>
+        </member>
+        <member name="T:Td.IO.Path">
+            <summary>
+            表示不依赖操作系统的路径。
+            </summary>
+            <remarks>
+            	<para>路径格式分为<seealso cref="P:Td.IO.Path.Scheme"/>和<seealso cref="P:Td.IO.Path.FullPath"/>这两个部分，中间使用冒号(:)分隔，路径各层级间使用正斜杠(/)进行分隔。如果是目录路径则以正斜杠(/)结尾。</para>
+            	<para>其中<seealso cref="P:Td.IO.Path.Scheme"/>可以省略，如果为目录路径，则<see cref="P:Td.IO.Path.FileName"/>属性为空或空字符串("")。常用路径示例如下：</para>
+            	<list type="bullet">
+            		<item>
+            			<term>某个文件的<see cref="P:Td.IO.Path.Url"/>：zfs:/data/attachments/2014/07/file-name.ext</term>
+            		</item>
+            		<item>
+            			<term>某个本地文件的<see cref="P:Td.IO.Path.Url"/>：zfs.local:/data/attachments/2014/07/file-name.ext</term>
+            		</item>
+            		<item>
+            			<term>某个分布式文件的<see cref="P:Td.IO.Path.Url"/>：zfs.distributed:/data/attachments/file-name.ext</term>
+            		</item>
+            		<item>
+            			<term>某个目录的<see cref="P:Td.IO.Path.Url"/>：zfs:/data/attachments/2014/07/</term>
+            		</item>
+            		<item>
+            			<term>未指定模式(Scheme)的<see cref="P:Td.IO.Path.Url"/>：/data/attachements/images/</term>
+            		</item>
+            	</list>
+            </remarks>
+        </member>
+        <member name="M:Td.IO.Path.Parse(System.String)">
+            <summary>
+            解析文本格式的路径。
+            </summary>
+            <param name="text">要解析的路径文本。</param>
+            <returns>返回解析成功的<see cref="T:Td.IO.Path"/>路径对象。</returns>
+            <exception cref="T:System.ArgumentNullException">当<paramref name="text"/>参数为空或空白字符串。</exception>
+            <exception cref="T:Td.IO.PathException">当<paramref name="text"/>参数为无效的路径格式。</exception>
+        </member>
+        <member name="M:Td.IO.Path.TryParse(System.String,Td.IO.Path@)">
+            <summary>
+            尝试解析文本格式的路径。
+            </summary>
+            <param name="text">要解析的路径文本。</param>
+            <param name="result">解析成功的<see cref="T:Td.IO.Path"/>路径对象。</param>
+            <returns>如果解析成功则返回真(True)，否则返回假(False)。</returns>
+        </member>
+        <member name="M:Td.IO.Path.GetScheme(System.String)">
+            <summary>
+            解析路径文本中指定的方案名。
+            </summary>
+            <param name="text">指定的路径文本。</param>
+            <returns>返回的路径方案名，如果解析失败或者路径文本未包含方案则返回空。</returns>
+        </member>
+        <member name="P:Td.IO.PathInfo.Name">
+            <summary>
+            获取路径信息的名称。
+            </summary>
+            <remarks>
+            	<para>该属性不同于<see cref="P:Td.IO.PathInfo.Path"/>属性指向的<seealso cref="T:System.IO.Path"/>路径对象中的<seealso cref="!:System.IO.Path.FileName"/>或<seealso cref="!:System.IO.Path.DirectoryName"/>属性值。</para>
+            	<para>如果<see cref="P:Td.IO.PathInfo.IsFile"/>属性为真(True)，则返回<see cref="P:Td.IO.PathInfo.Path"/>属性指向的<seealso cref="!:System.IO.Path.FileName"/>属性值。</para>
+            	<para>如果<see cref="P:Td.IO.PathInfo.IsDirectory"/>属性为真(True)，则返回<see cref="P:Td.IO.PathInfo.Path"/>属性指向的<seealso cref="!:System.IO.Path.DirectoryName"/>属性值表示的目录路径中的最后一个子目录的名称。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.IO.PathInfo.Url">
+            <summary>
+            获取或设置外部访问的URL地址。
+            </summary>
+            <remarks>有关外部访问的URL请参考：<seealso cref="M:Td.IO.IFileSystem.GetUrl(System.String)"/>方法。</remarks>
+        </member>
+        <member name="T:Td.LBS.Location">
+            <summary>
+            表示一个地理坐标点。
+            </summary>
+        </member>
+        <member name="P:Td.LBS.Location.Latitude">
+            <summary>
+            获取或设置纬度值。
+            </summary>
+        </member>
+        <member name="P:Td.LBS.Location.Longitude">
+            <summary>
+            获取或设置经度值。
+            </summary>
+        </member>
+        <member name="P:Td.LBS.Location.Series">
+            <summary>
+            获取当前坐标所属坐标系。
+            </summary>
+        </member>
+        <member name="M:Td.LBS.Location.#ctor(System.Double,System.Double,Td.LBS.LocationSeries)">
+            <summary>
+            初始化 Location 类的新实例。
+            </summary>
+            <param name="latitude">纬度值。</param>
+            <param name="longitude">经度值</param>
+            <param name="series">坐标系。</param>
+        </member>
+        <member name="M:Td.LBS.Location.#ctor(System.String,System.String,Td.LBS.LocationSeries)">
+            <summary>
+            初始化 Location 类的新实例。
+            </summary>
+            <param name="latitude">纬度值。</param>
+            <param name="longitude">经度值</param>
+            <param name="series">坐标系。</param>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert84To02(Td.LBS.Location)">
+            <summary>
+            将世界标准地理坐标(GPS:WGS-84)转换成中国国测局地理坐标(火星:GCJ-02)
+            </summary>
+            <remarks>只在中国大陆的范围的坐标有效，以外直接返回世界标准坐标。</remarks>
+            <param name="location">GPS坐标实例。</param>
+            <returns>GCJ-02坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert84To02(System.Double,System.Double)">
+            <summary>
+            将世界标准地理坐标(GPS:WGS-84)转换成中国国测局地理坐标(火星:GCJ-02)
+            </summary>
+            <param name="latitude">GPS纬度值。</param>
+            <param name="longitude">GPS经度值。</param>
+            <remarks>只在中国大陆的范围的坐标有效，以外直接返回世界标准坐标。</remarks>
+            <returns>GCJ-02坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert02To84(Td.LBS.Location)">
+            <summary>
+            将中国国测局地理坐标(火星:GCJ-02)转换成世界标准地理坐标(GPS:WGS-84)
+            </summary>
+            <remarks>此接口有1-2米左右的误差，需要精确的场景慎用。</remarks>
+            <param name="location">GCJ-02坐标实例。</param>
+            <returns>WGS-84坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert02To84(System.Double,System.Double)">
+            <summary>
+            将中国国测局地理坐标(火星:GCJ-02)转换成世界标准地理坐标(GPS:WGS-84)
+            </summary>
+            <remarks>此接口有1-2米左右的误差，需要精确的场景慎用。</remarks>
+            <param name="latitude">GCJ-02纬度值。</param>
+            <param name="longitude">GCJ-02经度值。</param>
+            <returns>WGS-84坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert84To09(Td.LBS.Location)">
+            <summary>
+            将世界标准地理坐标(GPS:WGS-84)转换成百度地理坐标(BD-09)
+            </summary>
+            <param name="location">GPS坐标实例。</param>
+            <returns>BD-09坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert84To09(System.Double,System.Double)">
+            <summary>
+            将世界标准地理坐标(GPS:WGS-84)转换成百度地理坐标(BD-09)
+            </summary>
+            <param name="latitude">GPS纬度值。</param>
+            <param name="longitude">GPS经度值。</param>
+            <returns>BD-09坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert09To84(Td.LBS.Location)">
+            <summary>
+            将百度地理坐标(BD-09)转换成世界标准地理坐标(GPS:WGS-84)
+            </summary>
+            <remarks>此接口有1－2米左右的误差，需要精确定位情景慎用</remarks>
+            <param name="location">BD-09坐标实例。</param>
+            <returns>WGS-84坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert09To84(System.Double,System.Double)">
+            <summary>
+            将百度地理坐标(BD-09)转换成世界标准地理坐标(GPS:WGS-84)
+            </summary>
+            <remarks>此接口有1－2米左右的误差，需要精确定位情景慎用</remarks>
+            <param name="latitude">BD-09坐标纬度值。</param>
+            <param name="longitude">BD-09坐标经度值。</param>
+            <returns>WGS-84坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert09To02(Td.LBS.Location)">
+            <summary>
+            将百度地理坐标(BD-09)转换成中国国测局地理坐标(火星:GCJ-02)
+            </summary>
+            <param name="location">BD-09坐标实例。</param>
+            <returns>GCJ-02坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert09To02(System.Double,System.Double)">
+            <summary>
+            将百度地理坐标(BD-09)转换成中国国测局地理坐标(火星:GCJ-02)
+            </summary>
+            <param name="latitude">BD-09纬度值。</param>
+            <param name="longitude">BD-09经度值。</param>
+            <returns>GCJ-02坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert02To09(Td.LBS.Location)">
+            <summary>
+            将中国国测局地理坐标(火星:GCJ-02)转换成百度地理坐标(BD-09)
+            </summary>
+            <param name="location">GCJ-02坐标实例。</param>
+            <returns>BD-09坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.Convert02To09(System.Double,System.Double)">
+            <summary>
+            将中国国测局地理坐标(火星:GCJ-02)转换成百度地理坐标(BD-09)
+            </summary>
+            <param name="latitude">GCJ-02坐标纬度值。</param>
+            <param name="longitude">GCJ-02坐标经度值。</param>
+            <returns>BD-09坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.EncryptGCJ02(System.Double,System.Double)">
+            <summary>
+            将世界标准地理坐标(GPS:WGS-84)加密成中国国测局地理坐标(火星:GCJ-02)
+            </summary>
+            <remarks>只在中国大陆的范围的坐标有效，以外直接返回世界标准坐标。</remarks>
+            <param name="latitude">GPS纬度。</param>
+            <param name="longitude">GPS经度。</param>
+            <returns>GCJ-02坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.DecryptGCJ02(System.Double,System.Double)">
+            <summary>
+            将中国国测局地理坐标(火星:GCJ-02)解密成世界标准地理坐标(GPS:WGS-84)
+            </summary>
+            <remarks>此接口有1-2米左右的误差，需要精确的场景慎用。</remarks>
+            <param name="latitude">GPS纬度。</param>
+            <param name="longitude">GPS经度。</param>
+            <returns>WGS-84坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.EncryptBD09(System.Double,System.Double)">
+            <summary>
+            将中国国测局地理坐标(火星:GCJ-02)加密成百度地理坐标(BD-09)
+            </summary>
+            <param name="latitude">GCJ-02纬度值。</param>
+            <param name="longitude">GCJ-02经度值。</param>
+            <returns>BD-09坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.DecryptBD09(System.Double,System.Double)">
+            <summary>
+            将百度地理坐标(BD-09)解密成中国国测局地理坐标(火星:GCJ-02)
+            </summary>
+            <param name="latitude">BD-09纬度值。</param>
+            <param name="longitude">BD-09经度值。</param>
+            <returns>GCJ-02坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.IsOutOfChina(System.Double,System.Double)">
+            <summary>
+            判断指定的GPS经纬度是否超出中国大陆范围。
+            </summary>
+            <param name="latitude">纬度值。</param>
+            <param name="longitude">经度值。</param>
+            <returns>验证结果。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.TransformLongitude(System.Double,System.Double)">
+            <summary>
+            转换GPS经度值。
+            </summary>
+            <param name="latitude">纬度值。</param>
+            <param name="longitude">经度值。</param>
+            <returns>转换后的经度值。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationConverter.TransformLatitude(System.Double,System.Double)">
+            <summary>
+            转换GPS纬度值。
+            </summary>
+            <param name="latitude">纬度值。</param>
+            <param name="longitude">经度值。</param>
+            <returns>转换后的纬度值。</returns>
+        </member>
+        <member name="T:Td.LBS.LocationSeries">
+            <summary>
+            表示坐标系。
+            </summary>
+        </member>
+        <member name="F:Td.LBS.LocationSeries.Unknown">
+            <summary>
+            未知坐标系。
+            </summary>
+        </member>
+        <member name="F:Td.LBS.LocationSeries.WGS84">
+            <summary>
+            地球坐标系，国际上通用的坐标系。
+            </summary>
+        </member>
+        <member name="F:Td.LBS.LocationSeries.GCJ02">
+            <summary>
+            火星坐标系，由WGS84坐标系经加密后的坐标系。
+            </summary>
+        </member>
+        <member name="F:Td.LBS.LocationSeries.BD09">
+            <summary>
+            百度坐标系，GCJ02坐标系经加密后的坐标系。
+            </summary>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.Parse(System.String)">
+            <summary>
+            将一个以“,”分割的经纬度(纬度在前)字符串解析为一个地理坐标实例。
+            </summary>
+            <param name="text">字符串实例。</param>
+            <returns>坐标实例。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.GetDistance(Td.LBS.Location,Td.LBS.Location)">
+            <summary>
+            计算两个位置之间的直接距离，单位：公里。
+            </summary>
+            <param name="location1">位置一。</param>
+            <param name="location2">位置二。</param>
+            <returns>计算后的距离(公里)。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.GetDistance(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            计算两个位置之间的直接距离，单位：公里。
+            </summary>
+            <param name="latitude1">位置1的纬度值。</param>
+            <param name="longitude1">位置1的经度值。</param>
+            <param name="latitude2">位置2的纬度值。</param>
+            <param name="longitude2">位置2的经度值。</param>
+            <returns>计算后的距离(公里)。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.GetPosition(Td.LBS.Location,System.Double)">
+            <summary>
+            以一个坐标点为中心计算出四个顶点。
+            </summary>
+            <param name="location">坐标点。</param> 
+            <param name="distance">半径(公里)</param>
+            <returns>指定半径外的四个顶点。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.GetPosition(System.Double,System.Double,System.Double)">
+            <summary>
+            以一个坐标点为中心计算出周边四个顶点。
+            </summary>
+            <param name="latitude">纬度值。</param>
+            <param name="longitude">经度值。</param>
+            <param name="distance">半径(公里)</param>
+            <returns>指定半径外的四个顶点。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.IsInRange(Td.LBS.Location,Td.LBS.Location,System.Double)">
+            <summary>
+            监测指定的位置点 <paramref name="source"/> 是否在位置 <paramref name="target"/> 的指定公里范围内。
+            </summary>
+            <param name="source">位置点。</param>
+            <param name="target">目标位置点。</param>
+            <param name="distance">目标范围(公里)</param>
+            <returns>如果</returns>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.IsInPolygon(Td.LBS.Location,System.Collections.Generic.IList{Td.LBS.Location})">
+            <summary>
+            监测指定的位置点 <paramref name="source"/> 是否在多边形顶点 <paramref name="points"/> 范围内。
+            </summary>
+            <param name="source">位置点。</param>
+            <param name="points">多边形顶点集合。</param>
+            <returns>如果在指定的多边形顶点范围内则为true，否则为false。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.ToRadians(System.Double)">
+            <summary>
+            角度数转换为弧度公式。
+            </summary>
+            <param name="number">角度数。</param>
+            <returns>弧度。</returns>
+        </member>
+        <member name="M:Td.LBS.LocationUtility.ToDegrees(System.Double)">
+            <summary>
+            弧度转换为角度数公式。
+            </summary>
+            <param name="number">弧度。</param>
+            <returns>角度数。</returns>
+        </member>
+        <member name="T:Td.Options.IOption">
+            <summary>
+            表示选项的基本功能定义，由 <seealso cref="T:Td.Options.Option"/> 类实现。
+            </summary>
+            <remarks>建议选项的实现者从 <see cref="T:Td.Options.Option"/> 基类继承。</remarks>
+        </member>
+        <member name="T:Td.Options.IOptionProvider">
+            <summary>
+            提供选项数据的获取与保存。
+            </summary>
+        </member>
+        <member name="M:Td.Options.IOptionProvider.GetOptionObject(System.String)">
+            <summary>
+            根据指定的选项路径获取对应的选项数据。
+            </summary>
+            <param name="path">要获取的选项路径。</param>
+            <returns>获取到的选项数据对象。</returns>
+        </member>
+        <member name="M:Td.Options.IOptionProvider.SetOptionObject(System.String,System.Object)">
+            <summary>
+            将指定的选项数据保存到指定路径的存储容器中。
+            </summary>
+            <param name="path">待保存的选项路径。</param>
+            <param name="optionObject">待保存的选项对象。</param>
+        </member>
+        <member name="M:Td.Options.ISettingsProvider.GetValue(System.String)">
+            <summary>
+            获取指定名称的自定义设置项的值。
+            </summary>
+            <param name="name">要查找的自定义设置项的名称。</param>
+            <returns>返回指定名称的自定义设置项的值。如果指定名称的设置项不存在则返回空(null)。</returns>
+            <remarks>
+            	<para>实现要求：如果指定名称的设置项不存在或查找失败，不要抛出异常，应返回空(null)。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Options.Option.Name">
+            <summary>
+            获取当前选项的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionManager.RootNode">
+            <summary>
+            获取选项管理的根节点。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionManager.Settings">
+            <summary>
+            获取全局的<seealso cref="T:Td.Options.ISettingsProvider"/>选项设置，全局设置集的配置路径为“/Settings”。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionManager.Providers">
+            <summary>
+            获取<see cref="T:Td.Options.IOptionProvider"/>选项提供程序集合，该集合中的选项提供程序将由<seealso cref="P:Td.Options.OptionManager.LoaderSelector"/>属性指定的选项加载器驱动加载过程。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionManager.LoaderSelector">
+            <summary>
+            获取或设置<see cref="T:Td.Options.IOptionLoaderSelector"/>选项加载选择器，默认为<seealso cref="T:Td.Options.OptionLoaderSelector"/>实例。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionNode.Title">
+            <summary>
+            获取或设置选项节点的标题文本。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionNode.Description">
+            <summary>
+            获取或设置选项节点的描述文本。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionNode.Option">
+            <summary>
+            获取或设置选项节点对应的选项对象。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionNode.Parent">
+            <summary>
+            获取选项节点的父节点，根节点的父节点为空(null)。
+            </summary>
+        </member>
+        <member name="P:Td.Options.OptionNode.Children">
+            <summary>
+            获取选项节点的子节点集合。
+            </summary>
+        </member>
+        <member name="P:Td.Options.Configuration.OptionConfiguration.FilePath">
+            <summary>
+            获取当前选项配置的完整文件路径。
+            </summary>
+        </member>
+        <member name="M:Td.Options.Configuration.OptionConfigurationElement.DeserializeElement(System.Xml.XmlReader)">
+            <summary>
+            读取选项配置文件中的XML内容。
+            </summary>
+            <param name="reader">在选项配置文件中进行读取操作的<seealso cref="T:System.Xml.XmlReader"/>读取器。</param>
+        </member>
+        <member name="M:Td.Options.Configuration.OptionConfigurationElementCollection.DeserializeElement(System.Xml.XmlReader)">
+            <summary>
+            重写了基类默认读取选项配置XML文件内容的逻辑。
+            </summary>
+            <param name="reader">在选项配置文件中进行读取操作的<seealso cref="T:System.Xml.XmlReader"/>读取器。</param>
+            <remarks>
+            	<para>注意：该方法传入的<paramref name="reader"/>参数的位置为集合中元素对应的XML节点。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Options.Configuration.OptionConfigurationSection.Path">
+            <summary>
+            获取当前选项申明节的逻辑路径，即选项路径。
+            </summary>
+        </member>
+        <member name="P:Td.Options.Configuration.SettingElementCollection.Item(System.String)">
+            <summary>
+            获取或设置指定设置项的文本值。
+            </summary>
+            <param name="name">指定要获取或设置的项目名称。</param>
+            <returns>返回指定名称对应的文本值，如果指定的名称不存在则返回空(null)，如果属性设置器中(setter)中<paramref name="value"/>参数为空(null)，则表示将其指定名称的设置项删除。</returns>
+        </member>
+        <member name="T:Td.Options.Profiles.Profile">
+            <summary>
+            提供了对 Microsoft 的INI文件格式的各项操作。
+            </summary>
+            <remarks>
+            	<para>INI文件就是简单的文本文件，只不过这种文本文件要遵循一定的INI文件格式，其扩展名通常为“.ini”、“.cfg”、“.conf”。</para>
+            	<para>INI文件中的每一行文本为一个元素单位，其类型分别为 Section(节)、Entry/Parameter(条目/参数)、Comment(注释)。</para>
+            	<para>Entry: INI所包含的最基本的“元素”就是 Entry/Parameter，每一个“条目”都由一个名称和一个值组成(值可选)，名称与值由等号“=”分隔，名称在等号的左边；可以省略值的部分。譬如：name=value 或者只有名称的“条目”：name。注意：在同一个设置节中，各个条目的名称必须唯一。</para>
+            	<para>Section: 所有的“条目”都是以“节”为单位结合在一起的。“节”名字都被方括号包围着。在“节”声明后的所有“条目”都是属于该“节”。对于一个“节”没有明显的结束标志符，一个“节”的开始就是上一个“节”的结束。</para>
+            	<para>注意：节是支持嵌套的，如果在中括号里面以空格或制表符(Tab)分隔来表示节的嵌套关系。</para>
+            	<para>Comment: 在INI文件中注释语句是以分号“;”或者“#”开始的。所有的注释语句不管多长都是独占一行直到结束的，在注释符和行结束符之间的所有内容都是被忽略的。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Options.Profiles.Profile.GetOptionObject(System.String)">
+            <summary>
+            获取指定路径的配置数据。
+            </summary>
+            <param name="path">指定的配置项路径，路径是以“/”斜杠分隔的文本。</param>
+            <returns>如果找到则返回配置结果，否则返回空(null)。</returns>
+            <remarks>
+            	<para>如果<paramref name="path"/>参数指定的配置路径以“/”斜杠结尾则将返回指定配置段的所有条目集；否则返回指定的配置条目的值。</para>
+            </remarks>
+        </member>
+        <member name="F:Td.Options.Profiles.ProfileItemType.Entry">
+            <summary>设置条目。</summary>
+        </member>
+        <member name="F:Td.Options.Profiles.ProfileItemType.Section">
+            <summary>设置段。</summary>
+        </member>
+        <member name="F:Td.Options.Profiles.ProfileItemType.Comment">
+            <summary>注释行。</summary>
+        </member>
+        <member name="T:Td.Resources.ResourceUtility">
+            <summary>
+            提供对资源文件的读取功能。
+            </summary>
+            <remarks>
+            	<para>
+            	该类的<see cref="!:GetString(string)"/>、<see cref="!:GetObject(string)"/>和<see cref="!:GetStream(string)"/>方法均支持如下表达式：
+            	${ResourceEntryName}或者${ResourceEntryName@BaseName, AssemblyName}， 其中BaseName和AssemblyName均可省略。
+            	</para>
+            	<para>GetString(string text, ...)方法的text参数如果不匹配上面的表达式语法则返回text参数值。</para>
+            	<para>如果GetXXXXX(string name, stirng baseName, ...)方法中baseName参数为空或空白字符串，或者表达式文本参数中没有包含ResourceBaseName部分，则资源根名(BaseName)默认为assembly程序集的名称。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Resources.ResourceUtility.GetBaseNames(System.String)">
+            <summary>
+            获取指定资源文件的根名及其所有上级根名的数组。
+            </summary>
+            <param name="baseName">要查找的资源文件的根名，如果为空(null)或全空白字符串则返回空数组(长度为零)。</param>
+            <returns>返回的资源文件的根名及其所有上级根名的字符串数组。</returns>
+            <remarks>
+            	<para>
+            	譬如<paramref name="baseName"/>参数为：Flagwind.CRM.Web，则返回的数组元素分别为：
+            	<list type="number">
+            		<item>
+            			<term>Flagwind.CRM.Web</term>
+            		</item>
+            		<item>
+            			<term>Flagwind.CRM.Web.Resources</term>
+            		</item>
+            		<item>
+            			<term>Flagwind.CRM.Web.Properties.Resources</term>
+            		</item>
+            		<item>
+            			<term>Flagwind.CRM</term>
+            		</item>
+            		<item>
+            			<term>Flagwind.CRM.Resources</term>
+            		</item>
+            		<item>
+            			<term>Flagwind.CRM.Properties.Resources</term>
+            		</item>
+            		<item>
+            			<term>Flagwind</term>
+            		</item>
+            		<item>
+            			<term>Flagwind.Resources</term>
+            		</item>
+            		<item>
+            			<term>Flagwind.Properties.Resources</term>
+            		</item>
+            	</list>
+            	</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Resources.ResourceUtility.GetBaseNames(System.String,System.Reflection.Assembly)">
+            <summary>
+            获取指定资源文件的根名及其所有上级根名的数组，并在指定的程序集进行有效性过滤。
+            </summary>
+            <param name="baseName">要查找的资源文件的根名。</param>
+            <param name="assembly">对待返回的所有资源文件的根名进行有效性过滤的程序集，如果为空(null)则不进行有效性过滤。</param>
+            <returns>
+            	<para>返回的在指定程序集中存在的资源文件的根名及其所有上级根名的字符串数组。</para>
+            	<para>如果<paramref name="baseName"/>参数为空(null)或全空白字符串但是<paramref name="assembly"/>参数为不为空(null)，则当<paramref name="baseName"/>参数值为<paramref name="assembly"/>参数指定的程序集名称。</para>
+            	<para>如果<paramref name="baseName"/>参数为空(null)或全空白字符串并且<paramref name="assembly"/>参数为空(null)，则返回空数组(长度为零)。</para>
+            </returns>
+            <remarks>
+            	<para>
+            	如果<paramref name="assembly"/>参数为空(null)，该方法执行效果与<see cref="M:Td.Resources.ResourceUtility.GetBaseNames(System.String)"/>方法功能一样。
+            	</para>
+            	<para>
+            	如果<paramref name="assembly"/>参数不为空，则对方法返回的每个资源文件根名进行有效性过滤，即查看待返回的每个资源文件根名在<paramref name="assembly"/>参数指定的程序集中查看是否存在，如果不存在则不会包含在返回的数组中。
+            	</para>
+            </remarks>
+        </member>
+        <member name="T:Td.Security.PasswordUtility">
+            <summary>
+            提供密码操作的工具类。
+            </summary>
+        </member>
+        <member name="M:Td.Security.PasswordUtility.Encrypt(System.String,System.String)">
+            <summary>
+            采用对称加密算法，加密字符串 <paramref name="originalText" />。
+            </summary>
+            <param name="key">密钥。</param>
+            <param name="originalText">需要加密的文本。</param>
+            <returns>加密后的内容。</returns>
+        </member>
+        <member name="M:Td.Security.PasswordUtility.Decrypt(System.String,System.String,System.String@)">
+            <summary>
+            采用对称解密算法，解密字符串 <paramref name="cipherText" />，并返回 <paramref name="originalText" />。
+            </summary>
+            <param name="key">密钥。</param>
+            <param name="cipherText">需要解密的文本。</param>
+            <param name="originalText">解密后的文本。</param>
+            <returns>解密是否成功。</returns>
+        </member>
+        <member name="T:Td.Serialization.ISerializable">
+            <summary>
+            标识实现者实现的特定序列化程序。
+            </summary>
+        </member>
+        <member name="M:Td.Serialization.ISerializable.Serialize(System.IO.Stream)">
+            <summary>
+            将当前实现类序列化到指定的流。
+            </summary>
+            <param name="serializationStream">序列化数据的流。此流可以引用多种后备存储区（如文件、网络、内存等）。</param>
+        </member>
+        <member name="M:Td.Serialization.ISerializationWriter.Write(Td.Serialization.SerializationWriterContext)">
+            <summary>
+            根据序列化的<seealso cref="T:Td.Serialization.SerializationWriterContext"/>上下文对象执行具体的写入操作。
+            </summary>
+            <param name="context">执行序列化操作的上下文。</param>
+            <returns>如果当前写入的对象后不再需要进行后续的成员序列化写入则可以设置<paramref name="context"/>参数指定的<seealso cref="P:Td.Serialization.SerializationWriterContext.Terminated"/>属性为真(True)。</returns>
+        </member>
+        <member name="T:Td.Serialization.ISerializer">
+            <summary>
+            提供将对象序列化到流中和从流中反序列化对象的功能。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.ISerializer.Settings">
+            <summary>
+            获取当前序列化的默认选项设置。
+            </summary>
+        </member>
+        <member name="M:Td.Serialization.ISerializer.Deserialize(System.IO.Stream)">
+            <summary>
+            反序列化指定<paramref name="serializationStream"/>包含的对象。
+            </summary>
+            <param name="serializationStream">待反序列化的流。</param>
+            <returns>反序列化的结果。</returns>
+        </member>
+        <member name="M:Td.Serialization.ISerializer.Deserialize(System.IO.Stream,System.Type)">
+            <summary>
+            反序列化指定<paramref name="serializationStream"/>包含的对象。
+            </summary>
+            <param name="serializationStream">待反序列化的流。</param>
+            <param name="type">反序列化的结果类型。</param>
+            <returns>反序列化的结果。</returns>
+        </member>
+        <member name="M:Td.Serialization.ISerializer.Deserialize``1(System.IO.Stream)">
+            <summary>
+            反序列化指定<paramref name="serializationStream"/>包含的对象。
+            </summary>
+            <typeparam name="T">指定的反序列化结果的泛类型。</typeparam>
+            <param name="serializationStream">待反序列化的流。</param>
+            <returns>反序列化的结果。</returns>
+        </member>
+        <member name="M:Td.Serialization.ISerializer.Serialize(System.IO.Stream,System.Object,Td.Serialization.SerializationSettings)">
+            <summary>
+            将指定的对象序列化到指定的<seealso cref="T:System.IO.Stream"/>流中。
+            </summary>
+            <param name="serializationStream">要将对象序列化到的流。</param>
+            <param name="graph">待序列化的目标对象。</param>
+            <param name="settings">序列化的选项设置。</param>
+        </member>
+        <member name="T:Td.Serialization.SerializationDirection">
+            <summary>
+            表示序列化方向的枚举。
+            </summary>
+        </member>
+        <member name="F:Td.Serialization.SerializationDirection.Input">
+            <summary>
+            输入，即反序列化调用。
+            </summary>
+        </member>
+        <member name="F:Td.Serialization.SerializationDirection.Output">
+            <summary>
+            输出，即序列化调用。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.SerializationEventArgs.Direction">
+            <summary>
+            获取当前序列化的调用方向。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.SerializationEventArgs.SerializationStream">
+            <summary>
+            获取序列化流对象。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.SerializationEventArgs.SerializationObject">
+            <summary>
+            获取序列化对象。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.SerializationMemberAttribute.Name">
+            <summary>
+            获取或设置序列化后的成员名称，如果为空(null)或空字符串("")则取对应的成员本身的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.SerializationMemberAttribute.Behavior">
+            <summary>
+            获取或设置成员的序列化行为。
+            </summary>
+        </member>
+        <member name="F:Td.Serialization.SerializationMemberBehavior.None">
+            <summary>
+            未定义，默认状态。
+            </summary>
+        </member>
+        <member name="F:Td.Serialization.SerializationMemberBehavior.Ignored">
+            <summary>
+            忽略序列化对应的成员。
+            </summary>
+        </member>
+        <member name="F:Td.Serialization.SerializationMemberBehavior.Required">
+            <summary>
+            必须序列化对应的成员。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.TextSerializationSettings.Indented">
+            <summary>
+            获取或设置一个值，指示序列化后的文本是否保持缩进风格。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.TextSerializationSettings.Typed">
+            <summary>
+            获取或设置一个值，指示序列化的文本是否保持强类型信息。
+            </summary>
+        </member>
+        <member name="P:Td.Serialization.TextSerializationSettings.NamingConvention">
+            <summary>
+            获取或设置一个值，指示序列化成员的命名转换方式。
+            </summary>
+        </member>
+        <member name="T:Td.Services.CommandBase`1">
+            <summary>
+            提供实现<see cref="T:Td.Services.ICommand"/>接口功能的基类，建议需要完成<see cref="T:Td.Services.ICommand"/>接口功能的实现者从此类继承。
+            </summary>
+            <typeparam name="TContext">指定命令的执行上下文类型。</typeparam>
+        </member>
+        <member name="M:Td.Services.CommandBase`1.CanExecute(`0)">
+            <summary>
+            判断命令是否可被执行。
+            </summary>
+            <param name="context">判断命令是否可被执行的上下文对象。</param>
+            <returns>如果返回真(true)则表示命令可被执行，否则表示不可执行。</returns>
+            <remarks>
+            	<para>本方法为虚拟方法，可由子类更改基类的默认实现方式。</para>
+            	<para>如果<seealso cref="P:Td.Services.CommandBase.Predication"/>属性为空(null)，则返回<seealso cref="P:Td.Services.CommandBase.Enabled"/>属性值；否则返回由<seealso cref="P:Td.Services.CommandBase.Predication"/>属性指定的断言对象的断言方法的值。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Services.CommandBase`1.Execute(`0)">
+            <summary>
+            执行命令。
+            </summary>
+            <param name="context">执行命令的上下文对象。</param>
+            <returns>返回执行的返回结果。</returns>
+            <remarks>
+            	<para>本方法的实现中首先调用<seealso cref="M:Td.Services.CommandBase.CanExecute(System.Object)"/>方法，以确保阻止非法的调用。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Services.CommandBase.Name">
+            <summary>
+            获取或设置命令的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandBase.Predication">
+            <summary>
+            获取或设置当前命令的断言对象，该断言决定当前命令是否可用。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandBase.Enabled">
+            <summary>
+            获取或设置当前命令是否可用。
+            </summary>
+            <remarks>
+            	该属性作为当前命令是否可被执行的备选方案，命令是否可被执行由<see cref="M:Td.Services.CommandBase.CanExecute(System.Object)"/>方法决定，该方法的不同实现方式可能导致不同的判断逻辑。有关默认的判断逻辑请参考<seealso cref="M:Td.Services.CommandBase.CanExecute(System.Object)"/>方法的帮助。
+            </remarks>
+        </member>
+        <member name="M:Td.Services.CommandBase.IsMatch(System.Object)">
+            <summary>
+            判断命令是否为指定要匹配的名称。
+            </summary>
+            <param name="parameter">要匹配的参数，如果参数为空(null)则返回真；如果参数为字符串则返回其当前命令名进行不区分大小写匹对值；否则返回假(false)。</param>
+            <returns>如果匹配成功则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="M:Td.Services.CommandBase.CanExecute(System.Object)">
+            <summary>
+            判断命令是否可被执行。
+            </summary>
+            <param name="parameter">判断命令是否可被执行的参数对象。</param>
+            <returns>如果返回真(true)则表示命令可被执行，否则表示不可执行。</returns>
+            <remarks>
+            	<para>本方法为虚拟方法，可由子类更改基类的默认实现方式。</para>
+            	<para>如果<seealso cref="P:Td.Services.CommandBase.Predication"/>属性为空(null)，则返回<see cref="P:Td.Services.CommandBase.Enabled"/>属性值；否则返回由<see cref="P:Td.Services.CommandBase.Predication"/>属性指定的断言对象的断言方法的值。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Services.CommandBase.Execute(System.Object)">
+            <summary>
+            执行命令。
+            </summary>
+            <param name="parameter">执行命令的参数。</param>
+            <returns>返回执行的返回结果。</returns>
+            <remarks>
+            	<para>本方法的实现中首先调用<see cref="M:Td.Services.CommandBase.CanExecute(System.Object)"/>方法，以确保阻止非法的调用。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Services.CommandBase.Td#Services#IPredication#Predicate(System.Object)">
+            <summary>
+            判断命令是否可被执行。
+            </summary>
+            <param name="parameter">判断命令是否可被执行的参数。</param>
+            <returns>如果返回真(true)则表示命令可被执行，否则表示不可执行。</returns>
+            <remarks>
+            	<para>本显式实现为调用<see cref="M:Td.Services.CommandBase.CanExecute(System.Object)"/>虚拟方法。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Services.CommandBase.Td#Services#IMatchable#IsMatch(System.Object)">
+            <summary>
+            判断命令是否为指定要匹配的名称。
+            </summary>
+            <param name="parameter">要匹配的参数，如果参数为空(null)则返回真；如果参数为字符串则返回其当前命令名进行不区分大小写匹对值；否则返回假(false)。</param>
+            <returns>如果匹配成功则返回真(true)，否则返回假(false)。</returns>
+            <remarks>该显式实现为调用<see cref="M:Td.Services.CommandBase.IsMatch(System.Object)"/>虚拟方法。</remarks>
+        </member>
+        <member name="P:Td.Services.CommandContextBase.Command">
+            <summary>
+            获取执行的命令对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandContextBase.CommandNode">
+            <summary>
+            获取执行的命令所在节点。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandContextBase.Parameter">
+            <summary>
+            获取命令执行的传入参数。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandContextBase.HasExtendedProperties">
+            <summary>
+            获取扩展属性集是否有内容。
+            </summary>
+            <remarks>
+            	<para>在不确定扩展属性集是否含有内容之前，建议先使用该属性来检测。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Services.CommandContextBase.ExtendedProperties">
+            <summary>
+            获取可用于在本次执行过程中在各处理模块之间组织和共享数据的键/值集合。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandContextBase.Executor">
+            <summary>
+            获取执行命令所在的命令执行器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandContextBase.States">
+            <summary>
+            获取一个由当前命令执行器为宿主的字典容器。
+            </summary>
+            <remarks>
+            	<para>在本属性返回的字典集合中的内容对于相同<see cref="T:Td.Services.ICommandExecutor"/>中的命令而言都是可见(读写)的，但对于不同<seealso cref="T:Td.Services.ICommandExecutor"/>下的命令而言，这些字典集合内的内容则是不可见的。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Services.CommandContextBase.Result">
+            <summary>
+            获取或设置命令的执行结果。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutedEventArgs.Exception">
+            <summary>
+            获取命令执行过程中的异常，如果返回空则表示为发生异常。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutedEventArgs.ExceptionHandled">
+            <summary>
+            获取或设置异常是否处理完成，如果返回假(false)则异常信息将被抛出。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutedEventArgs.Context">
+            <summary>
+            获取命令的执行上下文对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutedEventArgs.Parameter">
+            <summary>
+            获取命令的执行参数对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutedEventArgs.ExtendedProperties">
+            <summary>
+            获取可用于在命令执行过程中在各处理模块之间组织和共享数据的键/值集合。
+            </summary>
+        </member>
+        <member name="M:Td.Services.CommandExecutedEventArgs.#ctor(System.Object,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            构造一个命令执行成功的事件参数对象。
+            </summary>
+            <param name="parameter">命令执行参数对象。</param>
+            <param name="result">命令执行的结果。</param>
+            <param name="extendedProperties">指定的扩展属性集。</param>
+        </member>
+        <member name="M:Td.Services.CommandExecutedEventArgs.#ctor(System.Object,System.Exception,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            构造一个命令执行失败的事件参数对象。
+            </summary>
+            <param name="parameter">命令执行参数对象。</param>
+            <param name="exception">命令执行失败的异常对象。</param>
+            <param name="extendedProperties">指定的扩展属性集。</param>
+        </member>
+        <member name="P:Td.Services.CommandExecutingEventArgs.Cancel">
+            <summary>
+            获取或设置一个值，表示是否取消当前命令的执行。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutingEventArgs.Context">
+            <summary>
+            获取命令的执行上下文对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutingEventArgs.Parameter">
+            <summary>
+            获取命令的执行参数对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutingEventArgs.ExtendedProperties">
+            <summary>
+            获取可用于在命令执行过程中在各处理模块之间组织和共享数据的键/值集合。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutor.Default">
+            <summary>
+            获取或设置默认的<see cref="T:Td.Services.CommandExecutor"/>命令执行器。
+            </summary>
+            <remarks>
+            	<para>注意：如果已经设置过该属性，则不允许再更改其值。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Services.CommandExecutorContextBase.Executor">
+            <summary>
+            获取当前命令执行器对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutorContextBase.CommandText">
+            <summary>
+            获取当前执行的命令文本。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutorContextBase.CommandNode">
+            <summary>
+            获取当前执行命令所在的命令树节点。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutorContextBase.Command">
+            <summary>
+            获取当前执行命令。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutorContextBase.Parameter">
+            <summary>
+            获取从命令执行器传入的参数值。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandExecutorContextBase.Result">
+            <summary>
+            获取或设置命令执行器的执行结果。
+            </summary>
+        </member>
+        <member name="M:Td.Services.CommandLine.Parse(System.String)">
+            <summary>
+            解析命令行文本。
+            </summary>
+            <param name="commandText">指定的要解析的命令行文本。</param>
+            <returns>返回解析成功的命令行对象，如果解析失败则返回空(null)。</returns>
+        </member>
+        <member name="M:Td.Services.CommandLoaderBase.OnLoad(Td.Services.CommandTreeNode)">
+            <summary>
+            执行加载命令的实际操作。
+            </summary>
+            <param name="node">待加载的命令树节点。</param>
+            <returns>如果加载成功则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="P:Td.Services.CommandOption.Name">
+            <summary>
+            获取命令选项的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandOption.Value">
+            <summary>
+            获取或设置命令选项的值。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandOptionAttribute.Name">
+            <summary>
+            获取命令选项的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandOptionAttribute.Required">
+            <summary>
+            获取或设置命令选项是否必需的，默认值为假(false)。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandOptionAttribute.Type">
+            <summary>
+            获取或设置命令选项的值类型，如果返回空则表示当前选项没有值。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandOptionAttribute.Converter">
+            <summary>
+            获取或设置命令选项的值类型转换器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandOptionAttribute.DefaultValue">
+            <summary>
+            获取或设置命令选项的默认值。
+            </summary>
+        </member>
+        <member name="P:Td.Services.CommandOptionAttribute.Description">
+            <summary>
+            获取或设置命令选项的文本描述。
+            </summary>
+        </member>
+        <member name="M:Td.Services.CommandTreeNode.Find(System.String)">
+            <summary>
+            查找指定的命令路径的命令节点。
+            </summary>
+            <param name="path">指定的命令路径。</param>
+            <returns>返回查找的结果，如果为空则表示没有找到指定路径的<see cref="T:Td.Services.CommandTreeNode"/>命令节点。</returns>
+            <remarks>
+            	<para>如果路径以斜杠(/)打头则从根节点开始查找；如果以双点(../)打头则表示从上级节点开始查找；否则从当前节点开始查找。</para>
+            </remarks>
+        </member>
+        <member name="T:Td.Services.ICommand">
+            <summary>
+            扩展命令接口。
+            </summary>
+        </member>
+        <member name="E:Td.Services.ICommand.EnabledChanged">
+            <summary>
+            在 <seealso cref="P:Td.Services.ICommand.Enabled"/> 属性发生改变之后发生。
+            </summary>
+        </member>
+        <member name="E:Td.Services.ICommand.Executed">
+            <summary>
+            在 <seealso cref="M:Td.Services.ICommand.Execute(System.Object)"/> 方法执行之前发生。可以通过事件参数取消后续的执行。
+            </summary>
+        </member>
+        <member name="E:Td.Services.ICommand.Executing">
+            <summary>
+            在 <seealso cref="M:Td.Services.ICommand.Execute(System.Object)"/> 方法执行之后发生。
+            </summary>
+        </member>
+        <member name="P:Td.Services.ICommand.Name">
+            <summary>
+            获取命令的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Services.ICommand.Enabled">
+            <summary>
+            获取或设置一个值，该值指示命令是否可以执行。
+            </summary>
+        </member>
+        <member name="M:Td.Services.ICommand.CanExecute(System.Object)">
+            <summary>
+            判断当前命令能否依据给定的选项和参数执行。
+            </summary>
+            <param name="parameter">判断命令能否执行的参数对象。</param>
+            <returns>返回能否执行的结果。</returns>
+        </member>
+        <member name="M:Td.Services.ICommand.Execute(System.Object)">
+            <summary>
+            执行命令。
+            </summary>
+            <param name="parameter">执行命令的参数对象。</param>
+            <returns>返回执行的返回结果。</returns>
+            <remarks>
+            	<para>对实现着的要求：应该在本方法的实现中首先调用<see cref="M:Td.Services.ICommand.CanExecute(System.Object)"/>方法，以确保阻止非法的调用。</para>
+            </remarks>
+        </member>
+        <member name="T:Td.Services.ICommandLineParser">
+            <summary>
+            提供命令行文本解析功能。
+            </summary>
+        </member>
+        <member name="M:Td.Services.ICommandLineParser.Parse(System.String)">
+            <summary>
+            将指定的命令行文本解析成命令行对象。
+            </summary>
+            <param name="commandText">指定的要解析的命令行文本。</param>
+            <returns>返回解析的命令行对象，如果解析失败则返回空(null)。</returns>
+        </member>
+        <member name="T:Td.Services.ICommandLoader">
+            <summary>
+            提供命令加载的功能。
+            </summary>
+            <remarks>
+            	<para>对使用者的提醒：命令加载器不能重复使用，即不要把一个<see cref="T:Td.Services.ICommandLoader"/>实例赋予不同的用例，因为<seealso cref="P:Td.Services.ICommandLoader.IsLoaded"/>属性与不同的用例是无关的。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Services.ICommandLoader.IsLoaded">
+            <summary>
+            获取一个值表示当前加载器是否已经加载完成。
+            </summary>
+        </member>
+        <member name="M:Td.Services.ICommandLoader.Load(Td.Services.CommandTreeNode)">
+            <summary>
+            将命令加载到指定的命令树节点中。
+            </summary>
+            <param name="node">要挂载的命令树节点。</param>
+            <remarks>
+            	<para>对实现者的提醒：应该确保该方法的实现是线程安全的。</para>
+            </remarks>
+        </member>
+        <member name="T:Td.Services.IMatchable">
+            <summary>
+            提供一种特定于类型的通用匹配方法，某些同类型的类通过实现此接口对其进行更进一步的匹配。
+            </summary>
+        </member>
+        <member name="M:Td.Services.IMatchable.IsMatch(System.Object)">
+            <summary>
+            指示当前对象是否匹配指定参数的条件约束。
+            </summary>
+            <param name="parameter">指定是否匹配逻辑的参数。</param>
+            <returns>如果当前对象符合<paramref name="parameter"/>参数的匹配规则，则为真(true)；否则为假(false)。</returns>
+        </member>
+        <member name="M:Td.Services.IPredication`1.Predicate(`0)">
+            <summary>
+            确定指定对象是否符合某种条件。
+            </summary>
+            <param name="parameter">指定的条件参数对象。</param>
+            <returns>如果符合某种条件则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="T:Td.Services.IPredication">
+            <summary>
+            表示条件判断的接口。
+            </summary>
+        </member>
+        <member name="M:Td.Services.IPredication.Predicate(System.Object)">
+            <summary>
+            确定指定对象是否符合某种条件。
+            </summary>
+            <param name="parameter">指定的条件参数对象。</param>
+            <returns>如果符合某种条件则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="M:Td.Services.IServiceProvider.GetServiceType(System.String)">
+            <summary>
+            获取指定名称的服务类型。
+            </summary>
+            <param name="name">指定的服务名称。</param>
+            <returns>返回指定名称的服务的类型，如果返回空(null)则表示没有找到指定名称的服务。</returns>
+        </member>
+        <member name="T:Td.Services.IServiceProviderFactory">
+            <summary>
+            提供关于服务供应程序容器的功能。
+            </summary>
+        </member>
+        <member name="P:Td.Services.IServiceProviderFactory.Default">
+            <summary>
+            获取或设置默认的服务供应程序。
+            </summary>
+        </member>
+        <member name="M:Td.Services.IServiceProviderFactory.GetProvider(System.String)">
+            <summary>
+            获取指定名称的服务供应程序。
+            </summary>
+            <param name="name">指定的服务供应程序名称。</param>
+            <returns>返回指定名称的服务供应程序。</returns>
+        </member>
+        <member name="T:Td.Services.IWorker">
+            <summary>
+            关于工作器的接口。
+            </summary>
+        </member>
+        <member name="E:Td.Services.IWorker.StateChanged">
+            <summary>
+            表示状态发生了改变。
+            </summary>
+        </member>
+        <member name="P:Td.Services.IWorker.Name">
+            <summary>
+            获取当前工作器的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Services.IWorker.State">
+            <summary>
+            获取当前工作器的状态。
+            </summary>
+        </member>
+        <member name="P:Td.Services.IWorker.Disabled">
+            <summary>
+            获取或设置是否禁用工作器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.IWorker.CanPauseAndContinue">
+            <summary>
+            获取工作器是否允许暂停和继续。
+            </summary>
+        </member>
+        <member name="M:Td.Services.IWorker.Start(System.String[])">
+            <summary>
+            启动工作器。
+            </summary>
+            <param name="args">启动的参数。</param>
+        </member>
+        <member name="M:Td.Services.IWorker.Stop(System.String[])">
+            <summary>
+            停止工作器。
+            </summary>
+            <param name="args">停止的参数。</param>
+        </member>
+        <member name="M:Td.Services.IWorker.Pause">
+            <summary>
+            暂停工作器。
+            </summary>
+        </member>
+        <member name="M:Td.Services.IWorker.Resume">
+            <summary>
+            恢复工作器，继续运行。
+            </summary>
+        </member>
+        <member name="P:Td.Services.PredicationCollection`1.Combination">
+            <summary>
+            获取或设置断言集合内各断言的逻辑组合方式。
+            </summary>
+        </member>
+        <member name="P:Td.Services.PredicationCollection.Combination">
+            <summary>
+            获取或设置断言集合内各断言的逻辑组合方式。
+            </summary>
+        </member>
+        <member name="M:Td.Services.PredicationCollection.Predicate(System.Object)">
+            <summary>
+            对断言集合内的所有断言进行遍历断言调用，并根据<see cref="P:Td.Services.PredicationCollection.Combination"/>属性值进行组合判断。
+            </summary>
+            <param name="parameter">对断言集合内所有断言调用时的传入参数。</param>
+            <returns>集合内所有断言的组合结果，如果集合为空则始终返回真(true)。</returns>
+            <remarks>
+            	<para>在调用过程中如果是“或”组合则会发生“真”短路；如果是“与”组合则会发生“假”短路。</para>
+            </remarks>
+        </member>
+        <member name="F:Td.Services.PredicationCombination.Or">
+            <summary>
+            表示如果某个断言返回成功，则不再执行后续断言测试而直接返回成功；如果返回失败，则进行后续断言测试。即整个断言链中所有断言测试均失败则断言链返回失败。
+            </summary>
+        </member>
+        <member name="F:Td.Services.PredicationCombination.And">
+            <summary>
+            表示如果某个断言返回成功，则进行下一个断言测试，如果返回失败，则不再执行后续断言测试而直接返回失败。即整个断言链中所有断言测试均成功则断言链返回成功。
+            </summary>
+        </member>
+        <member name="P:Td.Services.ServiceDependencyAttribute.Name">
+            <summary>
+            获取或设置服务的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Services.ServiceDependencyAttribute.Contract">
+            <summary>
+            获取或设置服务的契约类型。
+            </summary>
+        </member>
+        <member name="M:Td.Services.ServiceProviderFactory.Unregister(System.String)">
+            <summary>
+            注销服务供应程序。
+            </summary>
+            <param name="name">要注销服务供应程序的名称。</param>
+        </member>
+        <member name="M:Td.Services.ServiceProviderFactory.GetProvider(System.String)">
+            <summary>
+            获取指定名称的服务供应程序。具体的获取策略请参考更详细的备注说明。
+            </summary>
+            <param name="name">待获取的服务供应程序名。</param>
+            <returns>如果指定名称的供应程序回存在则返它，否则返回空(null)。</returns>
+        </member>
+        <member name="P:Td.Services.ServiceRegisteredEventArgs.Entry">
+            <summary>
+            获取注册完成的<see cref="T:Td.Services.ServiceEntry"/>服务描述项对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.ServiceUnregisteredEventArgs.Entry">
+            <summary>
+            获取注册完成的<see cref="T:Td.Services.ServiceEntry"/>服务描述项对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.WorkerBase.Disabled">
+            <summary>
+            获取或设置是否禁用当前工作器。
+            </summary>
+            <remarks>如果当前工作器</remarks>
+        </member>
+        <member name="P:Td.Services.WorkerBase.CanPauseAndContinue">
+            <summary>
+            获取或设置工作器工作器是否可以暂停和继续。
+            </summary>
+        </member>
+        <member name="P:Td.Services.WorkerBase.State">
+            <summary>
+            获取工作器的状态。
+            </summary>
+        </member>
+        <member name="P:Td.Services.WorkerBase.IsDisposed">
+            <summary>
+            获取一个值表示工作器是否已经被处置了。
+            </summary>
+        </member>
+        <member name="T:Td.Services.WorkerState">
+            <summary>
+            关于 <seealso cref="T:Td.Services.IWorker"/> 的状态信息。
+            </summary>
+        </member>
+        <member name="F:Td.Services.WorkerState.Stopped">
+            <summary>未运行/已停止。</summary>
+        </member>
+        <member name="F:Td.Services.WorkerState.Running">
+            <summary>运行中。</summary>
+        </member>
+        <member name="F:Td.Services.WorkerState.Starting">
+            <summary>正在启动中。</summary>
+        </member>
+        <member name="F:Td.Services.WorkerState.Stopping">
+            <summary>正在停止中。</summary>
+        </member>
+        <member name="F:Td.Services.WorkerState.Pausing">
+            <summary>正在暂停中。</summary>
+        </member>
+        <member name="F:Td.Services.WorkerState.Paused">
+            <summary>已暂停。</summary>
+        </member>
+        <member name="F:Td.Services.WorkerState.Resuming">
+            <summary>正在恢复中。</summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionContext.Executor">
+            <summary>
+            获取处理本次执行请求的执行器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionContext.Parameter">
+            <summary>
+            获取处理本次执行请求的输入参数。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionContext.Exception">
+            <summary>
+            获取本次执行中发生的异常。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionContext.HasExtendedProperties">
+            <summary>
+            获取扩展属性集是否有内容。
+            </summary>
+            <remarks>
+            	<para>在不确定扩展属性集是否含有内容之前，建议先使用该属性来检测。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionContext.ExtendedProperties">
+            <summary>
+            获取扩展属性集。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionContext.Result">
+            <summary>
+            获取或设置本次执行的返回结果。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionHandlerBase.Name">
+            <summary>
+            获取或设置处理程序的名称。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionHandlerBase.Predication">
+            <summary>
+            获取或设置当前处理程序的断言对象，该断言决定处理程序是否可用。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionHandlerBase.Enabled">
+            <summary>
+            获取或设置当前处理程序是否可用。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionPipeline.Children">
+            <summary>
+            获取当前管道的后续管道集合。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionPipeline.Filters">
+            <summary>
+            获取当前管道的过滤器集合。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionPipelineContext.Context">
+            <summary>
+            获取当前管道上下文的上级执行上下文。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.ExecutionPipelineContext.Pipeline">
+            <summary>
+            获取当前的<see cref="T:Td.Services.Composition.ExecutionPipeline"/>执行管道。
+            </summary>
+        </member>
+        <member name="E:Td.Services.Composition.Executor.Executed">
+            <summary>
+            表示执行器对所有管道执行完成之后激发的事件。
+            </summary>
+            <remarks>
+            	<para>该事件确保执行器中的所有管道执行完毕后激发，而无论这些管道是否异步执行。</para>
+            </remarks>
+        </member>
+        <member name="E:Td.Services.Composition.Executor.Executing">
+            <summary>
+            表示执行器在执行操作之前激发的事件，该事件位于所有管道及过滤器之前被激发。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.Executor.Host">
+            <summary>
+            获取当前执行器的宿主对象。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.Executor.PipelineSelector">
+            <summary>
+            获取或设置一个<see cref="T:Td.Services.Composition.IExecutionPipelineSelector"/>管道执行选择器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.Executor.Combiner">
+            <summary>
+            获取或设置一个<see cref="T:Td.Services.Composition.IExecutionCombiner"/>结果合并器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.Executor.Pipelines">
+            <summary>
+            获取当前执行器的管道集合。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.Executor.Filters">
+            <summary>
+            获取当前执行器的全局过滤器集合。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionContext.Executor">
+            <summary>
+            获取处理本次执行请求的执行器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionContext.Parameter">
+            <summary>
+            获取处理本次执行请求的输入参数。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionContext.Exception">
+            <summary>
+            获取本次执行中发生的异常。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionContext.HasExtendedProperties">
+            <summary>
+            获取扩展属性集是否有内容。
+            </summary>
+            <remarks>
+            	<para>在不确定扩展属性集是否含有内容之前，建议先使用该属性来检测。</para>
+            </remarks>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionContext.ExtendedProperties">
+            <summary>
+            获取可用于在本次执行过程中在各处理模块之间组织和共享数据的键/值集合。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionContext.Result">
+            <summary>
+            获取或设置本次执行的返回结果。
+            </summary>
+        </member>
+        <member name="T:Td.Services.Composition.IExecutionFilter">
+            <summary>
+            提供过滤执行管道的功能。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionFilter.Name">
+            <summary>
+            获取执行过滤器的名称。
+            </summary>
+        </member>
+        <member name="M:Td.Services.Composition.IExecutionFilter.OnExecuting(Td.Services.Composition.IExecutionContext)">
+            <summary>
+            表示在执行处理程序之前被激发调用。
+            </summary>
+            <param name="context">当前执行上下文对象。</param>
+        </member>
+        <member name="M:Td.Services.Composition.IExecutionFilter.OnExecuted(Td.Services.Composition.IExecutionContext)">
+            <summary>
+            表示在执行处理程序之后被激发调用。
+            </summary>
+            <param name="context">当前执行上下文对象。</param>
+        </member>
+        <member name="T:Td.Services.Composition.IExecutionHandler">
+            <summary>
+            提供执行处理程序的功能。
+            </summary>
+        </member>
+        <member name="M:Td.Services.Composition.IExecutionHandler.CanHandle(Td.Services.Composition.IExecutionPipelineContext)">
+            <summary>
+            确认当前处理程序能否处理本次执行请求。
+            </summary>
+            <param name="context">当前执行上下文对象。</param>
+            <returns>如果能处理本次执行请求则返回真(true)，否则返回假(false)。</returns>
+        </member>
+        <member name="M:Td.Services.Composition.IExecutionHandler.Handle(Td.Services.Composition.IExecutionPipelineContext)">
+            <summary>
+            处理本次执行请求。
+            </summary>
+            <param name="context">当前执行上下文对象。</param>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionPipelineContext.Pipeline">
+            <summary>
+            获取当前上下文所属的执行管道。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionPipelineContext.HasChildren">
+            <summary>
+            判断当前管道是否有子管道集。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutionPipelineContext.Children">
+            <summary>
+            获取当前管道的子管道集合。
+            </summary>
+        </member>
+        <member name="E:Td.Services.Composition.IExecutor.Executed">
+            <summary>表示执行器对所有管道执行完成之后激发的事件。</summary>
+        </member>
+        <member name="E:Td.Services.Composition.IExecutor.Executing">
+            <summary>表示执行器在执行操作之前激发的事件，该事件位于所有管道及过滤器之前被激发。</summary>
+        </member>
+        <member name="E:Td.Services.Composition.IExecutor.PipelineExecuted">
+            <summary>表示管道执行完成，为管道执行步骤中最后一个被激发的事件。</summary>
+        </member>
+        <member name="E:Td.Services.Composition.IExecutor.PipelineExecuting">
+            <summary>表示管道开始执行，为管道执行步骤中第一个被激发的事件。</summary>
+        </member>
+        <member name="E:Td.Services.Composition.IExecutor.HandlerExecuted">
+            <summary>表示管道中的处理器执行完成。</summary>
+        </member>
+        <member name="E:Td.Services.Composition.IExecutor.HandlerExecuting">
+            <summary>表示管道中的处理器开始执行。</summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutor.Combiner">
+            <summary>
+            获取或设置一个<see cref="T:Td.Services.Composition.IExecutionCombiner"/>结果合并器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutor.PipelineSelector">
+            <summary>
+            获取或设置一个<see cref="T:Td.Services.Composition.IExecutionPipelineSelector"/>管道执行选择器。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutor.Pipelines">
+            <summary>
+            获取当前执行器的管道集合。
+            </summary>
+        </member>
+        <member name="P:Td.Services.Composition.IExecutor.Filters">
+            <summary>
+            获取当前执行器的全局过滤器集合。
+            </summary>
+            <remarks>
+            	<para>全局过滤器即表示，当执行器被执行时全局过滤器优先于管道自身的过滤器被执行。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Services.Composition.IExecutor.Execute(System.Object)">
+            <summary>
+            执行方法。
+            </summary>
+            <param name="parameter">指定的执行参数对象。</param>
+            <returns>返回执行的结果器。</returns>
+        </member>
+        <member name="T:Td.Services.Composition.IObservable">
+            <summary>
+            提供基于推送机制的通知提供者。
+            </summary>
+        </member>
+        <member name="M:Td.Services.Composition.IObservable.Subscribe(Td.Services.Composition.IObserver)">
+            <summary>
+            向当前通知提供者订阅，表示某观察器将要接收通知。
+            </summary>
+            <param name="observer">要接收通知的观察者对象。</param>
+        </member>
+        <member name="M:Td.Services.Composition.IObservable.Unsubscribe(Td.Services.Composition.IObservable)">
+            <summary>
+            向当前通知提供者退订，表示某观察器取消接收通知。
+            </summary>
+            <param name="observer">要取消接收通知的观察者对象。</param>
+        </member>
+        <member name="M:Td.Services.Composition.IObservable.Notify(System.Object)">
+            <summary>
+            通知所有观察者，即向已注册的所有观察者发送通知。
+            </summary>
+            <param name="value">发送的信息。</param>
+        </member>
+        <member name="M:Td.Services.Composition.IObservable.Complete(System.Object)">
+            <summary>
+            通知观察者，提供程序已完成发送基于推送的通知。
+            </summary>
+            <param name="value">发送的信息。</param>
+        </member>
+        <member name="T:Td.Services.Composition.IObserver">
+            <summary>
+            提供用于接收基于推送的通知的机制的观察者。
+            </summary>
+        </member>
+        <member name="M:Td.Services.Composition.IObserver.Initialize(Td.Services.Composition.IObservable)">
+            <summary>
+            初始化当前观察者。
+            </summary>
+            <param name="observable">被注册到的观察容器，即被消息提供者。</param>
+            <remarks>
+            	<para>该方法由观察容器进行调用，通常当观察者被注册到容器中时被调用。</para>
+            </remarks>
+        </member>
+        <member name="M:Td.Services.Composition.IObserver.OnNotified(System.Object)">
+            <summary>
+            向观察者提供新的信息。
+            </summary>
+            <param name="value">当前的通知信息。</param>
+        </member>
+        <member name="M:Td.Services.Composition.IObserver.OnCompleted(System.Object)">
+            <summary>
+            通知观察者，提供程序已完成发送基于推送的通知。
+            </summary>
+            <param name="value">当前的通知信息。</param>
+        </member>
+        <member name="F:Td.Text.TextRegular.Web.Email">
+            <summary>获取电子邮箱(Email)地址的文本验证器。</summary>
+        </member>
+        <member name="F:Td.Text.TextRegular.Uri.Url">
+            <summary>获取任意协议的URL文本验证器。</summary>
+        </member>
+        <member name="F:Td.Text.TextRegular.Uri.Http">
+            <summary>获取Http协议的URL文本验证器。</summary>
+        </member>
+        <member name="F:Td.Text.TextRegular.Uri.Ftp">
+            <summary>获取Ftp协议的URL文本验证器。</summary>
+        </member>
+        <member name="F:Td.Text.TextRegular.Chinese.Cellphone">
+            <summary>获取中国手机号码的文本验证器。</summary>
+        </member>
+        <member name="F:Td.Text.TextRegular.Chinese.Telephone">
+            <summary>获取中国固定电话号码的文本验证器。</summary>
+        </member>
+        <member name="F:Td.Text.TextRegular.Chinese.IdentityNo">
+            <summary>获取中国身份证号码的文本验证器。</summary>
+        </member>
+        <member name="F:Td.Text.TextRegular.Chinese.PostalCode">
+            <summary>获取中国邮政编码的文本验证器。</summary>
+        </member>
+    </members>
+</doc>

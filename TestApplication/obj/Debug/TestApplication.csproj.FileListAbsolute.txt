@@ -1,0 +1,10 @@
+D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Debug\TestApplication.exe.config
+D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Debug\TestApplication.exe
+D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Debug\TestApplication.pdb
+D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Debug\Td.CoreLibrary.dll
+D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Debug\Td.Task.Framework.dll
+D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Debug\Td.Task.Framework.pdb
+D:\Work\01-Projects\Td.TimerTask\TestApplication\bin\Debug\Td.CoreLibrary.xml
+D:\Work\01-Projects\Td.TimerTask\TestApplication\obj\Debug\TestApplication.csprojResolveAssemblyReference.cache
+D:\Work\01-Projects\Td.TimerTask\TestApplication\obj\Debug\TestApplication.exe
+D:\Work\01-Projects\Td.TimerTask\TestApplication\obj\Debug\TestApplication.pdb

@@ -144,7 +144,11 @@ namespace KylinService.Services
         {
             ThreadPool.QueueUserWorkItem((item) =>
             {
-                if (_isLoop)
+                if (!_isLoop)
+                {
+                    ServiceMain();
+                }
+                else
                 {
                     while (true)
                     {
@@ -154,7 +158,7 @@ namespace KylinService.Services
                         if (!IsPaused)
                         {
                             //执行单次请求并返回是否需要继续指示信号
-                            onContinue = SingleRequest();
+                            onContinue = ServiceMain();
                         }
 
                         //不继续时
@@ -165,11 +169,25 @@ namespace KylinService.Services
                         }
                     }
                 }
-                else
-                {
-                    SingleRequest();
-                }
             });
+        }
+
+        /// <summary>
+        /// 服务主程序执行
+        /// </summary>
+        /// <returns></returns>
+        private bool ServiceMain()
+        {
+            try
+            {
+                //执行单次请求并返回是否需要继续指示信号
+                return SingleRequest();
+            }
+            catch (Exception ex)
+            {
+                OnThrowException(ex);
+                return true;
+            }
         }
 
         /// <summary>
@@ -215,13 +233,15 @@ namespace KylinService.Services
             {
                 OutputMessage(sb.ToString());
             }
+            else
+            {
+                sb.AppendLine("异常详情：");
+                sb.AppendLine(ex.StackTrace);
 
-            sb.AppendLine("异常详情：");
-            sb.AppendLine(ex.StackTrace);
-
-            //写入异常日志
-            var loger = new ExceptionLoger();
-            loger.Write(ServiceName, ex);
+                //写入异常日志
+                var loger = new ExceptionLoger();
+                loger.Write(ServiceName, ex);
+            }
         }
 
         /// <summary>
