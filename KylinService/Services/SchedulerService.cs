@@ -58,9 +58,19 @@ namespace KylinService.Services
         private bool _isLoop;
 
         /// <summary>
-        /// 循环队列为空时等待下次执行的等待时间（毫秒）
+        /// 循环队列为空时默认等待下次执行的时间（毫秒）间隔，如连续为empty，等待时间为当前设置时间的倍数
         /// </summary>
-        private int _loopMillisecondsTimeout;
+        private int _defaultNextWaitMillisecondsIfEmpty;
+
+        /// <summary>
+        /// 队列为空时阶梯等待时间的最大倍数
+        /// </summary>
+        private const int _maxWaitTimes = 10;
+
+        /// <summary>
+        /// 当前已等待时间倍数
+        /// </summary>
+        private int _waitTimes = 0;
 
         #region 初始化
 
@@ -75,8 +85,8 @@ namespace KylinService.Services
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
         /// <param name="isLoop">是否循环处理</param>
-        /// <param name="loopMillisecondsTimeout">循环队列为空时等待下次执行的等待时间</param>
-        public SchedulerService(Form form, DelegateTool.WriteMessageDelegate writeDelegate, bool isLoop = false, int loopMillisecondsTimeout = 0)
+        /// <param name="defaultNextWaitMillisecondsIfEmpty">循环队列为空时默认等待下次执行的时间（毫秒）间隔，如连续为empty，等待时间为当前设置时间的倍数</param>
+        public SchedulerService(Form form, DelegateTool.WriteMessageDelegate writeDelegate, bool isLoop = false, int defaultNextWaitMillisecondsIfEmpty = 0)
         {
             Schedulers = new SchedulerCollection();
 
@@ -86,7 +96,7 @@ namespace KylinService.Services
 
             this._isLoop = isLoop;
 
-            this._loopMillisecondsTimeout = loopMillisecondsTimeout;
+            this._defaultNextWaitMillisecondsIfEmpty = defaultNextWaitMillisecondsIfEmpty;
         }
 
         #endregion
@@ -164,8 +174,20 @@ namespace KylinService.Services
                         //不继续时
                         if (!onContinue)
                         {
-                            //休眠_loopMillisecondsTimeout毫秒，避免CPU空转
-                            Thread.Sleep(_loopMillisecondsTimeout);
+                            if (_waitTimes < _maxWaitTimes)
+                            {
+                                _waitTimes++;
+                            }
+
+                            //休眠时间（单位：毫秒）
+                            var waitMilliseconds = _defaultNextWaitMillisecondsIfEmpty * _waitTimes;
+
+                            //休眠一段时间（单位：毫秒），避免CPU空转
+                            Thread.Sleep(waitMilliseconds);
+                        }
+                        else
+                        {
+                            _waitTimes = 0;
                         }
                     }
                 }
@@ -178,16 +200,24 @@ namespace KylinService.Services
         /// <returns></returns>
         private bool ServiceMain()
         {
+            bool _continue = false;
             try
             {
                 //执行单次请求并返回是否需要继续指示信号
-                return SingleRequest();
+                _continue = SingleRequest();
+
+                //不能继续时写入脏数据
+                if (!_continue)
+                {
+                    WriteDirtyData();
+                }
             }
             catch (Exception ex)
             {
                 OnThrowException(ex);
-                return true;
             }
+
+            return _continue;
         }
 
         /// <summary>
@@ -195,6 +225,11 @@ namespace KylinService.Services
         /// </summary>
         /// <returns></returns>
         protected abstract bool SingleRequest();
+
+        /// <summary>
+        /// 写入脏数据
+        /// </summary>
+        protected abstract void WriteDirtyData();
 
         /// <summary>
         /// 执行事务

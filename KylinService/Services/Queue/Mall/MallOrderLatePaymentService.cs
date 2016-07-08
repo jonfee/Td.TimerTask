@@ -40,21 +40,26 @@ namespace KylinService.Services.Queue.Mall
             //获取一条待处理数据
             var model = null != config ? config.DataBase.ListLeftPop<MallOrderNoPaymentModel>(config.Key) : null;
 
+            //对象不为null
             if (null != model)
             {
-                DateTime lastTime = model.NeedPayTime ?? model.CreateTime.AddMinutes(Startup.B2COrderConfig.WaitPaymentMinutes);
+                //非脏数据，则处理
+                if (model.OrderID.ToString() != Startup.DirtyDataPKValue)
+                {
+                    DateTime lastTime = model.NeedPayTime ?? model.CreateTime.AddMinutes(Startup.B2COrderConfig.WaitPaymentMinutes);
 
-                TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间
+                    TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间
 
-                if (duetime.Ticks < 0) duetime = TimeoutZero;
+                    if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+                    System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
-                //输出消息
-                string message = string.Format("精品汇订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                OutputMessage(message);
+                    //输出消息
+                    string message = string.Format("精品汇订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                    OutputMessage(message);
 
-                Schedulers.Add(model.OrderID, timer);
+                    Schedulers.Add(model.OrderID, timer);
+                }
 
                 return true;
             }
@@ -100,6 +105,14 @@ namespace KylinService.Services.Queue.Mall
             {
                 Schedulers.Remove(model.OrderID);
             }
+        }
+
+        protected override void WriteDirtyData()
+        {
+            var model = new MallOrderNoPaymentModel();
+            model.OrderID = long.Parse(Startup.DirtyDataPKValue);
+
+            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

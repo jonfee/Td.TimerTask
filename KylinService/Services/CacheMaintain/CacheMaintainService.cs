@@ -134,5 +134,10 @@ namespace KylinService.Services.CacheMaintain
                 m_disposed = true;
             }
         }
+
+        protected override void WriteDirtyData()
+        {
+            //无处理
+        }
     }
 }

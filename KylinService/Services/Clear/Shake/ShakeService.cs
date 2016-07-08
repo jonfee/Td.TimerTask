@@ -81,5 +81,10 @@ namespace KylinService.Services.Clear.Shake
 
             return true;
         }
+
+        protected override void WriteDirtyData()
+        {
+            //无处理
+        }
     }
 }

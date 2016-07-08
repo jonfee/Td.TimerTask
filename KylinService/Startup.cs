@@ -436,6 +436,11 @@ namespace KylinService
         public static int ErrorRangeMillisecond { get; private set; }
 
         /// <summary>
+        /// 队列为空时写入脏数据的默认主键值
+        /// </summary>
+        public const string DirtyDataPKValue = "19840828";
+
+        /// <summary>
         /// 服务程序相关描述信息
         /// </summary>
         public static ProductInfo ProductInfo { get; private set; }
@@ -499,7 +504,7 @@ namespace KylinService
         /// 跑腿业务全局配置
         /// </summary>
         public static LegworkGlobalConfigCacheModel LegworkGlobalConfig
-        {//Td.Kylin.DataCache.CacheCollection.LegworkGlobalConfigCache.Value()?.FirstOrDefault()
+        {
             get;
             private set;
         }

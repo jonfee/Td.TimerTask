@@ -43,17 +43,21 @@ namespace KylinService.Services.Queue.Appoint
 
             if (null != model)
             {
-                TimeSpan duetime = model.WorkerFinishTime.AddDays(Startup.AppointConfig.EndServiceWaitUserDays).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+                //非脏数据则处理
+                if (model.OrderID.ToString() != Startup.DirtyDataPKValue)
+                {
+                    TimeSpan duetime = model.WorkerFinishTime.AddDays(Startup.AppointConfig.EndServiceWaitUserDays).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                if (duetime.Ticks < 0) duetime = TimeoutZero;
+                    if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+                    System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
-                //输出消息
-                string message = string.Format("上门服务订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未确认服务完成系统将自动确认服务完成", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                OutputMessage(message);
+                    //输出消息
+                    string message = string.Format("上门服务订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未确认服务完成系统将自动确认服务完成", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                    OutputMessage(message);
 
-                Schedulers.Add(model.OrderID, timer);
+                    Schedulers.Add(model.OrderID, timer);
+                }
 
                 return true;
             }
@@ -100,6 +104,14 @@ namespace KylinService.Services.Queue.Appoint
             {
                 Schedulers.Remove(model.OrderID);
             }
+        }
+
+        protected override void WriteDirtyData()
+        {
+            var model = new VisitingOrderLateReceiveModel();
+            model.OrderID = long.Parse(Startup.DirtyDataPKValue);
+
+            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

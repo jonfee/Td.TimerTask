@@ -43,17 +43,21 @@ namespace KylinService.Services.Queue.Welfare
 
             if (null != model)
             {
-                TimeSpan duetime = model.ApplyStartTime.AddMinutes(-Startup.WelfareConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+                //非脏数据，则处理
+                if (model.WelfareID.ToString() != Startup.DirtyDataPKValue)
+                {
+                    TimeSpan duetime = model.ApplyStartTime.AddMinutes(-Startup.WelfareConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                if (duetime.Ticks < 0) duetime = TimeoutZero;
+                    if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+                    System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
-                //输出消息
-                string message = string.Format("福利(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户参与报名", model.WelfareID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                OutputMessage(message);
+                    //输出消息
+                    string message = string.Format("福利(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户参与报名", model.WelfareID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+                    OutputMessage(message);
 
-                Schedulers.Add(model.WelfareID, timer);
+                    Schedulers.Add(model.WelfareID, timer);
+                }
 
                 return true;
             }
@@ -102,6 +106,14 @@ namespace KylinService.Services.Queue.Welfare
             {
                 Schedulers.Remove(model.WelfareID);
             }
+        }
+
+        protected override void WriteDirtyData()
+        {
+            var model = new WelfareRemindModel();
+            model.WelfareID = long.Parse(Startup.DirtyDataPKValue);
+
+            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }
