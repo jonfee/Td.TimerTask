@@ -3,7 +3,6 @@ using KylinService.Core.Loger;
 using System;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace KylinService.Services
 {
@@ -16,16 +15,6 @@ namespace KylinService.Services
         /// 是否已释放
         /// </summary>
         protected bool m_disposed;
-
-        /// <summary>
-        /// 消息输出委托
-        /// </summary>
-        private DelegateTool.WriteMessageDelegate WriteDelegate;
-
-        /// <summary>
-        /// 当前操作Form窗体
-        /// </summary>
-        private Form CurrentForm;
 
         /// <summary>
         /// 任务计划收集器
@@ -65,7 +54,7 @@ namespace KylinService.Services
         /// <summary>
         /// 队列为空时阶梯等待时间的最大倍数
         /// </summary>
-        private const int _maxWaitTimes = 10;
+        private const int _maxWaitTimes = 20;
 
         /// <summary>
         /// 当前已等待时间倍数
@@ -77,7 +66,7 @@ namespace KylinService.Services
         /// <summary>
         /// 初始化
         /// </summary>
-        public SchedulerService() : this(null, null) { }
+        public SchedulerService() : this(isLoop: false, defaultNextWaitMillisecondsIfEmpty: 0) { }
 
         /// <summary>
         /// 初始化
@@ -86,13 +75,9 @@ namespace KylinService.Services
         /// <param name="writeDelegate"></param>
         /// <param name="isLoop">是否循环处理</param>
         /// <param name="defaultNextWaitMillisecondsIfEmpty">循环队列为空时默认等待下次执行的时间（毫秒）间隔，如连续为empty，等待时间为当前设置时间的倍数</param>
-        public SchedulerService(Form form, DelegateTool.WriteMessageDelegate writeDelegate, bool isLoop = false, int defaultNextWaitMillisecondsIfEmpty = 0)
+        public SchedulerService(bool isLoop = false, int defaultNextWaitMillisecondsIfEmpty = 0)
         {
             Schedulers = new SchedulerCollection();
-
-            this.CurrentForm = form;
-
-            this.WriteDelegate = writeDelegate;
 
             this._isLoop = isLoop;
 
@@ -156,7 +141,7 @@ namespace KylinService.Services
             {
                 if (!_isLoop)
                 {
-                    ServiceMain();
+                    SingleMain();
                 }
                 else
                 {
@@ -167,8 +152,8 @@ namespace KylinService.Services
                         //未暂停时
                         if (!IsPaused)
                         {
-                            //执行单次请求并返回是否需要继续指示信号
-                            onContinue = ServiceMain();
+                            //执行单次请求并返回是否需要继续信号指示
+                            onContinue = SingleMain();
                         }
 
                         //不继续时
@@ -195,22 +180,16 @@ namespace KylinService.Services
         }
 
         /// <summary>
-        /// 服务主程序执行
+        /// 单一操作执行主程序
         /// </summary>
         /// <returns></returns>
-        private bool ServiceMain()
+        private bool SingleMain()
         {
             bool _continue = false;
             try
             {
                 //执行单次请求并返回是否需要继续指示信号
                 _continue = SingleRequest();
-
-                //不能继续时写入脏数据
-                if (!_continue)
-                {
-                    WriteDirtyData();
-                }
             }
             catch (Exception ex)
             {
@@ -227,32 +206,25 @@ namespace KylinService.Services
         protected abstract bool SingleRequest();
 
         /// <summary>
-        /// 写入脏数据
-        /// </summary>
-        protected abstract void WriteDirtyData();
-
-        /// <summary>
         /// 执行事务
         /// </summary>
         /// <param name="state"></param>
         protected abstract void Execute(object state);
 
         /// <summary>
-        /// 暂停服务
+        /// 暂停服务（IsPaused=true）
         /// </summary>
         public virtual void Pause()
         {
             this.IsPaused = true;
-            OnStart();
         }
 
         /// <summary>
-        /// 继续服务
+        /// 继续服务（IsPaused=false）
         /// </summary>
-        public void Continue()
+        public virtual void Continue()
         {
             this.IsPaused = false;
-            OnStart();
         }
 
         /// <summary>
@@ -266,7 +238,7 @@ namespace KylinService.Services
 
             if (ex is CustomException)
             {
-                OutputMessage(sb.ToString());
+                Logger(sb.ToString());
             }
             else
             {
@@ -280,12 +252,12 @@ namespace KylinService.Services
         }
 
         /// <summary>
-        /// 输出消息
+        /// 输出消息并记录日志
         /// </summary>
         /// <param name="message"></param>
-        protected void OutputMessage(string message)
+        protected void Logger(string message)
         {
-            DelegateTool.WriteMessage(CurrentForm, WriteDelegate, message);
+            WriteMessageHelper.WriteMessage(message);
 
             RunLoger loger = new RunLoger(ServiceName);
             loger.Write(message);

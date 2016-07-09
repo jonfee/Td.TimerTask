@@ -3,8 +3,15 @@ using System.Windows.Forms;
 
 namespace KylinService.Core
 {
-    public class DelegateTool
+    public sealed class WriteMessageHelper
     {
+        /// <summary>
+        /// 输出消息的Form对象实例
+        /// </summary>
+        public static Form OutputForm;
+
+        public static WriteMessageDelegate OutputMessage;
+
         /// <summary>
         /// 消息输出委托
         /// </summary>
@@ -16,13 +23,13 @@ namespace KylinService.Core
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public static void WriteMessage(Form form, WriteMessageDelegate writeDelegate, string message)
+        public static void WriteMessage(string message)
         {
-            if (null != form && null != writeDelegate)
+            if (null != OutputForm && null != OutputMessage)
             {
-                form.Invoke((EventHandler)delegate
+                OutputForm.Invoke((EventHandler)delegate
                 {
-                    writeDelegate(message, true);
+                    OutputMessage(message, true);
                 });
             }
         }

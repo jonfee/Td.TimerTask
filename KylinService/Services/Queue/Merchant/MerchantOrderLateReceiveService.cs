@@ -27,7 +27,7 @@ namespace KylinService.Services.Queue.Merchant
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public MerchantOrderLateReceiveService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.MerchantOrderLateReceive, form, writeDelegate)
+        public MerchantOrderLateReceiveService() : base(QueueScheduleType.MerchantOrderLateReceive)
         {
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.MerchantOrderLateReceive];
         }
@@ -43,9 +43,6 @@ namespace KylinService.Services.Queue.Merchant
 
             if (null != model)
             {
-                //非脏数据，则处理
-                if (model.OrderID.ToString() != Startup.DirtyDataPKValue)
-                {
                     DateTime lastTime = model.SendTime.AddDays(Startup.MerchantOrderConfig.WaitReceiptGoodsDays);
 
                     TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
@@ -56,10 +53,10 @@ namespace KylinService.Services.Queue.Merchant
 
                     //输出消息
                     string message = string.Format("附近购订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未收货系统将自动确认收货", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                    OutputMessage(message);
+
+                Logger(message);
 
                     Schedulers.Add(model.OrderID, timer);
-                }
 
                 return true;
             }
@@ -98,7 +95,7 @@ namespace KylinService.Services.Queue.Merchant
                     message = string.Format("〖订单（{0}）〗自动确认收货失败，原因：{1}", lastOrder.OrderCode, settlement.ErrorMessage);
                 }
 
-                OutputMessage(message);
+                Logger(message);
             }
             catch (Exception ex)
             {
@@ -108,14 +105,6 @@ namespace KylinService.Services.Queue.Merchant
             {
                 Schedulers.Remove(model.OrderID);
             }
-        }
-
-        protected override void WriteDirtyData()
-        {
-          var  model = new MerchantOrderNoReceiveModel();
-            model.OrderID = long.Parse(Startup.DirtyDataPKValue);
-
-            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace KylinService.Services.CacheMaintain
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public CacheMaintainService(string serviceName, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(form, writeDelegate)
+        public CacheMaintainService(string serviceName)
         {
             ServiceName = serviceName;
         }
@@ -110,7 +110,7 @@ namespace KylinService.Services.CacheMaintain
 
                 if (string.IsNullOrWhiteSpace(message)) message = "没有任何可更新的缓存项";
 
-                OutputMessage(message);
+                Logger(message);
             }
             catch (Exception ex)
             {
@@ -135,9 +135,18 @@ namespace KylinService.Services.CacheMaintain
             }
         }
 
-        protected override void WriteDirtyData()
+        public override void Pause()
         {
-            //无处理
+            base.Pause();
+
+            Schedulers.Dispose();
+        }
+
+        public override void Continue()
+        {
+            base.Continue();
+
+            SingleRequest();
         }
     }
 }

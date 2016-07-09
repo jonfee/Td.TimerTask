@@ -17,7 +17,7 @@ namespace KylinService.Services.Clear.Shake
         /// </summary>
         System.Threading.Timer timer;
 
-        public ShakeService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(ClearScheduleType.ShakeDayTimesClear, form, writeDelegate)
+        public ShakeService() : base(ClearScheduleType.ShakeDayTimesClear)
         {
             timer = new System.Threading.Timer(new TimerCallback(Execute), null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -52,7 +52,7 @@ namespace KylinService.Services.Clear.Shake
 
                 string message = string.Format("共对 {0} 位用户进行了摇一摇当日已摇次数清除", count);
 
-                OutputMessage(message);
+                Logger(message);
             }
             catch (Exception ex)
             {
@@ -82,9 +82,18 @@ namespace KylinService.Services.Clear.Shake
             return true;
         }
 
-        protected override void WriteDirtyData()
+        public override void Pause()
         {
-            //无处理
+            base.Pause();
+
+            timer.Change(Timeout.Infinite, Timeout.Infinite);
+        }
+
+        public override void Continue()
+        {
+            base.Continue();
+
+            SingleRequest();
         }
     }
 }

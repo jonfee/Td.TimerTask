@@ -1,4 +1,5 @@
-﻿using KylinService.SysEnums;
+﻿using KylinService.Services;
+using KylinService.SysEnums;
 using StackExchange.Redis;
 using System;
 using Td.Kylin.Redis;
@@ -8,7 +9,7 @@ namespace KylinService.Redis.Schedule
     /// <summary>
     /// 任务计划队列Redis配置
     /// </summary>
-    public class ScheduleRedisConfig
+    public class ScheduleRedisConfig : ServiceState
     {
         /// <summary>
         /// 任务计划名称

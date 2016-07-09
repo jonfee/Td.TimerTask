@@ -43,8 +43,9 @@ namespace KylinService
             //初始化显示消息
             InitShow();
 
-            //委托
-            writeDelegate = WriteMessage;
+            //输出消息相关定义
+            WriteMessageHelper.OutputForm = this;//窗体对象
+            WriteMessageHelper.OutputMessage = WriteMessage;//消息输出委托
 
             //初始化显示产品信息
             InitProductInfo();
@@ -71,13 +72,13 @@ namespace KylinService
         //private string _serTtime = "time_";         //服务运行时间控件标识
 
         //定义消息输出委托
-        private DelegateTool.WriteMessageDelegate writeDelegate;
+        private WriteMessageHelper.WriteMessageDelegate writeDelegate;
 
         #endregion
 
         #region 公共属性
 
-        internal DelegateTool.WriteMessageDelegate WriteMessageDelegate
+        internal WriteMessageHelper.WriteMessageDelegate WriteMessageDelegate
         {
             get
             {
@@ -191,7 +192,7 @@ namespace KylinService
             {
                 //摇一摇服务
                 case ClearScheduleType.ShakeDayTimesClear:
-                    service = new ShakeService(this, writeDelegate);
+                    service = new ShakeService();
                     break;
             }
             #endregion
@@ -249,7 +250,7 @@ namespace KylinService
 
             #endregion
 
-            #region 启动服务
+            #region 暂停服务
 
             //当前服务的计划类型
             SchedulerService service = _serviceCollection[serviceName]; //SchedulerServiceFactory.GetService<SchedulerService>(ClearScheduleType.ShakeDayTimesClear);
@@ -432,23 +433,6 @@ namespace KylinService
                 panel.Controls.Add(stopButton);
                 #endregion
 
-                //#region//运行时长标题说明Lable
-                //Label lbTimeTip = new Label();
-                //lbTimeTip.Width = 70;
-                //lbTimeTip.Text = "运行时长：";
-                //lbTimeTip.Location = new System.Drawing.Point(500, 5);
-                //panel.Controls.Add(lbTimeTip);
-                //#endregion
-
-                //#region//运行时长展示Label
-                //Label lbTime = new Label();
-                //lbTime.Width = 200;
-                //lbTime.Text = "0天 0时 0分 0秒";
-                //lbTime.Name = _serTtime + serv.Name;
-                //lbTime.Location = new System.Drawing.Point(570, 5);
-                //panel.Controls.Add(lbTime);
-                //#endregion
-
                 this.tabQueue.Controls.Add(panel);
             }
         }
@@ -480,59 +464,59 @@ namespace KylinService
             {
                 //福利开奖 
                 case QueueScheduleType.WelfareLottery:
-                    service = new LotteryService(this, writeDelegate);
+                    service = new LotteryService();
                     break;
                 //福利报名提醒
                 case QueueScheduleType.WelfareBaoMinRemind:
-                    service = new WelfareBaoMinRemindService(this, writeDelegate);
+                    service = new WelfareBaoMinRemindService();
                     break;
                 //社区活动提醒
                 case QueueScheduleType.CircleEventRemind:
-                    service = new EventRemindService(this, writeDelegate);
+                    service = new EventRemindService();
                     break;
                 //精品汇订单超时未支付
                 case QueueScheduleType.MallOrderLatePayment:
-                    service = new MallOrderLatePaymentService(this, writeDelegate);
+                    service = new MallOrderLatePaymentService();
                     break;
                 //精品汇订单超时未收货
                 case QueueScheduleType.MallOrderLateReceive:
-                    service = new MallOrderLateReceiveService(this, writeDelegate);
+                    service = new MallOrderLateReceiveService();
                     break;
                 //附近购订单超时未支付
                 case QueueScheduleType.MerchantOrderLatePayment:
-                    service = new MerchantOrderLatePaymentService(this, writeDelegate);
+                    service = new MerchantOrderLatePaymentService();
                     break;
                 //附近购订单超时未收货
                 case QueueScheduleType.MerchantOrderLateReceive:
-                    service = new MerchantOrderLateReceiveService(this, writeDelegate);
+                    service = new MerchantOrderLateReceiveService();
                     break;
                 //上门订单超时未支付
                 case QueueScheduleType.VisitingOrderLatePayment:
-                    service = new VisitingOrderLatePaymentService(this, writeDelegate);
+                    service = new VisitingOrderLatePaymentService();
                     break;
                 //上门订单超时未确认服务完成
                 case QueueScheduleType.VisitingOrderLateConfirmDone:
-                    service = new VisitingOrderLateConfirmDoneService(this, writeDelegate);
+                    service = new VisitingOrderLateConfirmDoneService();
                     break;
                 //预约订单超时未支付
                 case QueueScheduleType.ReservationOrderLatePayment:
-                    service = new ReservationOrderLatePaymentService(this, writeDelegate);
+                    service = new ReservationOrderLatePaymentService();
                     break;
                 //预约订单超时未确认服务完成
                 case QueueScheduleType.ReservationOrderLateConfirmDone:
-                    service = new ReservationOrderLateConfirmDoneService(this, writeDelegate);
+                    service = new ReservationOrderLateConfirmDoneService();
                     break;
                 //跑腿业务员接单超时时间
                 case QueueScheduleType.LegworkOrderTimeout:
-                    service = new Legwork_OrderTimeoutService(this, writeDelegate);
+                    service = new Legwork_OrderTimeoutService();
                     break;
                 //跑腿业务员自动确认收货时间
                 case QueueScheduleType.LegworkAutoConfirmTime:
-                    service = new Legwork_AutoConfirmTimeService(this, writeDelegate);
+                    service = new Legwork_AutoConfirmTimeService();
                     break;
                 //跑腿业务员支付超时时间
                 case QueueScheduleType.LegworkPaymentTimeout:
-                    service = new Legwork_PaymentTimeoutService(this, writeDelegate);
+                    service = new Legwork_PaymentTimeoutService();
                     break;
             }
 
@@ -1032,7 +1016,7 @@ namespace KylinService
 
             string serviceName = "缓存维护服务";
 
-            SchedulerService service = new CacheMaintainService(serviceName, this, writeDelegate);
+            SchedulerService service = new CacheMaintainService(serviceName);
 
             service.Start();
 
@@ -1070,7 +1054,7 @@ namespace KylinService
         {
             var btn = (Button)sender;
 
-            #region 停止服务
+            #region 暂停服务
 
             //服务名称
             var serviceName = "缓存维护服务";

@@ -27,7 +27,7 @@ namespace KylinService.Services.Queue.Welfare
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public LotteryService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.WelfareLottery, form, writeDelegate)
+        public LotteryService() : base(QueueScheduleType.WelfareLottery)
         {
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.WelfareLottery];
         }
@@ -43,9 +43,6 @@ namespace KylinService.Services.Queue.Welfare
 
             if (null != model)
             {
-                //非脏数据，则处理
-                if (model.WelfareID.ToString() != Startup.DirtyDataPKValue)
-                {
                     TimeSpan duetime = model.LotteryTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
                     if (duetime.Ticks < 0) duetime = TimeoutZero;
@@ -54,10 +51,10 @@ namespace KylinService.Services.Queue.Welfare
 
                     //输出消息
                     string message = string.Format("福利“{0}”将于{2}天{3}小时{4}分{5}秒后（{1}）开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"), duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                    OutputMessage(message);
+
+                    Logger(message);
 
                     Schedulers.Add(model.WelfareID, timer);
-                }
 
                 return true;
             }
@@ -132,7 +129,7 @@ namespace KylinService.Services.Queue.Welfare
                 {
                     string sucMessage = string.Format("〖福利：{0}〗已开奖，本次共有 {1} 名人员中奖（总参与人数：{2}）！", model.Name, winnerPartCodes.Length, lastWelfare.PartNumber);
 
-                    OutputMessage(sucMessage);
+                    Logger(sucMessage);
                 }
                 else
                 {
@@ -160,14 +157,6 @@ namespace KylinService.Services.Queue.Welfare
             {
                 Schedulers.Remove(model.WelfareID);
             }
-        }
-
-        protected override void WriteDirtyData()
-        {
-           var model = new WelfareLotteryModel();
-            model.WelfareID = long.Parse(Startup.DirtyDataPKValue);
-
-            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

@@ -6,7 +6,6 @@ using KylinService.Redis.Schedule.Model;
 using KylinService.SysEnums;
 using System;
 using System.Threading;
-using System.Windows.Forms;
 using Td.Kylin.EnumLibrary;
 using Td.Kylin.Redis;
 
@@ -27,7 +26,7 @@ namespace KylinService.Services.Queue.Appoint
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public ReservationOrderLateConfirmDoneService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.ReservationOrderLateConfirmDone, form, writeDelegate)
+        public ReservationOrderLateConfirmDoneService() : base(QueueScheduleType.ReservationOrderLateConfirmDone)
         {
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.ReservationOrderLateConfirmDone];
         }
@@ -43,9 +42,6 @@ namespace KylinService.Services.Queue.Appoint
 
             if (null != model)
             {
-                //非脏数据则处理
-                if (model.OrderID.ToString() != Startup.DirtyDataPKValue)
-                {
                     TimeSpan duetime = model.WorkerFinishTime.AddDays(Startup.AppointConfig.EndServiceWaitUserDays).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
                     if (duetime.Ticks < 0) duetime = TimeoutZero;
@@ -54,10 +50,10 @@ namespace KylinService.Services.Queue.Appoint
 
                     //输出消息
                     string message = string.Format("预约服务订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未确认服务完成系统将自动确认服务完成", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                    OutputMessage(message);
+
+                Logger(message);
 
                     Schedulers.Add(model.OrderID, timer);
-                }
 
                 return true;
             }
@@ -94,7 +90,7 @@ namespace KylinService.Services.Queue.Appoint
                     message = string.Format("〖预约订单（{0}）〗自动确认服务完成失败，原因：{1}", lastOrder.OrderCode, settlement.ErrorMessage);
                 }
 
-                OutputMessage(message);
+                Logger(message);
             }
             catch (Exception ex)
             {
@@ -104,14 +100,6 @@ namespace KylinService.Services.Queue.Appoint
             {
                 Schedulers.Remove(model.OrderID);
             }
-        }
-
-        protected override void WriteDirtyData()
-        {
-            var model = new ReservationOrderLateReceiveModel();
-            model.OrderID = long.Parse(Startup.DirtyDataPKValue);
-
-            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

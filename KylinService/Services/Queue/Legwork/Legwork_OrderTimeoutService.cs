@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using KylinService.Core;
-using KylinService.Data.Model;
+﻿using KylinService.Core;
 using KylinService.Data.Provider;
 using KylinService.Redis.Schedule;
 using KylinService.Services.Queue.Legwork.Model;
 using KylinService.SysEnums;
-using Td.Kylin.Entity;
+using System;
+using System.Threading;
 using Td.Kylin.EnumLibrary;
 using Td.Kylin.Redis;
 
@@ -28,7 +21,7 @@ namespace KylinService.Services.Queue.Legwork
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public Legwork_OrderTimeoutService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.LegworkOrderTimeout, form, writeDelegate)
+        public Legwork_OrderTimeoutService() : base(QueueScheduleType.LegworkOrderTimeout)
         {
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.LegworkOrderTimeout];
         }
@@ -44,9 +37,6 @@ namespace KylinService.Services.Queue.Legwork
 
             if (null != model)
             {
-                //非脏数据则处理
-                if (model.OrderID.ToString() != Startup.DirtyDataPKValue)
-                {
                     DateTime lastTime = model.CreateTime.AddSeconds(Startup.LegworkGlobalConfig.OrderTimeout);
 
                     TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
@@ -57,10 +47,10 @@ namespace KylinService.Services.Queue.Legwork
 
                     //输出消息
                     string message = string.Format("跑腿订单(ID:{0})在{1}天{2}小时{3}分{4}秒后没有员工接单，系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                    OutputMessage(message);
+
+                Logger(message);
 
                     Schedulers.Add(model.OrderID, timer);
-                }
 
                 return true;
             }
@@ -97,7 +87,7 @@ namespace KylinService.Services.Queue.Legwork
                     message = string.Format("〖订单（{0}）〗自动取消订单失败！", lastOrder.OrderCode);
                 }
 
-                OutputMessage(message);
+                Logger(message);
             }
             catch (Exception ex)
             {
@@ -107,14 +97,6 @@ namespace KylinService.Services.Queue.Legwork
             {
                 Schedulers.Remove(model.OrderID);
             }
-        }
-
-        protected override void WriteDirtyData()
-        {
-            var model = new OrderTimeoutModel();
-            model.OrderID = long.Parse(Startup.DirtyDataPKValue);
-
-            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

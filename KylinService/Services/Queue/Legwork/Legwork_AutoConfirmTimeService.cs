@@ -1,19 +1,10 @@
 ﻿using KylinService.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using KylinService.Data.Model;
 using KylinService.Data.Provider;
-using KylinService.Data.Settlement;
 using KylinService.Redis.Schedule;
-using KylinService.Redis.Schedule.Model;
 using KylinService.Services.Queue.Legwork.Model;
 using KylinService.SysEnums;
-using Td.Kylin.Entity;
+using System;
+using System.Threading;
 using Td.Kylin.EnumLibrary;
 using Td.Kylin.Redis;
 
@@ -30,7 +21,7 @@ namespace KylinService.Services.Queue.Legwork
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public Legwork_AutoConfirmTimeService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.LegworkAutoConfirmTime, form, writeDelegate)
+        public Legwork_AutoConfirmTimeService() : base(QueueScheduleType.LegworkAutoConfirmTime)
         {
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.LegworkAutoConfirmTime];
         }
@@ -46,9 +37,6 @@ namespace KylinService.Services.Queue.Legwork
 
             if (null != model)
             {
-                //非脏数据，则处理
-                if (model.OrderID.ToString() != Startup.DirtyDataPKValue)
-                {
                     DateTime lastTime = model.ActualDeliveryTime.Value.AddSeconds(Startup.LegworkGlobalConfig.AutoConfirmTime);
 
                     TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
@@ -59,19 +47,10 @@ namespace KylinService.Services.Queue.Legwork
 
                     //输出消息
                     string message = string.Format("跑腿订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未收货系统将自动确认收货", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                    OutputMessage(message);
+
+                Logger(message);
 
                     Schedulers.Add(model.OrderID, timer);
-                }
-
-                return true;
-            }
-            else if (config != null && config.DataBase != null)
-            {
-                model = new AutoConfirmTimeModel();
-                model.OrderID = long.Parse(Startup.DirtyDataPKValue);
-
-                config.DataBase.ListLeftPush(config.Key, model);
 
                 return true;
             }
@@ -109,7 +88,7 @@ namespace KylinService.Services.Queue.Legwork
                     message = string.Format("〖订单（{0}）〗自动确认收货失败！", lastOrder.OrderCode);
                 }
 
-                OutputMessage(message);
+                Logger(message);
             }
             catch (Exception ex)
             {
@@ -119,14 +98,6 @@ namespace KylinService.Services.Queue.Legwork
             {
                 Schedulers.Remove(model.OrderID);
             }
-        }
-
-        protected override void WriteDirtyData()
-        {
-            var model = new AutoConfirmTimeModel();
-            model.OrderID = long.Parse(Startup.DirtyDataPKValue);
-
-            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

@@ -15,17 +15,12 @@ namespace KylinService.Services.Clear
         public ClearScheduleType ServiceType;
 
         /// <summary>
-        /// 初始化
-        /// </summary>
-        public ClearSchedulerService() : this(default(ClearScheduleType), null, null) { }
-
-        /// <summary>
         /// 初始化实例
         /// </summary>
         /// <param name="scheduleType"></param>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public ClearSchedulerService(ClearScheduleType scheduleType, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(form, writeDelegate)
+        public ClearSchedulerService(ClearScheduleType scheduleType)
         {
             ServiceType = scheduleType;
 

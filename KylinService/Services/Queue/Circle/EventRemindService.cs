@@ -24,7 +24,7 @@ namespace KylinService.Services.Queue.Circle
         /// </summary>
         ScheduleRedisConfig config;
 
-        public EventRemindService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.CircleEventRemind, form, writeDelegate)
+        public EventRemindService() : base(QueueScheduleType.CircleEventRemind)
         {
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.CircleEventRemind];
         }
@@ -40,21 +40,18 @@ namespace KylinService.Services.Queue.Circle
 
             if (null != model)
             {
-                //非脏数据则处理
-                if (model.EventID.ToString() != Startup.DirtyDataPKValue)
-                {
-                    TimeSpan duetime = model.StartTime.AddMinutes(-Startup.CircleConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+                TimeSpan duetime = model.StartTime.AddMinutes(-Startup.CircleConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
 
-                    if (duetime.Ticks < 0) duetime = TimeoutZero;
+                if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                    System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
-                    //输出消息
-                    string message = string.Format("社区活动(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户", model.EventID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                    OutputMessage(message);
+                //输出消息
+                string message = string.Format("社区活动(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户", model.EventID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
 
-                    Schedulers.Add(model.EventID, timer);
-                }
+                Logger(message);
+
+                Schedulers.Add(model.EventID, timer);
 
                 return true;
             }
@@ -103,14 +100,6 @@ namespace KylinService.Services.Queue.Circle
             {
                 Schedulers.Remove(model.EventID);
             }
-        }
-
-        protected override void WriteDirtyData()
-        {
-            var model = new CircleEventRemindModel();
-            model.EventID = long.Parse(Startup.DirtyDataPKValue);
-
-            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

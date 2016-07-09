@@ -383,7 +383,7 @@
     </Compile>
     <Compile Include="Core\ConsumerCodeGenerater.cs" />
     <Compile Include="Core\CustomException.cs" />
-    <Compile Include="Core\DelegateTool.cs" />
+    <Compile Include="Core\WriteMessageHelper.cs" />
     <Compile Include="Core\EnumExtensions.cs" />
     <Compile Include="Core\IDCreater.cs" />
     <Compile Include="Core\Loger\BaseLoger.cs" />
@@ -487,6 +487,7 @@
     <Compile Include="Services\Queue\Welfare\LotteryService.cs" />
     <Compile Include="Redis\Schedule\Model\WelfareLotteryModel.cs" />
     <Compile Include="Services\Queue\Welfare\WelfareConfig.cs" />
+    <Compile Include="Services\ServiceState.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="SysEnums\CacheTimeOption.cs" />
     <Compile Include="SysEnums\RedisPushType.cs" />

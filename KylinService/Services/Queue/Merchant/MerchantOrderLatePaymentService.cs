@@ -26,7 +26,7 @@ namespace KylinService.Services.Queue.Merchant
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public MerchantOrderLatePaymentService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.MerchantOrderLatePayment, form, writeDelegate)
+        public MerchantOrderLatePaymentService() : base(QueueScheduleType.MerchantOrderLatePayment)
         {
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.MerchantOrderLatePayment];
         }
@@ -42,9 +42,6 @@ namespace KylinService.Services.Queue.Merchant
 
             if (null != model)
             {
-                //非脏数据，则处理
-                if (model.OrderID.ToString() != Startup.DirtyDataPKValue)
-                {
                     DateTime lastTime = model.CreateTime.AddMinutes(Startup.MerchantOrderConfig.WaitPaymentMinutes);
 
                     TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
@@ -55,10 +52,10 @@ namespace KylinService.Services.Queue.Merchant
 
                     //输出消息
                     string message = string.Format("附近购订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                    OutputMessage(message);
+
+                Logger(message);
 
                     Schedulers.Add(model.OrderID, timer);
-                }
 
                 return true;
             }
@@ -94,7 +91,7 @@ namespace KylinService.Services.Queue.Merchant
                     message = string.Format("〖订单（{0}）〗因超时未付款，系统自动取消订单时操作失败！", lastOrder.OrderCode);
                 }
 
-                OutputMessage(message);
+                Logger(message);
             }
             catch (Exception ex)
             {
@@ -104,14 +101,6 @@ namespace KylinService.Services.Queue.Merchant
             {
                 Schedulers.Remove(model.OrderID);
             }
-        }
-
-        protected override void WriteDirtyData()
-        {
-          var  model = new MerchantOrderLateNoPaymentModel();
-            model.OrderID = long.Parse(Startup.DirtyDataPKValue);
-
-            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace KylinService.Services.Queue
         /// <summary>
         /// 初始化
         /// </summary>
-        public QueueSchedulerService() : this(default(QueueScheduleType), null, null) { }
+        public QueueSchedulerService() : this(default(QueueScheduleType)) { }
 
         /// <summary>
         /// 初始化实例
@@ -25,7 +25,7 @@ namespace KylinService.Services.Queue
         /// <param name="scheduleType"></param>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public QueueSchedulerService(QueueScheduleType scheduleType, Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(form, writeDelegate, true, 100)
+        public QueueSchedulerService(QueueScheduleType scheduleType) : base(true, 100)
         {
             ServiceType = scheduleType;
 

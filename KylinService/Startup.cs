@@ -434,12 +434,7 @@ namespace KylinService
         /// 定时操作时间误差范围（单位：毫秒）
         /// </summary>
         public static int ErrorRangeMillisecond { get; private set; }
-
-        /// <summary>
-        /// 队列为空时写入脏数据的默认主键值
-        /// </summary>
-        public const string DirtyDataPKValue = "19840828";
-
+        
         /// <summary>
         /// 服务程序相关描述信息
         /// </summary>

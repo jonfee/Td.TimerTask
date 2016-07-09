@@ -26,7 +26,7 @@ namespace KylinService.Services.Queue.Mall
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public MallOrderLatePaymentService(Form form, DelegateTool.WriteMessageDelegate writeDelegate) : base(QueueScheduleType.MallOrderLatePayment, form, writeDelegate)
+        public MallOrderLatePaymentService() : base(QueueScheduleType.MallOrderLatePayment)
         {
             config = Startup.ScheduleRedisConfigs[QueueScheduleType.MallOrderLatePayment];
         }
@@ -43,23 +43,20 @@ namespace KylinService.Services.Queue.Mall
             //对象不为null
             if (null != model)
             {
-                //非脏数据，则处理
-                if (model.OrderID.ToString() != Startup.DirtyDataPKValue)
-                {
-                    DateTime lastTime = model.NeedPayTime ?? model.CreateTime.AddMinutes(Startup.B2COrderConfig.WaitPaymentMinutes);
+                DateTime lastTime = model.NeedPayTime ?? model.CreateTime.AddMinutes(Startup.B2COrderConfig.WaitPaymentMinutes);
 
-                    TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间
+                TimeSpan duetime = lastTime.Subtract(DateTime.Now);    //延迟执行时间
 
-                    if (duetime.Ticks < 0) duetime = TimeoutZero;
+                if (duetime.Ticks < 0) duetime = TimeoutZero;
 
-                    System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
 
-                    //输出消息
-                    string message = string.Format("精品汇订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                    OutputMessage(message);
+                //输出消息
+                string message = string.Format("精品汇订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
 
-                    Schedulers.Add(model.OrderID, timer);
-                }
+                Logger(message);
+
+                Schedulers.Add(model.OrderID, timer);
 
                 return true;
             }
@@ -95,7 +92,7 @@ namespace KylinService.Services.Queue.Mall
                     message = string.Format("〖订单（{0}）：{1}〗因超时未付款，系统自动取消订单时操作失败！", lastOrder.OrderCode, lastOrder.ProductInfo);
                 }
 
-                OutputMessage(message);
+                Logger(message);
             }
             catch (Exception ex)
             {
@@ -105,14 +102,6 @@ namespace KylinService.Services.Queue.Mall
             {
                 Schedulers.Remove(model.OrderID);
             }
-        }
-
-        protected override void WriteDirtyData()
-        {
-            var model = new MallOrderNoPaymentModel();
-            model.OrderID = long.Parse(Startup.DirtyDataPKValue);
-
-            config.DataBase.ListRightPush(config.Key, model);
         }
     }
 }
