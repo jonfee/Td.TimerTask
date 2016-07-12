@@ -1,0 +1,84 @@
+________________________________________________________________________________________________________________
+
+日期：2016/7/12 18:05:48
+标题：跑腿业务员接单超时时间
+异常信息：Timeout performing LPOP LegworkOrderTimeout, inst: 1, queue: 1, qu: 0, qs: 1, qc: 0, wr: 0, wq: 0, in: 7, ar: 0, clientName: DESKTOP-BCST9L4 (Please take a look at this article for some common client-side issues that can cause timeouts: https://github.com/StackExchange/StackExchange.Redis/tree/master/Docs/Timeouts.md)
+异常内容：   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisDatabase.ListLeftPop(RedisKey key, CommandFlags flags)
+   在 Td.Kylin.Redis.RedisExtensions.ListLeftPop[T](IDatabase db, RedisKey key, CommandFlags flags)
+   在 KylinService.Services.Queue.Legwork.Legwork_OrderTimeoutService.SingleRequest() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\Queue\Legwork\Legwork_OrderTimeoutService.cs:行号 36
+   在 KylinService.Services.SchedulerService.SingleMain() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\SchedulerService.cs:行号 115
+________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________
+
+日期：2016/7/12 18:06:00
+标题：跑腿业务员接单超时时间
+异常信息：Timeout performing LPOP LegworkOrderTimeout, inst: 1, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, clientName: DESKTOP-BCST9L4 (Please take a look at this article for some common client-side issues that can cause timeouts: https://github.com/StackExchange/StackExchange.Redis/tree/master/Docs/Timeouts.md)
+异常内容：   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisDatabase.ListLeftPop(RedisKey key, CommandFlags flags)
+   在 Td.Kylin.Redis.RedisExtensions.ListLeftPop[T](IDatabase db, RedisKey key, CommandFlags flags)
+   在 KylinService.Services.Queue.Legwork.Legwork_OrderTimeoutService.SingleRequest() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\Queue\Legwork\Legwork_OrderTimeoutService.cs:行号 36
+   在 KylinService.Services.SchedulerService.SingleMain() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\SchedulerService.cs:行号 115
+________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________
+
+日期：2016/7/12 18:06:10
+标题：跑腿业务员自动确认收货时间
+异常信息：Timeout performing LPOP LegworkAutoConfirmTime, inst: 1, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, clientName: DESKTOP-BCST9L4 (Please take a look at this article for some common client-side issues that can cause timeouts: https://github.com/StackExchange/StackExchange.Redis/tree/master/Docs/Timeouts.md)
+异常内容：   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisDatabase.ListLeftPop(RedisKey key, CommandFlags flags)
+   在 Td.Kylin.Redis.RedisExtensions.ListLeftPop[T](IDatabase db, RedisKey key, CommandFlags flags)
+   在 KylinService.Services.Queue.Legwork.Legwork_AutoConfirmTimeService.SingleRequest() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\Queue\Legwork\Legwork_AutoConfirmTimeService.cs:行号 36
+   在 KylinService.Services.SchedulerService.SingleMain() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\SchedulerService.cs:行号 115
+________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________
+
+日期：2016/7/12 18:06:10
+标题：跑腿业务员接单超时时间
+异常信息：Timeout performing LPOP LegworkOrderTimeout, inst: 0, queue: 0, qu: 0, qs: 0, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, clientName: DESKTOP-BCST9L4 (Please take a look at this article for some common client-side issues that can cause timeouts: https://github.com/StackExchange/StackExchange.Redis/tree/master/Docs/Timeouts.md)
+异常内容：   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisDatabase.ListLeftPop(RedisKey key, CommandFlags flags)
+   在 Td.Kylin.Redis.RedisExtensions.ListLeftPop[T](IDatabase db, RedisKey key, CommandFlags flags)
+   在 KylinService.Services.Queue.Legwork.Legwork_OrderTimeoutService.SingleRequest() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\Queue\Legwork\Legwork_OrderTimeoutService.cs:行号 36
+   在 KylinService.Services.SchedulerService.SingleMain() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\SchedulerService.cs:行号 115
+________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________
+
+日期：2016/7/12 18:06:10
+标题：福利开奖
+异常信息：Timeout performing LPOP WelfareLottery, inst: 1, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, clientName: DESKTOP-BCST9L4 (Please take a look at this article for some common client-side issues that can cause timeouts: https://github.com/StackExchange/StackExchange.Redis/tree/master/Docs/Timeouts.md)
+异常内容：   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisDatabase.ListLeftPop(RedisKey key, CommandFlags flags)
+   在 Td.Kylin.Redis.RedisExtensions.ListLeftPop[T](IDatabase db, RedisKey key, CommandFlags flags)
+   在 KylinService.Services.Queue.Welfare.LotteryService.SingleRequest() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\Queue\Welfare\LotteryService.cs:行号 42
+   在 KylinService.Services.SchedulerService.SingleMain() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\SchedulerService.cs:行号 115
+________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________
+
+日期：2016/7/12 18:06:15
+标题：跑腿业务员自动确认收货时间
+异常信息：Timeout performing LPOP LegworkAutoConfirmTime, inst: 2, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 5, ar: 0, clientName: DESKTOP-BCST9L4 (Please take a look at this article for some common client-side issues that can cause timeouts: https://github.com/StackExchange/StackExchange.Redis/tree/master/Docs/Timeouts.md)
+异常内容：   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisDatabase.ListLeftPop(RedisKey key, CommandFlags flags)
+   在 Td.Kylin.Redis.RedisExtensions.ListLeftPop[T](IDatabase db, RedisKey key, CommandFlags flags)
+   在 KylinService.Services.Queue.Legwork.Legwork_AutoConfirmTimeService.SingleRequest() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\Queue\Legwork\Legwork_AutoConfirmTimeService.cs:行号 36
+   在 KylinService.Services.SchedulerService.SingleMain() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\SchedulerService.cs:行号 115
+________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________
+
+日期：2016/7/12 18:06:19
+标题：跑腿业务员支付超时时间
+异常信息：Timeout performing LPOP LegworkPaymentTimeout, inst: 2, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 5, ar: 0, clientName: DESKTOP-BCST9L4 (Please take a look at this article for some common client-side issues that can cause timeouts: https://github.com/StackExchange/StackExchange.Redis/tree/master/Docs/Timeouts.md)
+异常内容：   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server)
+   在 StackExchange.Redis.RedisDatabase.ListLeftPop(RedisKey key, CommandFlags flags)
+   在 Td.Kylin.Redis.RedisExtensions.ListLeftPop[T](IDatabase db, RedisKey key, CommandFlags flags)
+   在 KylinService.Services.Queue.Legwork.Legwork_PaymentTimeoutService.SingleRequest() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\Queue\Legwork\Legwork_PaymentTimeoutService.cs:行号 36
+   在 KylinService.Services.SchedulerService.SingleMain() 位置 D:\Work\01-Projects\Td.TimerTask\KylinService\Services\SchedulerService.cs:行号 115
+________________________________________________________________________________________________________________

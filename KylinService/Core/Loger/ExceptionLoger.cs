@@ -10,6 +10,8 @@ namespace KylinService.Core.Loger
     {
         public ExceptionLoger() : base(@"\logs\exception.txt") { }
 
+        public ExceptionLoger(string logfile) : base(logfile) { }
+
         /// <summary>
         /// 异常信息日志
         /// </summary>

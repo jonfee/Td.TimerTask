@@ -1,8 +1,4 @@
-D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.csproj.KylinService.exe.config
-D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.ConfigForm.resources
-D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.MainForm.resources
-D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.UpdateForm.resources
-D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.csproj.GenerateResource.Cache
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.IO.Compression.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\KylinService.exe.config
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\KylinService.exe
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\KylinService.pdb
@@ -56,7 +52,6 @@ D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Console.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Diagnostics.DiagnosticSource.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Globalization.Calendars.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Interactive.Async.dll
-D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.IO.Compression.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.IO.Compression.ZipFile.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.IO.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.IO.FileSystem.dll
@@ -124,12 +119,15 @@ D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Configuration.Abs
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Interactive.Async.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Text.Encodings.Web.xml
-D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.DataCache.pdb
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.DataCache.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.Entity.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.EnumLibrary.1.0.35.0.Fakes.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.Redis.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\zh-Hans\Microsoft.QualityTools.Testing.Fakes.resources.dll
-D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.csprojFakesResolveAssemblyReference.cache
+D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.csproj.KylinService.exe.config
+D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.ConfigForm.resources
+D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.MainForm.resources
+D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.UpdateForm.resources
+D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.csproj.GenerateResource.Cache
 D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.exe
 D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.pdb

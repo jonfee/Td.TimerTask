@@ -33,55 +33,22 @@ namespace KylinService.Services
 
         /// <summary>
         /// 表示0时间刻度
-        /// </summary>
+        /// </summary> 
         public TimeSpan TimeoutZero { get { return new TimeSpan(0); } }
 
         /// <summary>
         /// 是否已暂停（暂停服务，但不影响已经开始工作的任务执行）
         /// </summary>
-        public bool IsPaused { get; private set; }
-
-        /// <summary>
-        /// 是否循环处理
-        /// </summary>
-        private bool _isLoop;
-
-        /// <summary>
-        /// 循环队列为空时默认等待下次执行的时间（毫秒）间隔，如连续为empty，等待时间为当前设置时间的倍数
-        /// </summary>
-        private int _defaultNextWaitMillisecondsIfEmpty;
-
-        /// <summary>
-        /// 队列为空时阶梯等待时间的最大倍数
-        /// </summary>
-        private const int _maxWaitTimes = 20;
-
-        /// <summary>
-        /// 当前已等待时间倍数
-        /// </summary>
-        private int _waitTimes = 0;
+        public bool IsPaused { get; protected set; }
 
         #region 初始化
 
         /// <summary>
         /// 初始化
         /// </summary>
-        public SchedulerService() : this(isLoop: false, defaultNextWaitMillisecondsIfEmpty: 0) { }
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <param name="form"></param>
-        /// <param name="writeDelegate"></param>
-        /// <param name="isLoop">是否循环处理</param>
-        /// <param name="defaultNextWaitMillisecondsIfEmpty">循环队列为空时默认等待下次执行的时间（毫秒）间隔，如连续为empty，等待时间为当前设置时间的倍数</param>
-        public SchedulerService(bool isLoop = false, int defaultNextWaitMillisecondsIfEmpty = 0)
+        public SchedulerService()
         {
             Schedulers = new SchedulerCollection();
-
-            this._isLoop = isLoop;
-
-            this._defaultNextWaitMillisecondsIfEmpty = defaultNextWaitMillisecondsIfEmpty;
         }
 
         #endregion
@@ -125,57 +92,13 @@ namespace KylinService.Services
         /// <summary>
         /// 服务启动
         /// </summary>
-        public void Start()
+        public virtual void Start()
         {
             this.IsPaused = false;
 
-            OnStart();
-        }
-
-        /// <summary>
-        /// 开始处理
-        /// </summary>
-        private void OnStart()
-        {
             ThreadPool.QueueUserWorkItem((item) =>
             {
-                if (!_isLoop)
-                {
-                    SingleMain();
-                }
-                else
-                {
-                    while (true)
-                    {
-                        bool onContinue = false;
-
-                        //未暂停时
-                        if (!IsPaused)
-                        {
-                            //执行单次请求并返回是否需要继续信号指示
-                            onContinue = SingleMain();
-                        }
-
-                        //不继续时
-                        if (!onContinue)
-                        {
-                            if (_waitTimes < _maxWaitTimes)
-                            {
-                                _waitTimes++;
-                            }
-
-                            //休眠时间（单位：毫秒）
-                            var waitMilliseconds = _defaultNextWaitMillisecondsIfEmpty * _waitTimes;
-
-                            //休眠一段时间（单位：毫秒），避免CPU空转
-                            Thread.Sleep(waitMilliseconds);
-                        }
-                        else
-                        {
-                            _waitTimes = 0;
-                        }
-                    }
-                }
+                SingleMain();
             });
         }
 
@@ -183,7 +106,7 @@ namespace KylinService.Services
         /// 单一操作执行主程序
         /// </summary>
         /// <returns></returns>
-        private bool SingleMain()
+        protected bool SingleMain()
         {
             bool _continue = false;
             try
@@ -193,7 +116,14 @@ namespace KylinService.Services
             }
             catch (Exception ex)
             {
-                OnThrowException(ex);
+                if (ex.StackTrace.Contains("StackExchange.Redis"))
+                {
+                    RedisException(ex);
+                }
+                else
+                {
+                    OnThrowException(ex);
+                }
             }
 
             return _continue;
@@ -228,6 +158,24 @@ namespace KylinService.Services
         }
 
         /// <summary>
+        /// redis异常日志记录
+        /// </summary>
+        /// <param name="ex"></param>
+        protected void RedisException(Exception ex)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("出错了，原因：{0}", ex.Message));
+
+            sb.AppendLine("异常详情：");
+            sb.AppendLine(ex.StackTrace);
+
+            //写入异常日志
+            string logfile = string.Format(@"\logs\redis-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
+            var loger = new ExceptionLoger(logfile);
+            loger.Write(ServiceName, ex);
+        }
+
+        /// <summary>
         /// 异常 处理
         /// </summary>
         /// <param name="ex"></param>
@@ -246,6 +194,7 @@ namespace KylinService.Services
                 sb.AppendLine(ex.StackTrace);
 
                 //写入异常日志
+                string logfile = string.Format(@"\logs\default-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
                 var loger = new ExceptionLoger();
                 loger.Write(ServiceName, ex);
             }

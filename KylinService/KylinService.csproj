@@ -354,8 +354,8 @@
       <HintPath>..\packages\Td.CoreLibrary.1.2.1\lib\net46\Td.CoreLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.DataCache, Version=1.2.5.300, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\Td.Kylin.DataCache\Td.Kylin.DataCache\bin\Debug\net46\Td.Kylin.DataCache.dll</HintPath>
+    <Reference Include="Td.Kylin.DataCache, Version=1.2.5.400, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.DataCache.1.2.5.400\lib\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.1.8.0, Culture=neutral, processorArchitecture=MSIL">
@@ -369,8 +369,8 @@
     <Reference Include="Td.Kylin.EnumLibrary.1.0.35.0.Fakes">
       <HintPath>FakesAssemblies\Td.Kylin.EnumLibrary.1.0.35.0.Fakes.dll</HintPath>
     </Reference>
-    <Reference Include="Td.Kylin.Redis, Version=1.2.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.Redis.1.2.5\lib\net46\Td.Kylin.Redis.dll</HintPath>
+    <Reference Include="Td.Kylin.Redis, Version=1.2.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.Redis.1.2.8\lib\net46\Td.Kylin.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -452,9 +452,9 @@
     <Compile Include="Services\Queue\Legwork\Legwork_PaymentTimeoutService.cs" />
     <Compile Include="Services\Queue\Legwork\Legwork_AutoConfirmTimeService.cs" />
     <Compile Include="Services\Queue\Legwork\Legwork_OrderTimeoutService.cs" />
-    <Compile Include="Services\Queue\Legwork\Model\AutoConfirmTimeModel.cs" />
-    <Compile Include="Services\Queue\Legwork\Model\OrderTimeoutModel.cs" />
-    <Compile Include="Services\Queue\Legwork\Model\PaymentTimeoutModel.cs" />
+    <Compile Include="Redis\Schedule\Model\LegworkAutoConfirmTimeModel.cs" />
+    <Compile Include="Redis\Schedule\Model\LegworkOrderTimeoutModel.cs" />
+    <Compile Include="Redis\Schedule\Model\LegworkPaymentTimeoutModel.cs" />
     <Compile Include="Services\Queue\Mall\B2COrderLateConfig.cs" />
     <Compile Include="Services\Queue\Mall\MallOrderLatePaymentService.cs" />
     <Compile Include="Services\Queue\Mall\MallOrderLateReceiveService.cs" />

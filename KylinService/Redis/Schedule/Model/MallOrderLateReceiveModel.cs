@@ -1,11 +1,12 @@
-﻿using System;
+﻿using KylinService.Services;
+using System;
 
 namespace KylinService.Redis.Schedule.Model
 {
     /// <summary>
     /// 精品汇已发货的订单
     /// </summary>
-    public class MallOrderLateReceiveModel
+    public class MallOrderLateReceiveModel:ServiceState
     {
         ///<summary>
         ///订单ID

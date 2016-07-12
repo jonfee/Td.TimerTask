@@ -27,6 +27,11 @@ namespace KylinService.Redis.Schedule
         public int DbIndex { get; set; }
 
         /// <summary>
+        /// 备份区数据库index
+        /// </summary>
+        public int BackupDBindex { get; set; }
+
+        /// <summary>
         /// Redis连接
         /// </summary>
         public string ConnectionString { get; set; }
@@ -43,10 +48,22 @@ namespace KylinService.Redis.Schedule
         }
 
         /// <summary>
+        /// 备份区Database
+        /// </summary>
+        public IDatabase BackupDB
+        {
+            get
+            {
+                return GetDB(BackupDBindex);
+            }
+        }
+
+        /// <summary>
         /// RedisContext
         /// </summary>
         public RedisContext RedisContext { get; set; }
 
+        private IDatabase _database;
         /// <summary>
         /// 数据库
         /// </summary>
@@ -54,13 +71,23 @@ namespace KylinService.Redis.Schedule
         {
             get
             {
-                if (null == RedisContext || RedisContext.IsConnected == false)
+                if (null == _database || !_database.Multiplexer.IsConnected)
                 {
-                    RedisContext = new RedisContext(ConnectionString);
+                    _database = GetDB(DbIndex);
                 }
 
-                return RedisContext[DbIndex];
+                return _database;
             }
+        }
+
+        private IDatabase GetDB(int dbIndex)
+        {
+            if (null == RedisContext || !RedisContext.IsConnected)
+            {
+                RedisContext = new RedisContext(ConnectionString, true);
+            }
+
+            return RedisContext.GetDatabase(dbIndex);
         }
     }
 }

@@ -15,22 +15,14 @@ namespace KylinService.Services.Queue.Welfare
     /// <summary>
     /// 福利开奖服务
     /// </summary>
-    public sealed class LotteryService : QueueSchedulerService
+    public sealed class LotteryService : QueueSchedulerService<WelfareLotteryModel>
     {
-        /// <summary>
-        /// 任务计划数据所在Redis配置
-        /// </summary>
-        ScheduleRedisConfig config;
-
         /// <summary>
         /// 初始化实例
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public LotteryService() : base(QueueScheduleType.WelfareLottery)
-        {
-            config = Startup.ScheduleRedisConfigs[QueueScheduleType.WelfareLottery];
-        }
+        public LotteryService() : base(QueueScheduleType.WelfareLottery) { }
 
         /// <summary>
         /// 执行单次请求并返回是否需要继续指示信号
@@ -38,28 +30,18 @@ namespace KylinService.Services.Queue.Welfare
         /// <returns></returns>
         protected override bool SingleRequest()
         {
-            //获取一条待处理数据
-            var model = null != config ? config.DataBase.ListLeftPop<WelfareLotteryModel>(config.Key) : null;
+            if (null == RedisConfig) return false;
 
-            if (null != model)
+            if (null == RedisConfig.DataBase)
             {
-                    TimeSpan duetime = model.LotteryTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
-
-                    if (duetime.Ticks < 0) duetime = TimeoutZero;
-
-                    System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
-
-                    //输出消息
-                    string message = string.Format("福利“{0}”将于{2}天{3}小时{4}分{5}秒后（{1}）开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"), duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-
-                    Logger(message);
-
-                    Schedulers.Add(model.WelfareID, timer);
-
-                return true;
+                WriteMessageHelper.WriteMessage("Redis(database)连接丢失，source:" + this.ServiceName + "，Method:" + this.Me());
+                return false;
             }
 
-            return false;
+            //获取一条待处理数据
+            var model = RedisConfig.DataBase.ListLeftPop<WelfareLotteryModel>(RedisConfig.Key);
+
+            return EntityTaskHandler(model);
         }
 
         /// <summary>
@@ -74,6 +56,9 @@ namespace KylinService.Services.Queue.Welfare
 
             try
             {
+                //从备份区将备份删除
+                DeleteBackAfterDone(model.WelfareID);
+
                 var lastWelfare = WelfareProvider.GetWelfare(model.WelfareID);
 
                 #region //验证开奖的有效性
@@ -157,6 +142,35 @@ namespace KylinService.Services.Queue.Welfare
             {
                 Schedulers.Remove(model.WelfareID);
             }
+        }
+
+        protected override bool EntityTaskHandler(WelfareLotteryModel model, bool mustBackup = true)
+        {
+            if (null != model)
+            {
+                TimeSpan duetime = model.LotteryTime.Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+
+                if (duetime.Ticks < 0) duetime = TimeoutZero;
+
+                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+
+                if (mustBackup)
+                {
+                    //复制到备份区以防数据丢失
+                    BackBeforeDone(model.WelfareID, model);
+                }
+
+                //输出消息
+                string message = string.Format("〖福利：{0}〗将于{2}天{3}小时{4}分{5}秒后（{1}）开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"), duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+
+                Logger(message);
+
+                Schedulers.Add(model.WelfareID, timer);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

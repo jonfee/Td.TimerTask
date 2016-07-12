@@ -1,10 +1,5 @@
-﻿using KylinService.Core.Loger;
-using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Xml;
-using Td.Kylin.Redis;
 
 namespace KylinService.Redis.Schedule
 {
@@ -26,7 +21,7 @@ namespace KylinService.Redis.Schedule
 
             ScheduleRedisConfig defaultConfig = null;
 
-            RedisContext defaultRedisContext = null;
+            int backupDB = -1;
 
             foreach (XmlNode node in section.ChildNodes)
             {
@@ -38,26 +33,18 @@ namespace KylinService.Redis.Schedule
                     {
                         var config = GetConfig(node);
 
-                        if (config.ScheduleName.ToLower() == "default")
+                        if (config.ScheduleName.ToLower() == "backupdb")
+                        {
+                            backupDB = config.BackupDBindex;
+                        }
+                        else if (config.ScheduleName.ToLower() == "default")
                         {
                             defaultConfig = config;
-
-                            var options = ConfigurationOptions.Parse(defaultConfig.ConnectionString);
-
-                            defaultRedisContext = new RedisContext(options);
                         }
                         else
                         {
                             if (config == null) continue;
                             if (string.IsNullOrWhiteSpace(config.Key)) continue;
-                            if (defaultConfig != null && string.IsNullOrWhiteSpace(config.ConnectionString))
-                            {
-                                config.ConnectionString = defaultConfig.ConnectionString;
-                            }
-                            if (defaultConfig != null && config.DbIndex < 0)
-                            {
-                                config.DbIndex = defaultConfig.DbIndex;
-                            }
 
                             _collection[config.ScheduleName] = config;
                         }
@@ -67,14 +54,17 @@ namespace KylinService.Redis.Schedule
 
             _collection.Items.ForEach((item) =>
             {
-                //如果当前redis连接跟默认连接一致，则初始化Database
-                if (defaultConfig.ConnectionString == item.ConnectionString)
+                if (defaultConfig != null && string.IsNullOrWhiteSpace(item.ConnectionString))
                 {
-                    item.RedisContext = defaultRedisContext;
+                    item.ConnectionString = defaultConfig.ConnectionString;
                 }
-                else
+                if (defaultConfig != null && item.DbIndex < 0)
                 {
-                    item.RedisContext = new RedisContext(item.ConnectionString);
+                    item.DbIndex = defaultConfig.DbIndex;
+                }
+                if (backupDB > -1 && item.BackupDBindex < 0)
+                {
+                    item.BackupDBindex = backupDB;
                 }
             });
 
@@ -89,10 +79,16 @@ namespace KylinService.Redis.Schedule
 
             var key = GetAttributeValue(node, "redisKey");
 
-            int dbIndex = 0;
+            int dbIndex = -1;
             if (!int.TryParse(GetAttributeValue(node, "databaseIndex"), out dbIndex))
             {
                 dbIndex = -1;
+            }
+
+            int backupIndex = -1;
+            if (!int.TryParse(GetAttributeValue(node, "backupDbIndex"), out backupIndex))
+            {
+                backupIndex = -1;
             }
 
             string connString = GetAttributeValue(node, "connectionString");
@@ -102,6 +98,7 @@ namespace KylinService.Redis.Schedule
                 ScheduleName = name,
                 Key = key,
                 DbIndex = dbIndex,
+                BackupDBindex = backupIndex,
                 ConnectionString = connString
             };
         }

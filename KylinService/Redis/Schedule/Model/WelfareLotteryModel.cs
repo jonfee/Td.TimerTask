@@ -1,11 +1,12 @@
-﻿using System;
+﻿using KylinService.Services;
+using System;
 
 namespace KylinService.Redis.Schedule.Model
 {
     /// <summary>
     /// 福利开奖数据模型
     /// </summary>
-    public class WelfareLotteryModel
+    public class WelfareLotteryModel : ServiceState
     {
         /// <summary>
         /// 福利ID

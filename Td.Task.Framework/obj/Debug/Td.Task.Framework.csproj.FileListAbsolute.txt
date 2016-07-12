@@ -2,6 +2,5 @@ D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\bin\Debug\Td.Task.Framework.d
 D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\bin\Debug\Td.Task.Framework.pdb
 D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\bin\Debug\Td.CoreLibrary.dll
 D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\bin\Debug\Td.CoreLibrary.xml
-D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\obj\Debug\Td.Task.Framework.csprojResolveAssemblyReference.cache
 D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\obj\Debug\Td.Task.Framework.dll
 D:\Work\01-Projects\Td.TimerTask\Td.Task.Framework\obj\Debug\Td.Task.Framework.pdb

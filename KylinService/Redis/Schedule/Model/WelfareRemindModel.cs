@@ -1,11 +1,12 @@
-﻿using System;
+﻿using KylinService.Services;
+using System;
 
 namespace KylinService.Redis.Schedule.Model
 {
     /// <summary>
     /// 福利参与报名提醒
     /// </summary>
-    public class WelfareRemindModel
+    public class WelfareRemindModel : ServiceState
     {
         /// <summary>
         /// 福利ID

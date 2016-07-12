@@ -1,7 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Provider;
 using KylinService.Redis.Push.Model;
-using KylinService.Redis.Schedule;
 using KylinService.Redis.Schedule.Model;
 using KylinService.SysEnums;
 using System;
@@ -13,23 +12,10 @@ using Td.Kylin.Redis;
 
 namespace KylinService.Services.Queue.Welfare
 {
-    public sealed class WelfareBaoMinRemindService : QueueSchedulerService
+    public sealed class WelfareBaoMinRemindService : QueueSchedulerService<WelfareRemindModel>
     {
-        /// <summary>
-        /// 任务计划收集器
-        /// </summary>
 
-        SchedulerCollection collection;
-        /// <summary>
-        /// 任务计划数据所在Redis配置
-        /// </summary>
-        ScheduleRedisConfig config;
-
-        public WelfareBaoMinRemindService() : base(QueueScheduleType.WelfareBaoMinRemind)
-        {
-            collection = new SchedulerCollection();
-            config = Startup.ScheduleRedisConfigs[QueueScheduleType.WelfareBaoMinRemind];
-        }
+        public WelfareBaoMinRemindService() : base(QueueScheduleType.WelfareBaoMinRemind) { }
 
         /// <summary>
         /// 执行单次请求并返回是否需要继续指示信号
@@ -37,28 +23,18 @@ namespace KylinService.Services.Queue.Welfare
         /// <returns></returns>
         protected override bool SingleRequest()
         {
-            //获取一条待处理数据
-            var model = null != config ? config.DataBase.ListLeftPop<WelfareRemindModel>(config.Key) : null;
+            if (null == RedisConfig) return false;
 
-            if (null != model)
+            if (null == RedisConfig.DataBase)
             {
-                TimeSpan duetime = model.ApplyStartTime.AddMinutes(-Startup.WelfareConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
-
-                if (duetime.Ticks < 0) duetime = TimeoutZero;
-
-                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
-
-                //输出消息
-                string message = string.Format("福利(ID:{0})将在{1}天{2}小时{3}分{4}秒后提醒用户参与报名", model.WelfareID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-
-                Logger(message);
-
-                Schedulers.Add(model.WelfareID, timer);
-
-                return true;
+                WriteMessageHelper.WriteMessage("Redis(database)连接丢失，source:" + this.ServiceName + "，Method:" + this.Me());
+                return false;
             }
 
-            return false;
+            //获取一条待处理数据
+            var model = RedisConfig.DataBase.ListLeftPop<WelfareRemindModel>(RedisConfig.Key);
+
+            return EntityTaskHandler(model);
         }
 
         protected override void Execute(object state)
@@ -69,6 +45,9 @@ namespace KylinService.Services.Queue.Welfare
 
             try
             {
+                //从备份区将备份删除
+                DeleteBackAfterDone(model.WelfareID);
+
                 var lastWelfare = WelfareProvider.GetWelfare(model.WelfareID);
 
                 if (null == lastWelfare || lastWelfare.IsDelete == true) throw new CustomException(string.Format("〖福利ID：{0}〗不存在或已被删除", model.WelfareID));
@@ -102,6 +81,35 @@ namespace KylinService.Services.Queue.Welfare
             {
                 Schedulers.Remove(model.WelfareID);
             }
+        }
+
+        protected override bool EntityTaskHandler(WelfareRemindModel model, bool mustBackup = true)
+        {
+            if (null != model)
+            {
+                TimeSpan duetime = model.ApplyStartTime.AddMinutes(-Startup.WelfareConfig.BeforeRemindMinutes).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+
+                if (duetime.Ticks < 0) duetime = TimeoutZero;
+
+                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+
+                if (mustBackup)
+                {
+                    //复制到备份区以防数据丢失
+                    BackBeforeDone(model.WelfareID, model);
+                }
+
+                //输出消息
+                string message = string.Format("〖福利：{0}〗将在{1}天{2}小时{3}分{4}秒后提醒用户参与报名", model.WelfareID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+
+                Logger(message);
+
+                Schedulers.Add(model.WelfareID, timer);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using KylinService.Services;
+using System;
 
 namespace KylinService.Redis.Schedule.Model
 {
     /// <summary>
     /// 上门未确定完成的订单
     /// </summary>
-    public class VisitingOrderLateReceiveModel
+    public class VisitingOrderLateReceiveModel:ServiceState
     {
         /// <summary>
         /// 订单ID

@@ -50,13 +50,9 @@ namespace KylinService.Redis.Push
                 }
             }
 
-            RedisContext context = new RedisContext(connectionString);
-
             _collection.Items.ForEach((item) =>
             {
                 item.ConnectionString = connectionString;
-
-                item.RedisContext = context;
             });
 
             Collection = _collection;

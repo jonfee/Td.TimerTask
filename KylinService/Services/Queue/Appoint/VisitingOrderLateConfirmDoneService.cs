@@ -1,7 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Provider;
 using KylinService.Data.Settlement;
-using KylinService.Redis.Schedule;
 using KylinService.Redis.Schedule.Model;
 using KylinService.SysEnums;
 using System;
@@ -14,22 +13,14 @@ namespace KylinService.Services.Queue.Appoint
     /// <summary>
     /// 上门超时间未确认服务结束的服务
     /// </summary>
-    public sealed class VisitingOrderLateConfirmDoneService : QueueSchedulerService
+    public sealed class VisitingOrderLateConfirmDoneService : QueueSchedulerService<VisitingOrderLateReceiveModel>
     {
-        /// <summary>
-        /// 任务计划数据所在Redis配置
-        /// </summary>
-        ScheduleRedisConfig config;
-
         /// <summary>
         /// 初始化实例
         /// </summary>
         /// <param name="form"></param>
         /// <param name="writeDelegate"></param>
-        public VisitingOrderLateConfirmDoneService() : base(QueueScheduleType.VisitingOrderLateConfirmDone)
-        {
-            config = Startup.ScheduleRedisConfigs[QueueScheduleType.VisitingOrderLateConfirmDone];
-        }
+        public VisitingOrderLateConfirmDoneService() : base(QueueScheduleType.VisitingOrderLateConfirmDone) { }
 
         /// <summary>
         /// 执行单次请求并返回是否需要继续指示信号
@@ -37,28 +28,18 @@ namespace KylinService.Services.Queue.Appoint
         /// <returns></returns>
         protected override bool SingleRequest()
         {
-            //获取一条待处理数据
-            var model = null != config ? config.DataBase.ListLeftPop<VisitingOrderLateReceiveModel>(config.Key) : null;
+            if (null == RedisConfig) return false;
 
-            if (null != model)
+            if (null == RedisConfig.DataBase)
             {
-                    TimeSpan duetime = model.WorkerFinishTime.AddDays(Startup.AppointConfig.EndServiceWaitUserDays).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
-
-                    if (duetime.Ticks < 0) duetime = TimeoutZero;
-
-                    System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
-
-                    //输出消息
-                    string message = string.Format("上门服务订单(ID:{0})在{1}天{2}小时{3}分{4}秒后未确认服务完成系统将自动确认服务完成", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-
-                Logger(message);
-
-                    Schedulers.Add(model.OrderID, timer);
-
-                return true;
+                WriteMessageHelper.WriteMessage("Redis(database)连接丢失，source:" + this.ServiceName + "，Method:" + this.Me());
+                return false;
             }
 
-            return false;
+            //获取一条待处理数据
+            var model = RedisConfig.DataBase.ListLeftPop<VisitingOrderLateReceiveModel>(RedisConfig.Key);
+
+            return EntityTaskHandler(model);
         }
 
         protected override void Execute(object state)
@@ -69,25 +50,28 @@ namespace KylinService.Services.Queue.Appoint
 
             try
             {
+                //从备份区将备份删除
+                DeleteBackAfterDone(model.OrderID);
+
                 var lastOrder = AppointOrderProvider.GetAppointOrder(model.OrderID);
 
-                if (null == lastOrder) throw new CustomException(string.Format("订单(ID:{0})信息已不存在！", model.OrderID));
+                if (null == lastOrder) throw new CustomException(string.Format("〖上门订单（ID:{0}）〗信息已不存在！", model.OrderID));
 
-                if (lastOrder.Status != (int)VisitingServiceOrderStatus.WorkerServiceDone) throw new CustomException(string.Format("订单(编号:{0})状态已发生变更，不能自动确认服务完成！", lastOrder.OrderCode));
+                if (lastOrder.Status != (int)VisitingServiceOrderStatus.WorkerServiceDone) throw new CustomException(string.Format("〖上门订单（ID:{0}）〗状态已发生变更，不能自动确认服务完成！",lastOrder.OrderID));
 
                 //结算并自动收货
                 var settlement = new VisitingOrderSettlementCenter(model.OrderID, true);
                 settlement.Execute();
-
+                
                 string message = string.Empty;
 
                 if (settlement.Success)
                 {
-                    message = string.Format("〖上门订单（{0}）〗自动确认服务完成！", lastOrder.OrderCode);
+                    message = string.Format("〖上门订单（ID:{0}）〗自动确认服务完成！",  lastOrder.OrderID);
                 }
                 else
                 {
-                    message = string.Format("〖上门订单（{0}）〗自动确认服务完成失败，原因：{1}", lastOrder.OrderCode, settlement.ErrorMessage);
+                    message = string.Format("〖上门订单（ID:{0}）〗自动确认服务完成失败，原因：{1}",lastOrder.OrderID, settlement.ErrorMessage);
                 }
 
                 Logger(message);
@@ -100,6 +84,35 @@ namespace KylinService.Services.Queue.Appoint
             {
                 Schedulers.Remove(model.OrderID);
             }
+        }
+
+        protected override bool EntityTaskHandler(VisitingOrderLateReceiveModel model, bool mustBackup = true)
+        {
+            if (null != model)
+            {
+                TimeSpan duetime = model.WorkerFinishTime.AddDays(Startup.AppointConfig.EndServiceWaitUserDays).Subtract(DateTime.Now);    //延迟执行时间（以毫秒为单位）
+
+                if (duetime.Ticks < 0) duetime = TimeoutZero;
+
+                System.Threading.Timer timer = new System.Threading.Timer(new TimerCallback(Execute), model, duetime, TimeoutInfinite);
+
+                if (mustBackup)
+                {
+                    //复制到备份区以防数据丢失
+                    BackBeforeDone(model.OrderID, model);
+                }
+
+                //输出消息
+                string message = string.Format("〖上门订单（ID:{0}）〗在{1}天{2}小时{3}分{4}秒后未确认服务完成系统将自动确认服务完成", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
+
+                Logger(message);
+
+                Schedulers.Add(model.OrderID, timer);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
