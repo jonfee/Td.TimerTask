@@ -41,7 +41,46 @@ namespace KylinService.Services.Queue
         /// <summary>
         /// 任务计划数据所在Redis配置
         /// </summary>
-        public ScheduleRedisConfig RedisConfig;
+        protected ScheduleRedisConfig RedisConfig;
+
+        /// <summary>
+        /// RedisContext
+        /// </summary>
+        protected RedisContext RedisContext;
+
+        private IDatabase _queueDB;
+        /// <summary>
+        /// 请求队列Database
+        /// </summary>
+        protected IDatabase QuequDatabase
+        {
+            get
+            {
+                if (null == _queueDB)
+                {
+                    _queueDB = GetRedisDatabase(RedisConfig.DbIndex);
+                }
+
+                return _queueDB;
+            }
+        }
+
+        private IDatabase _backupDB;
+        /// <summary>
+        /// 备份区Database
+        /// </summary>
+        protected IDatabase BackupDatabase
+        {
+            get
+            {
+                if (null == _backupDB)
+                {
+                    _backupDB = GetRedisDatabase(RedisConfig.BackupDBindex);
+                }
+
+                return _backupDB;
+            }
+        }
 
         /// <summary>
         /// 初始化实例
@@ -61,8 +100,13 @@ namespace KylinService.Services.Queue
             this._isLoop = isLoop;
 
             this._defaultNextWaitMillisecondsIfEmpty = defaultNextWaitMillisecondsIfEmpty;
+
+            if (null != RedisConfig)
+            {
+                RedisContext = new RedisContext(RedisConfig.ConnectionString);
+            }
         }
-        
+
         /// <summary>
         /// 服务启动/开始
         /// </summary>
@@ -121,9 +165,9 @@ namespace KylinService.Services.Queue
         /// </summary>
         protected virtual void StartFirstRequest()
         {
-            if (null != RedisConfig && null != RedisConfig.BackupDB)
+            if (null != BackupDatabase)
             {
-                var backDataDic = RedisConfig.BackupDB.HashGetAll<T>(RedisConfig.Key);
+                var backDataDic = BackupDatabase.HashGetAll<T>(RedisConfig.Key);
 
                 if (null == backDataDic || backDataDic.Count < 1) return;
 
@@ -142,13 +186,13 @@ namespace KylinService.Services.Queue
         /// <param name="data">数据对象</param>
         protected virtual void BackBeforeDone(RedisValue hashField, T data)
         {
-            if (null == RedisConfig.DataBase)
+            if (null == BackupDatabase)
             {
-                WriteMessageHelper.WriteMessage("Redis(database)在将数据写入备份区时连接丢失，source:" + this.ServiceName + "，Method:" + this.Me());
+                WriteMessageHelper.WriteMessage("Redis(database)在将数据备份到备份区时连接丢失，source:" + this.ServiceName + "，Method:" + this.Me());
             }
             else
             {
-                RedisConfig.BackupDB.HashSetAsync(RedisConfig.Key, hashField, data);
+                BackupDatabase.HashSetAsync(RedisConfig.Key, hashField, data);
             }
         }
 
@@ -160,13 +204,30 @@ namespace KylinService.Services.Queue
         {
             if (string.IsNullOrWhiteSpace(field)) return;
 
-            if (null == RedisConfig.DataBase)
+            if (null == BackupDatabase)
             {
                 WriteMessageHelper.WriteMessage("Redis(database)在将数据从备份区中删除时连接丢失，source:" + this.ServiceName + "，Method:" + this.Me());
             }
             else
             {
-                RedisConfig.DataBase.HashDeleteAsync(RedisConfig.Key, field);
+                BackupDatabase.HashDeleteAsync(RedisConfig.Key, field);
+            }
+        }
+
+        /// <summary>
+        /// 获取Redis的数据库 select dbindex
+        /// </summary>
+        /// <param name="dbindex"></param>
+        /// <returns></returns>
+        private IDatabase GetRedisDatabase(int dbindex)
+        {
+            if (null != RedisContext)
+            {
+                return RedisContext.GetDatabase(dbindex);
+            }
+            else
+            {
+                return null;
             }
         }
     }

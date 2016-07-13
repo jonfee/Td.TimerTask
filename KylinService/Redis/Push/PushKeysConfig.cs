@@ -42,7 +42,7 @@ namespace KylinService.Redis.Push
         {
             get
             {
-                if (null == _database || !_database.Multiplexer.IsConnected)
+                if (null == _database)
                 {
                     _database = GetDB(DbIndex);
                 }
@@ -55,7 +55,7 @@ namespace KylinService.Redis.Push
         {
             if (null == RedisContext || !RedisContext.IsConnected)
             {
-                RedisContext = new RedisContext(ConnectionString, true);
+                RedisContext = new RedisContext(ConnectionString);
             }
 
             return RedisContext.GetDatabase(dbIndex);

@@ -46,48 +46,5 @@ namespace KylinService.Redis.Schedule
                 return (QueueScheduleType)Enum.Parse(typeof(QueueScheduleType), ScheduleName);
             }
         }
-
-        /// <summary>
-        /// 备份区Database
-        /// </summary>
-        public IDatabase BackupDB
-        {
-            get
-            {
-                return GetDB(BackupDBindex);
-            }
-        }
-
-        /// <summary>
-        /// RedisContext
-        /// </summary>
-        public RedisContext RedisContext { get; set; }
-
-        private IDatabase _database;
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        public IDatabase DataBase
-        {
-            get
-            {
-                if (null == _database || !_database.Multiplexer.IsConnected)
-                {
-                    _database = GetDB(DbIndex);
-                }
-
-                return _database;
-            }
-        }
-
-        private IDatabase GetDB(int dbIndex)
-        {
-            if (null == RedisContext || !RedisContext.IsConnected)
-            {
-                RedisContext = new RedisContext(ConnectionString, true);
-            }
-
-            return RedisContext.GetDatabase(dbIndex);
-        }
     }
 }

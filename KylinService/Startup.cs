@@ -109,13 +109,9 @@ namespace KylinService
             {
                 var options = ConfigurationOptions.Parse(scheduleRedisConn);
 
-                RedisContext context = new RedisContext(options);
-
                 foreach (var item in ScheduleRedisConfigs.Items)
                 {
                     item.ConnectionString = scheduleRedisConn;
-
-                    item.RedisContext = context;
                 }
             }
         }

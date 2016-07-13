@@ -26,14 +26,14 @@ namespace KylinService.Services.Queue.Legwork
         {
             if (null == RedisConfig) return false;
 
-            if (null == RedisConfig.DataBase)
+            if (null == QuequDatabase)
             {
                 WriteMessageHelper.WriteMessage("Redis(database)连接丢失，source:" + this.ServiceName + "，Method:" + this.Me());
                 return false;
             }
 
             //获取一条待处理数据
-            var model = RedisConfig.DataBase.ListLeftPop<LegworkAutoConfirmTimeModel>(RedisConfig.Key);
+            var model = QuequDatabase.ListLeftPop<LegworkAutoConfirmTimeModel>(RedisConfig.Key);
 
             return EntityTaskHandler(model);
         }

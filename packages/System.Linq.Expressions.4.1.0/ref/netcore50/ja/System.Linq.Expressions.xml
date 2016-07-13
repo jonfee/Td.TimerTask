@@ -2268,7 +2268,7 @@
     <member name="M:System.Linq.Expressions.Expression.ModuloAssign(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)">
       <summary>剰余代入演算を表す <see cref="T:System.Linq.Expressions.BinaryExpression" /> を作成します。</summary>
       <returns>
-        <see cref="T:System.Linq.Expressions.BinaryExpression" /> と等しい <see cref="P:System.Linq.Expressions.Expression.NodeType" /> プロパティと、指定した値に設定された <see cref="F:System.Linq.Expressions.ExpressionType.ModuloAssign" /> プロパティおよび <see cref="P:System.Linq.Expressions.BinaryExpression.Left" /> プロパティを含낀 <see cref="P:System.Linq.Expressions.BinaryExpression.Right" />。</returns>
+        <see cref="T:System.Linq.Expressions.BinaryExpression" /> と等しい <see cref="P:System.Linq.Expressions.Expression.NodeType" /> プロパティと、指定した値に設定された <see cref="F:System.Linq.Expressions.ExpressionType.ModuloAssign" /> プロパティおよび <see cref="P:System.Linq.Expressions.BinaryExpression.Left" /> プロパティを含む <see cref="P:System.Linq.Expressions.BinaryExpression.Right" />。</returns>
       <param name="left">
         <see cref="T:System.Linq.Expressions.Expression" /> プロパティを等しく設定する <see cref="P:System.Linq.Expressions.BinaryExpression.Left" />。</param>
       <param name="right">
@@ -2285,7 +2285,7 @@
       <param name="method">
         <see cref="T:System.Reflection.MethodInfo" /> プロパティを等しく設定する <see cref="P:System.Linq.Expressions.BinaryExpression.Method" />。</param>
     </member>
-    <member name="M:System.Linq.Expressions.Expression.ModuloAssign(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression,System.Reflection.MethodInfo,System.Linq.Expressions.LambdaExPression)">
+    <member name="M:System.Linq.Expressions.Expression.ModuloAssign(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression,System.Reflection.MethodInfo,System.Linq.Expressions.LambdaExpression)">
       <summary>剰余代入演算を表す <see cref="T:System.Linq.Expressions.BinaryExpression" /> を作成します。</summary>
       <returns>
         <see cref="T:System.Linq.Expressions.BinaryExpression" /> と等しい <see cref="P:System.Linq.Expressions.Expression.NodeType" /> プロパティと、指定した値に設定された <see cref="F:System.Linq.Expressions.ExpressionType.ModuloAssign" />、<see cref="P:System.Linq.Expressions.BinaryExpression.Left" />、<see cref="P:System.Linq.Expressions.BinaryExpression.Right" />、および <see cref="P:System.Linq.Expressions.BinaryExpression.Method" /> の各プロパティを含む <see cref="P:System.Linq.Expressions.BinaryExpression.Conversion" />。</returns>

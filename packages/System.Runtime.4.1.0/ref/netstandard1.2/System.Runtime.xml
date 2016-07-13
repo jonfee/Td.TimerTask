@@ -2731,7 +2731,7 @@
         <paramref name="year" /> is less than 1 or greater than 9999.-or- <paramref name="month" /> is less than 1 or greater than 12.-or- <paramref name="day" /> is less than 1 or greater than the number of days in <paramref name="month" />.-or- <paramref name="hour" /> is less than 0 or greater than 23.-or- <paramref name="minute" /> is less than 0 or greater than 59.-or- <paramref name="second" /> is less than 0 or greater than 59.-or- <paramref name="millisecond" /> is less than 0 or greater than 999. </exception>
     </member>
     <member name="M:System.DateTime.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.DateTimeKind)">
-      <summary>Anitializes a new instance of the <see cref="T:System.DateTime" /> structure to the specified year, month, day, hour, minute, second, millisecond, and Coordinated Universal Time (UTC) or local time.</summary>
+      <summary>Initializes a new instance of the <see cref="T:System.DateTime" /> structure to the specified year, month, day, hour, minute, second, millisecond, and Coordinated Universal Time (UTC) or local time.</summary>
       <param name="year">The year (1 through 9999). </param>
       <param name="month">The month (1 through 12). </param>
       <param name="day">The day (1 through the number of days in <paramref name="month" />). </param>
@@ -2743,7 +2743,7 @@
       <exception cref="T:System.ArgumentOutOfRangeException">
         <paramref name="year" /> is less than 1 or greater than 9999.-or- <paramref name="month" /> is less than 1 or greater than 12.-or- <paramref name="day" /> is less than 1 or greater than the number of days in <paramref name="month" />.-or- <paramref name="hour" /> is less than 0 or greater than 23.-or- <paramref name="minute" /> is less than 0 or greater than 59.-or- <paramref name="second" /> is less than 0 or greater than 59.-or- <paramref name="millisecond" /> is less than 0 or greater than 999. </exception>
       <exception cref="T:System.ArgumentException">
-        <paramref name="kind" /> is not one of the <see bref="T:System.DateTimeKind" /> values.</exception>
+        <paramref name="kind" /> is not one of the <see cref="T:System.DateTimeKind" /> values.</exception>
     </member>
     <member name="M:System.DateTime.#ctor(System.Int64)">
       <summary>Initializes a new instance of the <see cref="T:System.DateTime" /> structure to a specified number of ticks.</summary>
@@ -2761,7 +2761,7 @@
         <paramref name="kind" /> is not one of the <see cref="T:System.DateTimeKind" /> values.</exception>
     </member>
     <member name="M:System.DateTime.Add(System.TimeSpan)">
-      <summary>Returns a new <see cref="T:System.DateTime" /> that adds the value of the spEcified <see cref="T:System.TimeSpan" /> to the value of this instance.</summary>
+      <summary>Returns a new <see cref="T:System.DateTime" /> that adds the value of the specified <see cref="T:System.TimeSpan" /> to the value of this instance.</summary>
       <returns>An object whose value is the sum of the date and time represented by this instance and the time interval represented by <paramref name="value" />.</returns>
       <param name="value">A positive or negative time interval. </param>
       <exception cref="T:System.ArgumentOutOfRangeException">The resulting <see cref="T:System.DateTime" /> is less than <see cref="F:System.DateTime.MinValue" /> or greater than <see cref="F:System.DateTime.MaxValue" />. </exception>
