@@ -116,14 +116,7 @@ namespace KylinService.Services
             }
             catch (Exception ex)
             {
-                if (ex.StackTrace.Contains("StackExchange.Redis"))
-                {
-                    RedisException(ex);
-                }
-                else
-                {
-                    OnThrowException(ex);
-                }
+                OnThrowException(ex);
             }
 
             return _continue;
@@ -158,24 +151,6 @@ namespace KylinService.Services
         }
 
         /// <summary>
-        /// redis异常日志记录
-        /// </summary>
-        /// <param name="ex"></param>
-        protected void RedisException(Exception ex)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(string.Format("出错了，原因：{0}", ex.Message));
-
-            sb.AppendLine("异常详情：");
-            sb.AppendLine(ex.StackTrace);
-
-            //写入异常日志
-            string logfile = string.Format(@"\logs\redis-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
-            var loger = new ExceptionLoger(logfile);
-            loger.Write(ServiceName, ex);
-        }
-
-        /// <summary>
         /// 异常 处理
         /// </summary>
         /// <param name="ex"></param>
@@ -183,28 +158,50 @@ namespace KylinService.Services
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(string.Format("出错了，原因：{0}", ex.Message));
+            sb.AppendLine("异常详情：");
+            sb.AppendLine(ex.StackTrace);
+
+            //需要写入异常的日志文件路径
+            string exceptionLogFile = null;
 
             if (ex is CustomException)
             {
-                Logger(sb.ToString());
+                // 自定义异常一般为业务数据问题，不属程序异常，所以：
+                // 1，所以记录在当前服务运行日志
+                // 2，并显示在消息中
+                RunLogger(sb.ToString());
+            }
+            else if (ex.StackTrace.Contains("StackExchange.Redis"))
+            {
+                if (ex.Message.Contains("Timeout performing"))
+                {
+                    //在消息中显示
+                    WriteMessageHelper.WriteMessage(sb.ToString());
+                }
+                else
+                {
+                    //写入redis异常日志
+                    exceptionLogFile = string.Format(@"\logs\redis-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
+                }
             }
             else
             {
-                sb.AppendLine("异常详情：");
-                sb.AppendLine(ex.StackTrace);
+                //写入程序异常日志
+                exceptionLogFile = string.Format(@"\logs\default-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
+            }
 
-                //写入异常日志
-                string logfile = string.Format(@"\logs\default-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
-                var loger = new ExceptionLoger();
+            if (!string.IsNullOrWhiteSpace(exceptionLogFile))
+            {
+                var loger = new ExceptionLoger(exceptionLogFile);
                 loger.Write(ServiceName, ex);
             }
         }
 
         /// <summary>
-        /// 输出消息并记录日志
+        /// 输出消息并记录 服务运行日志
         /// </summary>
         /// <param name="message"></param>
-        protected void Logger(string message)
+        protected void RunLogger(string message)
         {
             WriteMessageHelper.WriteMessage(message);
 

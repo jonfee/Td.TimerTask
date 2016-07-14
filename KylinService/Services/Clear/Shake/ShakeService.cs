@@ -52,7 +52,7 @@ namespace KylinService.Services.Clear.Shake
 
                 string message = string.Format("共对 {0} 位用户进行了摇一摇当日已摇次数清除", count);
 
-                Logger(message);
+                RunLogger(message);
             }
             catch (Exception ex)
             {

@@ -102,7 +102,7 @@ namespace KylinService.Services.Queue.Welfare
                 //输出消息
                 string message = string.Format("〖福利：{0}〗将在{1}天{2}小时{3}分{4}秒后提醒用户参与报名", model.WelfareID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
 
-                Logger(message);
+                RunLogger(message);
 
                 Schedulers.Add(model.WelfareID, timer);
 

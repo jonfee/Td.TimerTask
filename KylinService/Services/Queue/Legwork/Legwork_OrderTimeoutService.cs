@@ -69,7 +69,7 @@ namespace KylinService.Services.Queue.Legwork
                     message = string.Format("〖跑腿订单（ID:{0}）〗自动取消订单失败！", lastOrder.OrderID);
                 }
 
-                Logger(message);
+                RunLogger(message);
             }
             catch (Exception ex)
             {
@@ -102,7 +102,7 @@ namespace KylinService.Services.Queue.Legwork
                 //输出消息
                 string message = string.Format("〖跑腿订单（ID:{0}）〗在{1}天{2}小时{3}分{4}秒后没有员工接单，系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
 
-                Logger(message);
+                RunLogger(message);
 
                 Schedulers.Add(model.OrderID, timer);
 

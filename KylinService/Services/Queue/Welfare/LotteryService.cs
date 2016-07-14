@@ -114,7 +114,7 @@ namespace KylinService.Services.Queue.Welfare
                 {
                     string sucMessage = string.Format("〖福利：{0}〗已开奖，本次共有 {1} 名人员中奖（总参与人数：{2}）！", model.Name, winnerPartCodes.Length, lastWelfare.PartNumber);
 
-                    Logger(sucMessage);
+                    RunLogger(sucMessage);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace KylinService.Services.Queue.Welfare
                 //输出消息
                 string message = string.Format("〖福利：{0}〗将于{2}天{3}小时{4}分{5}秒后（{1}）开奖", model.Name, model.LotteryTime.ToString("yyyy/MM/dd HH:mm:ss"), duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
 
-                Logger(message);
+                RunLogger(message);
 
                 Schedulers.Add(model.WelfareID, timer);
 

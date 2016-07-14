@@ -76,7 +76,7 @@ namespace KylinService.Services.Queue.Mall
                     message = string.Format("〖精品汇订单（ID:{0}/{1}）〗自动确认收货失败，原因：{2}", lastOrder.OrderID, lastOrder.ProductInfo, settlement.ErrorMessage);
                 }
 
-                Logger(message);
+                RunLogger(message);
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace KylinService.Services.Queue.Mall
                 //输出消息
                 string message = string.Format("〖精品汇订单（ID:{0}）〗在{1}天{2}小时{3}分{4}秒后未收货系统将自动确认收货", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
 
-                Logger(message);
+                RunLogger(message);
 
                 Schedulers.Add(model.OrderID, timer);
 

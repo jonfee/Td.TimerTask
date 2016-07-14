@@ -75,7 +75,7 @@ namespace KylinService.Services.Queue.Appoint
                     message = string.Format("〖预约订单（ID:{0}）〗自动确认服务完成失败，原因：{1}", lastOrder.OrderID, settlement.ErrorMessage);
                 }
 
-                Logger(message);
+                RunLogger(message);
             }
             catch (Exception ex)
             {
@@ -106,7 +106,7 @@ namespace KylinService.Services.Queue.Appoint
                 //输出消息
                 string message = string.Format("〖预约订单（ID:{0}）〗在{1}天{2}小时{3}分{4}秒后未确认服务完成系统将自动确认服务完成", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
 
-                Logger(message);
+                RunLogger(message);
 
                 Schedulers.Add(model.OrderID, timer);
 

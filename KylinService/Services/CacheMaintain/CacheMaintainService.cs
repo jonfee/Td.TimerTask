@@ -110,7 +110,7 @@ namespace KylinService.Services.CacheMaintain
 
                 if (string.IsNullOrWhiteSpace(message)) message = "没有任何可更新的缓存项";
 
-                Logger(message);
+                RunLogger(message);
             }
             catch (Exception ex)
             {

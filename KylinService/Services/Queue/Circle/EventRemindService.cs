@@ -105,7 +105,7 @@ namespace KylinService.Services.Queue.Circle
                 //输出消息
                 string message = string.Format("〖社区活动（ID:{0}）〗将在{1}天{2}小时{3}分{4}秒后提醒用户", model.EventID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
 
-                Logger(message);
+                RunLogger(message);
 
                 Schedulers.Add(model.EventID, timer);
 

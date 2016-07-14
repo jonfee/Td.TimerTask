@@ -83,7 +83,7 @@ namespace KylinService.Services.Queue.Appoint
                     message = string.Format("〖预约订单（ID:{0}/{1}）〗因超时未付款，系统自动取消订单时操作失败！", lastOrder.OrderID, lastOrder.BusinessName);
                 }
 
-                Logger(message);
+                RunLogger(message);
             }
             catch (Exception ex)
             {
@@ -113,7 +113,7 @@ namespace KylinService.Services.Queue.Appoint
 
                 //输出消息
                 string message = string.Format("〖预约订单（ID:{0}）〗在{1}天{2}小时{3}分{4}秒后未付款系统将自动取消订单", model.OrderID, duetime.Days, duetime.Hours, duetime.Minutes, duetime.Seconds);
-                Logger(message);
+                RunLogger(message);
 
                 Schedulers.Add(model.OrderID, timer);
 
