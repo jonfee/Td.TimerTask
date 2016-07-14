@@ -156,10 +156,8 @@ namespace KylinService.Services
         /// <param name="ex"></param>
         protected void OnThrowException(Exception ex)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(string.Format("出错了，原因：{0}", ex.Message));
-            sb.AppendLine("异常详情：");
-            sb.AppendLine(ex.StackTrace);
+            StringBuilder sbErr = new StringBuilder();
+            sbErr.AppendLine(string.Format("出错了，原因：{0}", ex.Message));
 
             //需要写入异常的日志文件路径
             string exceptionLogFile = null;
@@ -169,14 +167,14 @@ namespace KylinService.Services
                 // 自定义异常一般为业务数据问题，不属程序异常，所以：
                 // 1，所以记录在当前服务运行日志
                 // 2，并显示在消息中
-                RunLogger(sb.ToString());
+                RunLogger(sbErr.ToString());
             }
             else if (ex.StackTrace.Contains("StackExchange.Redis"))
             {
                 if (ex.Message.Contains("Timeout performing"))
                 {
                     //在消息中显示
-                    WriteMessageHelper.WriteMessage(sb.ToString());
+                    WriteMessageHelper.WriteMessage(sbErr.ToString());
                 }
                 else
                 {
