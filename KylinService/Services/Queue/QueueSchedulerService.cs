@@ -151,7 +151,6 @@ namespace KylinService.Services.Queue
             });
         }
 
-
         /// <summary>
         /// 单个实体对象task处理器
         /// </summary>
