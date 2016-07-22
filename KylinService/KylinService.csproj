@@ -479,6 +479,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon\kylin.ico" />
+    <Content Include="libs\System.IO.dll" />
+    <Content Include="libs\System.Linq.dll" />
+    <Content Include="libs\System.Linq.Expressions.dll" />
+    <Content Include="libs\System.Reflection.dll" />
+    <Content Include="libs\System.Reflection.Emit.dll" />
+    <Content Include="libs\System.Reflection.Emit.Lightweight.dll" />
+    <Content Include="libs\System.Reflection.TypeExtensions.dll" />
+    <Content Include="libs\System.Runtime.dll" />
+    <Content Include="libs\System.Runtime.Extensions.dll" />
+    <Content Include="libs\System.Text.RegularExpressions.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
