@@ -23,42 +23,5 @@ namespace KylinService.Redis.Push
         /// 数据库序号
         /// </summary>
         public int DbIndex { get; set; }
-
-        /// <summary>
-        /// Redis服务器连接字符串
-        /// </summary>
-        public string ConnectionString { get; set; }
-
-        /// <summary>
-        /// RedisContext
-        /// </summary>
-        public RedisContext RedisContext { get; set; }
-
-        private IDatabase _database;
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        public IDatabase DataBase
-        {
-            get
-            {
-                if (null == _database)
-                {
-                    _database = GetDB(DbIndex);
-                }
-
-                return _database;
-            }
-        }
-
-        private IDatabase GetDB(int dbIndex)
-        {
-            if (null == RedisContext || !RedisContext.IsConnected)
-            {
-                RedisContext = new RedisContext(ConnectionString);
-            }
-
-            return RedisContext.GetDatabase(dbIndex);
-        }
     }
 }

@@ -39,6 +39,7 @@ namespace KylinService
             this.tabClear = new System.Windows.Forms.TabPage();
             this.tabCache = new System.Windows.Forms.TabPage();
             this.tabQueue = new System.Windows.Forms.TabPage();
+            this.btn = new System.Windows.Forms.Button();
             this.groupTool.SuspendLayout();
             this.tabMenu.SuspendLayout();
             this.SuspendLayout();
@@ -55,6 +56,7 @@ namespace KylinService
             // 
             // groupTool
             // 
+            this.groupTool.Controls.Add(this.btn);
             this.groupTool.Controls.Add(this.btnLookConfig);
             this.groupTool.Controls.Add(this.btnUpdateConfig);
             this.groupTool.Location = new System.Drawing.Point(13, 13);
@@ -80,7 +82,7 @@ namespace KylinService
             this.btnUpdateConfig.Name = "btnUpdateConfig";
             this.btnUpdateConfig.Size = new System.Drawing.Size(75, 23);
             this.btnUpdateConfig.TabIndex = 0;
-            this.btnUpdateConfig.Text = "更新配置";
+            this.btnUpdateConfig.Text = "编辑配置";
             this.btnUpdateConfig.UseVisualStyleBackColor = true;
             this.btnUpdateConfig.Click += new System.EventHandler(this.btnUpdateConfig_Click);
             // 
@@ -125,6 +127,16 @@ namespace KylinService
             this.tabQueue.Text = "队列服务";
             this.tabQueue.UseVisualStyleBackColor = true;
             // 
+            // btn
+            // 
+            this.btn.Location = new System.Drawing.Point(289, 21);
+            this.btn.Name = "btn";
+            this.btn.Size = new System.Drawing.Size(75, 23);
+            this.btn.TabIndex = 2;
+            this.btn.Text = "异常设置";
+            this.btn.UseVisualStyleBackColor = true;
+            this.btn.Click += new System.EventHandler(this.btn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -154,6 +166,7 @@ namespace KylinService
         private System.Windows.Forms.TabPage tabQueue;
         private System.Windows.Forms.TabPage tabCache;
         private System.Windows.Forms.TabPage tabClear;
+        private Button btn;
     }
 }
 

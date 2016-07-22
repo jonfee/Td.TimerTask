@@ -1,4 +1,5 @@
 ﻿using KylinService.Core;
+using KylinService.Redis.Push;
 using KylinService.Redis.Push.Model;
 using KylinService.SysEnums;
 using System;
@@ -603,7 +604,12 @@ namespace KylinService.Data.Settlement
                                 ServerType = _order.ServerType,
                                 WorkerID = _order.WorkerID
                             };
-                            pushRedis.DataBase.ListRightPush(pushRedis.Key, msgContent);
+                            var pushDb = PushRedisContext.Redis.GetDatabase(pushRedis.DbIndex);
+
+                            if (pushDb != null)
+                            {
+                                pushDb.ListRightPush(pushRedis.Key, msgContent);
+                            }
                         }
                     }
                     catch { }

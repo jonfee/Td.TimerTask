@@ -15,7 +15,7 @@ namespace KylinService
             Application.SetCompatibleTextRenderingDefault(false);
 
             //初始化信息
-            Startup.Init();
+            Startup.Start();
 
             //启动主窗体
             var mainForm = new MainForm();

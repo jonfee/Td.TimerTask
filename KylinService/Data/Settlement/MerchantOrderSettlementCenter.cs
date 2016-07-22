@@ -1,4 +1,5 @@
 ﻿using KylinService.Core;
+using KylinService.Redis.Push;
 using KylinService.Redis.Push.Model;
 using KylinService.SysEnums;
 using System;
@@ -440,7 +441,13 @@ namespace KylinService.Data.Settlement
                                 UserName = user.Username,
                                 MerchantID = _order.MerchantID
                             };
-                            pushRedis.DataBase.ListRightPush(pushRedis.Key, msgContent);
+
+                            var pushDb = PushRedisContext.Redis.GetDatabase(pushRedis.DbIndex);
+
+                            if (pushDb != null)
+                            {
+                                pushDb.ListRightPush(pushRedis.Key, msgContent);
+                            }
                         }
                     }
                     catch { }

@@ -1,5 +1,6 @@
 ﻿using KylinService.Core;
 using KylinService.Data.Provider;
+using KylinService.Redis.Push;
 using KylinService.Redis.Push.Model;
 using KylinService.Redis.Schedule.Model;
 using KylinService.SysEnums;
@@ -67,7 +68,12 @@ namespace KylinService.Services.Queue.Welfare
 
                     if (null != pushRedis)
                     {
-                        pushRedis.DataBase.ListRightPush<WelfareRemindContent>(pushRedis.Key, remindContentList);
+                        var pushDb = PushRedisContext.Redis.GetDatabase(pushRedis.DbIndex);
+
+                        if (pushDb != null)
+                        {
+                            pushDb.ListRightPush<WelfareRemindContent>(pushRedis.Key, remindContentList);
+                        }
                     }
                 }
 

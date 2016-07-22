@@ -34,7 +34,7 @@ namespace KylinService
         /// <summary>
         /// 初始化
         /// </summary>
-        public static void Init()
+        public static void Start()
         {
             #region //定时操作时间误差范围
             string strRange = ConfigurationManager.AppSettings["timerErrorRange"];
@@ -122,19 +122,7 @@ namespace KylinService
         /// <param name="pushRedisConn"></param>
         public static void UpdatePushRedis(string pushRedisConn)
         {
-            if (null != PushRedisConfigs)
-            {
-                var options = ConfigurationOptions.Parse(pushRedisConn);
-
-                RedisContext context = new RedisContext(options);
-
-                foreach (var item in PushRedisConfigs.Items)
-                {
-                    item.ConnectionString = pushRedisConn;
-
-                    item.RedisContext = context;
-                }
-            }
+            PushRedisConfigManager.RedisConnectionString = pushRedisConn;
         }
 
         /// <summary>
@@ -159,7 +147,6 @@ namespace KylinService
             {
                 CacheItems = null,
                 InitIfNull = true,
-                KeepAlive = true,
                 RedisConnectionString = DataCacheRedisConnectionString,
                 SqlConnectionString = KylinDBConnectionString,
                 SqlType = SqlType
@@ -290,7 +277,7 @@ namespace KylinService
         {
             values = values ?? CacheCollection.LegworkGlobalConfigCache.Value();
 
-            LegworkGlobalConfig = values.FirstOrDefault();
+            LegworkGlobalConfig = values?.FirstOrDefault();
         }
 
         /// <summary>
@@ -302,9 +289,9 @@ namespace KylinService
         {
             values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
 
-            var waitPay = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitPayment);
-            var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserDone);
-            var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserEvaluate);
+            var waitPay = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitPayment);
+            var waitDone = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserDone);
+            var waitEval = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.ServiceOrderWaitUserEvaluate);
 
             int waitPayMinutes = waitPay != null ? GetMinutes(waitPay.Value, waitPay.ValueUnit) : 30;
             int waitDoneMinutes = waitDone != null ? GetMinutes(waitDone.Value, waitDone.ValueUnit) : 7 * 24 * 60;
@@ -327,9 +314,9 @@ namespace KylinService
         {
             values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
 
-            var waitPay = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderWaitPayment);
-            var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderWaitReceive);
-            var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderEvaluate);
+            var waitPay = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderWaitPayment);
+            var waitDone = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderWaitReceive);
+            var waitEval = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.B2COrderEvaluate);
 
             int waitPayMinutes = waitPay != null ? GetMinutes(waitPay.Value, waitPay.ValueUnit) : 30;
             int waitDoneMinutes = waitDone != null ? GetMinutes(waitDone.Value, waitDone.ValueUnit) : 7 * 24 * 60;
@@ -352,9 +339,9 @@ namespace KylinService
         {
             values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
 
-            var waitPay = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitPayment);
-            var waitDone = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitReceive);
-            var waitEval = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitEvaluate);
+            var waitPay = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitPayment);
+            var waitDone = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitReceive);
+            var waitEval = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.MerchantOrderWaitEvaluate);
 
             int waitPayMinutes = waitPay != null ? GetMinutes(waitPay.Value, waitPay.ValueUnit) : 30;
             int waitDoneMinutes = waitDone != null ? GetMinutes(waitDone.Value, waitDone.ValueUnit) : 7 * 24 * 60;
@@ -377,11 +364,11 @@ namespace KylinService
         {
             values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
 
-            var remindTime = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.CircleEventRemind);
+            var remindTime = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.CircleEventRemind);
 
             CircleConfig = new CircleConfig
             {
-                BeforeRemindMinutes = GetMinutes(remindTime.Value, remindTime.ValueUnit)
+                BeforeRemindMinutes = remindTime != null ? GetMinutes(remindTime.Value, remindTime.ValueUnit) : 30
             };
         }
 
@@ -394,11 +381,11 @@ namespace KylinService
         {
             values = values ?? CacheCollection.SystemGolbalConfigCache.Value();
 
-            var remindTime = values.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.WelfareApplyRemind);
+            var remindTime = values?.FirstOrDefault(p => p.ResourceType == (int)GlobalConfigType.Time && p.ResourceKey == (int)GlobalTimeConfigOption.WelfareApplyRemind);
 
             WelfareConfig = new WelfareConfig
             {
-                BeforeRemindMinutes = GetMinutes(remindTime.Value, remindTime.ValueUnit)
+                BeforeRemindMinutes = remindTime != null ? GetMinutes(remindTime.Value, remindTime.ValueUnit) : 10
             };
         }
 
@@ -430,7 +417,7 @@ namespace KylinService
         /// 定时操作时间误差范围（单位：毫秒）
         /// </summary>
         public static int ErrorRangeMillisecond { get; private set; }
-        
+
         /// <summary>
         /// 服务程序相关描述信息
         /// </summary>

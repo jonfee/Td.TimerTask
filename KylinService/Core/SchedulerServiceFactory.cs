@@ -1,10 +1,6 @@
-﻿using System;
+﻿using KylinService.Services;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KylinService.Services;
-using Remotion.Linq.Clauses;
 
 namespace KylinService.Core
 {

@@ -13,6 +13,8 @@ namespace KylinService.Services.Queue
     /// </summary>
     public abstract class QueueSchedulerService<T> : SchedulerService where T : ServiceState
     {
+        private volatile object _locker = new object();
+
         /// <summary>
         /// 是否循环处理
         /// </summary>
@@ -43,12 +45,30 @@ namespace KylinService.Services.Queue
         /// </summary>
         protected ScheduleRedisConfig RedisConfig;
 
-        /// <summary>
-        /// RedisContext
-        /// </summary>
-        protected RedisContext RedisContext;
+        private ConnectionMultiplexer _redis;
 
-        private IDatabase _queueDB;
+        /// <summary>
+        /// QueueRedis（ConnectionMultiplexer）
+        /// </summary>
+        protected ConnectionMultiplexer QueueRedis
+        {
+            get
+            {
+                if (_redis == null)
+                {
+                    lock (_locker)
+                    {
+                        if (_redis == null)
+                        {
+                            _redis = ConnectionMultiplexer.Connect(RedisConfig.ConnectionString);
+                        }
+                    }
+                }
+
+                return _redis;
+            }
+        }
+
         /// <summary>
         /// 请求队列Database
         /// </summary>
@@ -56,16 +76,10 @@ namespace KylinService.Services.Queue
         {
             get
             {
-                if (null == _queueDB)
-                {
-                    _queueDB = GetRedisDatabase(RedisConfig.DbIndex);
-                }
-
-                return _queueDB;
+                return GetRedisDatabase(RedisConfig.DbIndex);
             }
         }
 
-        private IDatabase _backupDB;
         /// <summary>
         /// 备份区Database
         /// </summary>
@@ -73,12 +87,7 @@ namespace KylinService.Services.Queue
         {
             get
             {
-                if (null == _backupDB)
-                {
-                    _backupDB = GetRedisDatabase(RedisConfig.BackupDBindex);
-                }
-
-                return _backupDB;
+                return GetRedisDatabase(RedisConfig.BackupDBindex);
             }
         }
 
@@ -100,11 +109,6 @@ namespace KylinService.Services.Queue
             this._isLoop = isLoop;
 
             this._defaultNextWaitMillisecondsIfEmpty = defaultNextWaitMillisecondsIfEmpty;
-
-            if (null != RedisConfig)
-            {
-                RedisContext = new RedisContext(RedisConfig.ConnectionString);
-            }
         }
 
         /// <summary>
@@ -220,9 +224,9 @@ namespace KylinService.Services.Queue
         /// <returns></returns>
         private IDatabase GetRedisDatabase(int dbindex)
         {
-            if (null != RedisContext)
+            if (null != QueueRedis)
             {
-                return RedisContext.GetDatabase(dbindex);
+                return QueueRedis.GetDatabase(dbindex);
             }
             else
             {

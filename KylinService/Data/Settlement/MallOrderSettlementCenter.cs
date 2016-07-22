@@ -1,4 +1,5 @@
 ﻿using KylinService.Core;
+using KylinService.Redis.Push;
 using KylinService.Redis.Push.Model;
 using KylinService.SysEnums;
 using System;
@@ -13,7 +14,7 @@ namespace KylinService.Data.Settlement
     /// <summary>
     /// 精品汇（B2C）订单结算中心
     /// </summary>
-    public class MallOrderSettlementCenter: SettlementCenter
+    public class MallOrderSettlementCenter : SettlementCenter
     {
         /// <summary>
         /// 初始化B2C订单结算实例
@@ -329,7 +330,12 @@ namespace KylinService.Data.Settlement
                                 UserID = _order.UserID,
                                 UserName = user.Username
                             };
-                            pushRedis.DataBase.ListRightPush<B2COrderReceivedGoodsContent>(pushRedis.Key, msgContent);
+                            var pushDb = PushRedisContext.Redis.GetDatabase(pushRedis.DbIndex);
+
+                            if (pushDb != null)
+                            {
+                                pushDb.ListRightPush(pushRedis.Key, msgContent);
+                            }
                         }
                     }
                     catch { }

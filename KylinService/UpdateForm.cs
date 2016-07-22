@@ -1,4 +1,5 @@
 ﻿using KylinService.Core;
+using KylinService.Redis.Push;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,7 +35,7 @@ namespace KylinService
             this.tbSqlConn.Text = Startup.KylinDBConnectionString;
             this.tbCacheRedisConn.Text = Startup.DataCacheRedisConnectionString;
             this.tbScheduleRedisConn.Text = Startup.ScheduleRedisConfigs.Items.FirstOrDefault()?.ConnectionString;
-            this.tbPushRedisConn.Text = Startup.PushRedisConfigs.Items.FirstOrDefault()?.ConnectionString;
+            this.tbPushRedisConn.Text = PushRedisConfigManager.RedisConnectionString;
         }
 
         private void btnSqlUpdate_Click(object sender, EventArgs e)

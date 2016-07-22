@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using KylinService.Data.Model;
+using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using KylinService.Data.Model;
-using Td.Kylin.DataCache.CacheModel;
-using Td.Kylin.Entity;
 using Td.Kylin.EnumLibrary;
 
 namespace KylinService.Data.Provider

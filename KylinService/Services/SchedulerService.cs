@@ -159,9 +159,6 @@ namespace KylinService.Services
             StringBuilder sbErr = new StringBuilder();
             sbErr.AppendLine(string.Format("出错了，原因：{0}", ex.Message));
 
-            //需要写入异常的日志文件路径
-            string exceptionLogFile = null;
-
             if (ex is CustomException)
             {
                 // 自定义异常一般为业务数据问题，不属程序异常，所以：
@@ -169,29 +166,37 @@ namespace KylinService.Services
                 // 2，并显示在消息中
                 RunLogger(sbErr.ToString());
             }
-            else if (ex.StackTrace.Contains("StackExchange.Redis"))
-            {
-                if (ex.Message.Contains("Timeout performing"))
-                {
-                    //在消息中显示
-                    WriteMessageHelper.WriteMessage(sbErr.ToString());
-                }
-                else
-                {
-                    //写入redis异常日志
-                    exceptionLogFile = string.Format(@"\logs\redis-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
-                }
-            }
             else
             {
-                //写入程序异常日志
-                exceptionLogFile = string.Format(@"\logs\default-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
-            }
+                //输出/显示异常信息
+                if (ExceptionLogConfig.Display)
+                {
+                    RunLogger(sbErr.ToString());
+                }
 
-            if (!string.IsNullOrWhiteSpace(exceptionLogFile))
-            {
-                var loger = new ExceptionLoger(exceptionLogFile);
-                loger.Write(ServiceName, ex);
+                //需要写入到异常日志文件
+                if (ExceptionLogConfig.WriteFile)
+                {
+                    //需要写入异常的日志文件路径
+                    string exceptionLogFile = null;
+
+                    if (ex.StackTrace.Contains("StackExchange.Redis"))
+                    {
+                        //写入redis异常日志
+                        exceptionLogFile = string.Format(@"\logs\redis-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
+                    }
+                    else
+                    {
+                        //写入程序异常日志
+                        exceptionLogFile = string.Format(@"\logs\default-exception\{0}.txt", DateTime.Now.ToString("yyyyMMdd"));
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(exceptionLogFile))
+                    {
+                        var loger = new ExceptionLoger(exceptionLogFile);
+                        loger.Write(ServiceName, ex);
+                    }
+                }
             }
         }
 

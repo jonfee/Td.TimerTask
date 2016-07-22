@@ -1,11 +1,11 @@
 ﻿using KylinService.Core;
 using KylinService.Core.Loger;
-using KylinService.Data.Settlement;
 using KylinService.Services;
 using KylinService.Services.CacheMaintain;
 using KylinService.Services.Clear.Shake;
 using KylinService.Services.Queue.Appoint;
 using KylinService.Services.Queue.Circle;
+using KylinService.Services.Queue.Legwork;
 using KylinService.Services.Queue.Mall;
 using KylinService.Services.Queue.Merchant;
 using KylinService.Services.Queue.Welfare;
@@ -16,7 +16,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using KylinService.Services.Queue.Legwork;
 using Td.Kylin.DataCache;
 
 namespace KylinService
@@ -1366,7 +1365,9 @@ namespace KylinService
 
         #endregion
 
-        #region /////////////////查看/更新配置/////////////////////////
+        #region /////////////////查看配置/更新配置/异常处理设置/////////////////////////
+
+        private UpdateForm updateConfigForm = null;
 
         /// <summary>
         /// 更新配置
@@ -1375,9 +1376,18 @@ namespace KylinService
         /// <param name="e"></param>
         private void btnUpdateConfig_Click(object sender, EventArgs e)
         {
-            UpdateForm form = new UpdateForm();
-            form.Show();
+            if (updateConfigForm == null || updateConfigForm.IsDisposed)
+            {
+                updateConfigForm = new UpdateForm();
+                updateConfigForm.Show();
+            }
+            else
+            {
+                updateConfigForm.Activate();
+            }
         }
+
+        private ConfigForm lookConfigForm = null;
 
         /// <summary>
         /// 查看配置信息
@@ -1386,8 +1396,35 @@ namespace KylinService
         /// <param name="e"></param>
         private void btnLookConfig_Click(object sender, EventArgs e)
         {
-            var configForm = new ConfigForm();
-            configForm.Show();
+            if (lookConfigForm == null || lookConfigForm.IsDisposed)
+            {
+                lookConfigForm = new ConfigForm();
+                lookConfigForm.Show();
+            }
+            else
+            {
+                lookConfigForm.Activate();
+            }
+        }
+
+        private ExceptionSetForm execptionSetForm = null;
+
+        /// <summary>
+        /// 异常处理设置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_Click(object sender, EventArgs e)
+        {
+            if (execptionSetForm == null || execptionSetForm.IsDisposed)
+            {
+                execptionSetForm = new ExceptionSetForm();
+                execptionSetForm.Show();
+            }
+            else
+            {
+                execptionSetForm.Activate();
+            }
         }
 
         #endregion

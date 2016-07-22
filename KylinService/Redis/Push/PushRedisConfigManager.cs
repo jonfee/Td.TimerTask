@@ -20,6 +20,11 @@ namespace KylinService.Redis.Push
         /// </summary>
         public static PushRedisCollection Collection { get; private set; }
 
+        /// <summary>
+        /// 存储推送对象的Redis连接配置信息
+        /// </summary>
+        public static string RedisConnectionString { get; set; }
+
         static PushRedisConfigManager()
         {
             ConfigurationManager.GetSection("pushRedisConfig");
@@ -29,18 +34,14 @@ namespace KylinService.Redis.Push
         {
             var _collection = new PushRedisCollection();
 
-            string connectionString = null;
-
             foreach (XmlNode node in section.ChildNodes)
             {
                 if (node.NodeType == XmlNodeType.Element)
                 {
-                    var text = node.InnerText;
-
                     switch (node.Name.ToLower())
                     {
                         case "redisconnection":
-                            connectionString = text;
+                            RedisConnectionString = node.InnerText;
                             break;
                         case "datakey":
                             var config = GetKeysDbConfigValue(node);
@@ -49,11 +50,6 @@ namespace KylinService.Redis.Push
                     }
                 }
             }
-
-            _collection.Items.ForEach((item) =>
-            {
-                item.ConnectionString = connectionString;
-            });
 
             Collection = _collection;
 

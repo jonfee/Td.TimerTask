@@ -1,4 +1,5 @@
 ﻿using KylinService.Core;
+using KylinService.Redis.Push;
 using KylinService.SysEnums;
 using System;
 using System.Collections.Generic;
@@ -132,7 +133,7 @@ namespace KylinService
 
                 string server = null;
                 Regex regServer = new Regex(@"(?<server>[0-9a-z\-]+(\.[0-9a-z\-]+)+)", RegexOptions.IgnoreCase);
-                var dcoll = regServer.Match(config.ConnectionString);
+                var dcoll = regServer.Match(PushRedisConfigManager.RedisConnectionString);
                 if (null != dcoll)
                 {
                     server = dcoll.Groups["server"].Value;
