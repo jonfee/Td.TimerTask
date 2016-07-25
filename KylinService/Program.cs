@@ -37,9 +37,6 @@ namespace KylinService
                   }
               }, null, 0, 600000);
 
-            //// 注册所有调度服务。
-            //Startup.RegisterServices(mainForm, mainForm.WriteMessageDelegate);
-
             Application.Run(mainForm);
         }
     }

@@ -168,18 +168,25 @@ namespace KylinService.Services.Queue
         /// </summary>
         protected virtual void StartFirstRequest()
         {
-            if (null != BackupDatabase)
+            try
             {
-                var backDataDic = BackupDatabase.HashGetAll<T>(RedisConfig.Key);
-
-                if (null == backDataDic || backDataDic.Count < 1) return;
-
-                var backDataList = backDataDic.Values;
-
-                foreach (T item in backDataList)
+                if (null != BackupDatabase)
                 {
-                    EntityTaskHandler(item, false);
+                    var backDataDic = BackupDatabase.HashGetAll<T>(RedisConfig.Key);
+
+                    if (null == backDataDic || backDataDic.Count < 1) return;
+
+                    var backDataList = backDataDic.Values;
+
+                    foreach (T item in backDataList)
+                    {
+                        EntityTaskHandler(item, false);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                OnThrowException(ex);
             }
         }
 
