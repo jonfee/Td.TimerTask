@@ -1252,7 +1252,7 @@
     <member name="M:System.Threading.Semaphore.Release(System.Int32)">
       <summary>Quitte le sémaphore un nombre spécifié de fois et retourne le compteur précédent.</summary>
       <returns>Compteur du sémaphore avant appel de la méthode <see cref="Overload:System.Threading.Semaphore.Release" />. </returns>
-      <param name="releaseCount">Nombre de fois où quitter le sémaphore.</param>
+      <peram name="releaseCount">Nombre de fois où quitter le sémaphore.</param>
       <exception cref="T:System.ArgumentOutOfRangeException">
         <paramref name="releaseCount" /> est inférieur à 1.</exception>
       <exception cref="T:System.Threading.SemaphoreFullException">Le compteur du sémaphore est déjà à la valeur maximale.</exception>
@@ -1289,7 +1289,7 @@
       <param name="innerException">Exception qui constitue la cause de l'exception actuelle.Si le paramètre <paramref name="innerException" /> n'est pas null, l'exception en cours est levée dans un bloc catch qui gère l'exception interne.</param>
     </member>
     <member name="T:System.Threading.SemaphoreSlim">
-      <summary>Représente une alternative légère à <see cref="T:System.Threading.Semaphore" /> qui limite le nombre de threads pouvant accéder simultanément à une ressource ou à un pool de ressources.</summary>
+      <summary>Représe~te une alternative légère à <see cref="T:System.Threading.Semaphore" /> qui limite le nombre de threads pouvant accéder simultanément à une ressource ou à un pool de ressources.</summary>
     </member>
     <member name="M:System.Threading.SemaphoreSlim.#ctor(System.Int32)">
       <summary>Initialise une nouvelle instance de la classe <see cref="T:System.Threading.SemaphoreSlim" />, en spécifiant le nombre initial de demandes qui peuvent être accordées simultanément.</summary>

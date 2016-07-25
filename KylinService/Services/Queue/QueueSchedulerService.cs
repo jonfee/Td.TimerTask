@@ -54,11 +54,11 @@ namespace KylinService.Services.Queue
         {
             get
             {
-                if (_redis == null)
+                if (_redis == null || !_redis.IsConnected)
                 {
                     lock (_locker)
                     {
-                        if (_redis == null)
+                        if (_redis == null || !_redis.IsConnected)
                         {
                             _redis = ConnectionMultiplexer.Connect(RedisConfig.ConnectionString);
                         }

@@ -1349,6 +1349,11 @@ namespace KylinService
         #region////////////////// 结果/消息输出/////////////////////
 
         /// <summary>
+        /// 最后一次输出时期
+        /// </summary>
+        private DateTime lastOutputDate;
+
+        /// <summary>
         /// 输出消息
         /// </summary>
         /// <param name="message"></param>
@@ -1358,6 +1363,19 @@ namespace KylinService
             {
                 message += DateTime.Now.ToString("      ### yyyy-MM-dd HH:mm:ss ###");
             }
+
+            //上次更新日期不是当天，则将输出信息写入日志，并清空输出面板，重新记录更新日期为当天
+            if (lastOutputDate.Date != DateTime.Now.Date)
+            {
+                //写入日志
+                var loger = new RunLoger();
+                loger.Write(this.richMessage.Text);
+                //清空面板
+                this.richMessage.Clear();
+                //更新日期记录
+                lastOutputDate = DateTime.Now.Date;
+            }
+
             this.richMessage.AppendText(message);
             this.richMessage.AppendText("\n");
             this.richMessage.Focus();

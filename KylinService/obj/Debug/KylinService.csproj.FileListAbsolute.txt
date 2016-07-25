@@ -107,4 +107,8 @@ D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.Redis.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.DataCache.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.exe
 D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.pdb
-D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Debug\KylinService.csprojResolveAssemblyReference.cache
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Runtime.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Linq.Expressions.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Linq.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Runtime.Extensions.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.IO.dll

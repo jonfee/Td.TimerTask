@@ -171,7 +171,7 @@ namespace KylinService.Services
                 //输出/显示异常信息
                 if (ExceptionLogConfig.Display)
                 {
-                    RunLogger(sbErr.ToString());
+                    WriteMessageHelper.WriteMessage(sbErr.ToString());
                 }
 
                 //需要写入到异常日志文件

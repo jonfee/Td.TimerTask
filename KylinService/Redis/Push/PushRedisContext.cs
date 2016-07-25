@@ -18,11 +18,11 @@ namespace KylinService.Redis.Push
         {
             get
             {
-                if (_redis == null)
+                if (_redis == null || !_redis.IsConnected)
                 {
                     lock (_redis)
                     {
-                        if (_redis == null)
+                        if (_redis == null || !_redis.IsConnected)
                         {
                             _redis = ConnectionMultiplexer.Connect(PushRedisConfigManager.RedisConnectionString);
                         }

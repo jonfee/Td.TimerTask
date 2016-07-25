@@ -12,6 +12,7 @@ using KylinService.SysEnums;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Windows.Forms;
@@ -24,6 +25,16 @@ namespace KylinService
 {
     internal sealed class Startup
     {
+        static Startup()
+        {
+            AppSettings = ConfigurationManager.AppSettings;
+            ConnectionStrings = ConfigurationManager.ConnectionStrings;
+        }
+
+        public static NameValueCollection AppSettings;
+
+        public static ConnectionStringSettingsCollection ConnectionStrings;
+
         /// <summary>
         /// 更新缓存对象锁
         /// </summary>
@@ -37,7 +48,7 @@ namespace KylinService
         public static void Start()
         {
             #region //定时操作时间误差范围
-            string strRange = ConfigurationManager.AppSettings["timerErrorRange"];
+            string strRange = AppSettings["timerErrorRange"];
             int errorRange = 0;
             int.TryParse(strRange, out errorRange);
             if (errorRange < 1)
@@ -50,10 +61,10 @@ namespace KylinService
             #region//产品信息及维护人员信息
             ProductInfo = new ProductInfo
             {
-                Author = ConfigurationManager.AppSettings["Author"],
-                Email = ConfigurationManager.AppSettings["Email"],
-                Mobile = ConfigurationManager.AppSettings["Mobile"],
-                QQ = ConfigurationManager.AppSettings["QQ"],
+                Author = AppSettings["Author"],
+                Email = AppSettings["Email"],
+                Mobile = AppSettings["Mobile"],
+                QQ = AppSettings["QQ"],
                 ProductName = Application.ProductName,
                 Version = Application.ProductVersion
             };
@@ -75,12 +86,12 @@ namespace KylinService
 
               }).Invoke();
 
-            KylinDBConnectionString = ConfigurationManager.ConnectionStrings["KylinConnectionString"].ConnectionString;
+            KylinDBConnectionString = ConnectionStrings["KylinConnectionString"].ConnectionString;
 
             #endregion
 
             #region  //缓存注入
-            DataCacheRedisConnectionString = ConfigurationManager.ConnectionStrings["RedisDataCacheConnectionString"].ConnectionString;
+            DataCacheRedisConnectionString = ConnectionStrings["RedisDataCacheConnectionString"].ConnectionString;
             InjectionDataCache();
             #endregion
 

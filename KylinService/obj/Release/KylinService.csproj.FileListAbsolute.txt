@@ -108,3 +108,8 @@ D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Release\KylinService.pdb
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\Td.CoreLibrary.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\Td.CoreLibrary.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\obj\Release\KylinService.csprojResolveAssemblyReference.cache
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.Runtime.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.Linq.Expressions.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.Linq.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.Runtime.Extensions.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.IO.dll

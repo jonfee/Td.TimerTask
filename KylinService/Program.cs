@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace KylinService
@@ -16,6 +17,12 @@ namespace KylinService
 
             //初始化信息
             Startup.Start();
+
+            #region 设置线程池线程数
+            int workerThreads = int.Parse(Startup.AppSettings["workerThreads"]);
+            int completionPortThreads = int.Parse(Startup.AppSettings["completionPortThreads"]);
+            ThreadPool.SetMinThreads(workerThreads, completionPortThreads);
+            #endregion
 
             //启动主窗体
             var mainForm = new MainForm();
