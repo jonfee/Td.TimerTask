@@ -8,7 +8,7 @@ namespace KylinService.Core.Loger
     /// </summary>
     public class RunLoger : BaseLoger
     {
-        public RunLoger() : base(string.Format(@"\logs\output\{0}.txt", DateTime.Now.ToString("yyyyMMdd"))) { }
+        public RunLoger(DateTime datetime) : base(string.Format(@"\logs\output\{0}.txt", datetime.ToString("yyyyMMdd"))) { }
 
         public RunLoger(string serviceName) : base(string.Format(@"\logs\{0}\{1}.txt", serviceName, DateTime.Now.ToString("yyyyMMdd"))) { }
 
