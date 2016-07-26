@@ -89,7 +89,7 @@ namespace KylinService.Services.CacheMaintain
                     lock (Startup.uploadCacheObjectLock)
                     {
                         //更新当前级别的缓存
-                        CacheCollection.Update(level);
+                         CacheCollection.Update(level);
                     }
 
                     if (null != list && list.Count > 0)

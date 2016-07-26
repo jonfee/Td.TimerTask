@@ -1366,7 +1366,7 @@ namespace KylinService
             }
 
             //距离上次写入日志时间超过1小时，则将输出信息写入日志，并清空输出面板
-            if (lastWriteLogTime.AddHours(1) <= DateTime.Now.Date)
+            if (lastWriteLogTime.AddHours(1) <= DateTime.Now)
             {
                 //写入日志
                 var loger = new RunLoger(lastWriteLogTime.Date);
