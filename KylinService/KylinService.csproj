@@ -291,8 +291,8 @@
       <HintPath>..\packages\Td.CoreLibrary.1.2.5\lib\net452\Td.CoreLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Td.Kylin.DataCache, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Td.Kylin.DataCache.1.3.0\lib\net46\Td.Kylin.DataCache.dll</HintPath>
+    <Reference Include="Td.Kylin.DataCache, Version=1.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Td.Kylin.DataCache.1.3.2\lib\net46\Td.Kylin.DataCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Td.Kylin.Entity, Version=1.1.11.0, Culture=neutral, processorArchitecture=MSIL">

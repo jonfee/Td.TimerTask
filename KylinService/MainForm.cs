@@ -1202,7 +1202,7 @@ namespace KylinService
 
             if (null != cache)
             {
-                cache.Update();
+                cache.Update().Wait();
 
                 var cacheName = EnumExtensions.GetDescription<CacheItemType>(cache.ItemType.ToString());
 
