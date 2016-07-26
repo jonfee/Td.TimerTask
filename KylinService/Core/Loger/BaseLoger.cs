@@ -48,7 +48,8 @@ namespace KylinService.Core.Loger
 
                 if (!File.Exists(appFilePath))
                 {
-                    File.Create(appFilePath).Close();
+                    FileStream fs = File.Create(appFilePath);
+                    fs.Close();
                 }
 
                 using (StreamWriter sw = File.AppendText(appFilePath))

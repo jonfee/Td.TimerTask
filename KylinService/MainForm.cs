@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Td.Kylin.DataCache;
 
@@ -1349,9 +1350,9 @@ namespace KylinService
         #region////////////////// 结果/消息输出/////////////////////
 
         /// <summary>
-        /// 最后一次输出日期
+        /// 最后一次写入日志文件时间
         /// </summary>
-        private DateTime lastOutputDate = DateTime.Now.Date;
+        private DateTime lastWriteLogTime = DateTime.Now;
 
         /// <summary>
         /// 输出消息
@@ -1364,16 +1365,16 @@ namespace KylinService
                 message += DateTime.Now.ToString("___yyyy-MM-dd HH:mm:ss___");
             }
 
-            //上次更新日期不是当天，则将输出信息写入日志，并清空输出面板，重新记录更新日期为当天
-            if (lastOutputDate.Date != DateTime.Now.Date)
+            //距离上次写入日志时间超过1小时，则将输出信息写入日志，并清空输出面板
+            if (lastWriteLogTime.AddHours(1) <= DateTime.Now.Date)
             {
                 //写入日志
-                var loger = new RunLoger(lastOutputDate);
+                var loger = new RunLoger(lastWriteLogTime.Date);
                 loger.Write(this.richMessage.Text);
                 //清空面板
                 this.richMessage.Clear();
                 //更新日期记录
-                lastOutputDate = DateTime.Now.Date;
+                lastWriteLogTime = DateTime.Now;
             }
 
             this.richMessage.AppendText(message);
