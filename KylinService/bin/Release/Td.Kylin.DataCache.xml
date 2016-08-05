@@ -51,7 +51,7 @@
         <member name="P:Td.Kylin.DataCache.CacheCollection.OpenAreaCache">
             <summary>
             开通区域缓存
-            </summary>
+            </summary> 
         </member>
         <member name="P:Td.Kylin.DataCache.CacheCollection.MerchantIndustryCache">
             <summary>
@@ -61,11 +61,6 @@
         <member name="P:Td.Kylin.DataCache.CacheCollection.AreaRecommendIndustryCache">
             <summary>
             区域行业推荐缓存
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheCollection.BusinessServiceCache">
-            <summary>
-            上门预约服务缓存
             </summary>
         </member>
         <member name="P:Td.Kylin.DataCache.CacheCollection.MerchantProductSystemCategoryCache">
@@ -163,6 +158,16 @@
             跑腿业务物品类型缓存
             </summary>
         </member>
+        <member name="P:Td.Kylin.DataCache.CacheCollection.LifeServiceSystemCategoryCache">
+            <summary>
+            生活服务分类缓存
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheCollection.MerchantCustomCategoryCache">
+            <summary>
+            商家自定义分类缓存
+            </summary>
+        </member>
         <member name="M:Td.Kylin.DataCache.CacheCollection.GetCache(Td.Kylin.DataCache.CacheItemType)">
             <summary>
             获取缓存项
@@ -236,6 +241,11 @@
             缓存数据来源数据库连接字符串
             </summary>
         </member>
+        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.Level2CacheSeconds">
+            <summary>
+            二级缓存的时间（单位：秒）
+            </summary>
+        </member>
         <member name="T:Td.Kylin.DataCache.CacheRedisContext">
             <summary>
             缓存Redis上下文对象
@@ -250,6 +260,18 @@
             <summary>
             Redis（ConnectionMultiplexer）对象，单例
             </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Startup.Start(StackExchange.Redis.ConfigurationOptions,System.Boolean,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,System.Collections.Generic.IEnumerable{Td.Kylin.DataCache.CacheItemType},System.Int32)">
+            <summary>
+            初始化加载
+            </summary>
+            <param name="options">缓存Redis配置信息</param>
+            <param name="keepAlive">是否长连接</param>
+            <param name="initIfNull">缓存为null时是否初始化</param>
+            <param name="sqlType">缓存的源数据库类型</param>
+            <param name="sqlConnection">缓存的源数据库连接</param>
+            <param name="types">需要缓存的对象类型集合</param>
+            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
         </member>
         <member name="M:Td.Kylin.DataCache.Startup.InjectCacheItems(System.Collections.Generic.IEnumerable{Td.Kylin.DataCache.CacheItemType})">
             <summary>
@@ -287,6 +309,11 @@
             数据库连接字符串
             </summary>
         </member>
+        <member name="P:Td.Kylin.DataCache.Startup.Level2CacheSeconds">
+            <summary>
+            二级缓存时间（秒）
+            </summary>
+        </member>
         <member name="T:Td.Kylin.DataCache.DataCacheInjection">
             <summary>
             缓存注入
@@ -300,7 +327,7 @@
             <param name="config"><seealso cref="T:Td.Kylin.DataCache.CacheInjectionConfig"/>缓存注入配置类实例</param>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Microsoft.AspNetCore.Builder.IApplicationBuilder,StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean)">
+        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Microsoft.AspNetCore.Builder.IApplicationBuilder,StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
             <summary>
             以ConfigurationOptions形式注入
             </summary>
@@ -311,9 +338,10 @@
             <param name="sqlConnection">数据库连接字符串</param>
             <param name="cacheItems">缓存类型</param>
             <param name="initIfNull">缓存数据为空时是否初始化</param>
+            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean)">
+        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
             <summary>
             以连接字符串形式注入
             </summary>
@@ -324,6 +352,7 @@
             <param name="sqlConnection">数据库连接字符串</param>
             <param name="cacheItems">缓存类型</param>
             <param name="initIfNull">缓存数据为空时是否初始化</param>
+            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Td.Kylin.DataCache.CacheInjectionConfig)">
@@ -333,7 +362,7 @@
             <param name="config"><seealso cref="T:Td.Kylin.DataCache.CacheInjectionConfig"/>类实例</param>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean)">
+        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
             <summary>
             以ConfigurationOptions形式注入
             </summary>
@@ -343,9 +372,10 @@
             <param name="sqlConnection">数据库连接字符串</param>
             <param name="cacheItems">缓存类型</param>
             <param name="initIfNull">缓存数据为空时是否初始化</param>
+            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(System.String,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean)">
+        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(System.String,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
             <summary>
             以连接字符串形式注入
             </summary>
@@ -355,6 +385,7 @@
             <param name="sqlConnection">数据库连接字符串</param>
             <param name="cacheItems">缓存类型</param>
             <param name="initIfNull">缓存数据为空时是否初始化</param>
+            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
             <returns></returns>
         </member>
         <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._next">
@@ -392,7 +423,12 @@
             缓存数据为null时是否初始化
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean)">
+        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._level2CacheSeconds">
+            <summary>
+            二级缓存的时间（单位：秒）
+            </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.DataCacheMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
             <summary>
             实例化
             </summary>
@@ -403,8 +439,9 @@
             <param name="sqlConnection">数据库连接字符串</param>
             <param name="cacheItems">缓存类型</param>
             <param name="initIfNull">缓存数据为空时是否初始化</param>
+            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheMiddleware.#ctor(StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean)">
+        <member name="M:Td.Kylin.DataCache.DataCacheMiddleware.#ctor(StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
             <summary>
             实例化（非Web程序中使用）
             </summary>
@@ -414,142 +451,7 @@
             <param name="sqlConnection">数据库连接字符串</param>
             <param name="cacheItems">缓存类型</param>
             <param name="initIfNull">缓存数据为空时是否初始化</param>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.Items">
-            <summary>
-            数据操作服务集
-            </summary>
-        </member>
-        <member name="M:Td.Kylin.DataCache.ServicesProvider.#ctor">
-            <summary>
-            实例化
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.SystemAreaService">
-            <summary>
-            系统区域数据服务
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.OpenAreaService">
-            <summary>
-            开通区域数据服务
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.MerchantIndustryService">
-            <summary>
-            商家行业数据服务
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.AreaRecommendIndustryService">
-            <summary>
-            区域行业推荐数据服务
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.BusinessService">
-            <summary>
-            上门预约业务数据服务
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.B2CProductCategoryService">
-            <summary>
-            B2C区域商城商品分类
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.B2CProductCategoryTagService">
-            <summary>
-            B2C区域商城商品分类标签
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.SystemGolbalConfigService">
-            <summary>
-            系统全局配置
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.UserPointsConfigService">
-            <summary>
-            用户积分规则配置 
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.UserEmpiricalConfigService">
-            <summary>
-            用户经验值规则配置 
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.UserLevelConfigService">
-            <summary>
-            用户等级配置
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.ForumCategoryService">
-            <summary>
-            圈子分类
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.ForumCircleService">
-            <summary>
-            系统圈子
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.AreaForumService">
-            <summary>
-            区域圈子
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.MerchantProductSystemCategoryService">
-            <summary>
-            商家商品系统分类
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.JobCategoryService">
-            <summary>
-            职位类别
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.PlatformCommissionService">
-            <summary>
-            平台针对区域抽成
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.AreaForMerchantCommissionService">
-            <summary>
-            区域针对商家抽成
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.AreaForPersonalWorkerCommissionService">
-            <summary>
-            区域针对个人服务人员抽成
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.AreaDefaultCommissionService">
-            <summary>
-            区域默认抽成配置
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.ModuleAuthorizeService">
-            <summary>
-            模块授权
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.LegworkAreaConfigService">
-            <summary>
-            跑腿业务区域配置
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.LegworkGlobalConfigService">
-            <summary>
-            跑腿业务全局配置
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.ServicesProvider.LegworkGoodsCategoryService">
-            <summary>
-            跑腿业务物品类型
-            </summary>
-        </member>
-        <member name="M:Td.Kylin.DataCache.ServicesProvider.InitServices``1">
-            <summary>
-            数据服务初始化
-            </summary>
-            <typeparam name="T"></typeparam>
+            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
         </member>
         <member name="T:Td.Kylin.DataCache.CacheModel.ApiModuleAuthorizeCacheModel">
             <summary>
@@ -871,76 +773,6 @@
             HashField
             </summary>
         </member>
-        <member name="T:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel">
-            <summary>
-            上门预约服务业务缓存模型
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.HashField">
-            <summary>
-            HashField（BusinessID）
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.BusinessID">
-            <summary>
-            业务ID
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.IndustryID">
-            <summary>
-            所属行业
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.Name">
-            <summary>
-            业务名称
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.BusinessType">
-            <summary>
-            业务类型（如：上门|预约）
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.IsOpenService">
-            <summary>
-            是否已开通线上服务（未开通时表示不能进行业务操作，如：上门服务|预约服务）
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.QuoteWays">
-            <summary>
-            报价方式（枚举：下单时报价｜上门时报价等）
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.PayerType">
-            <summary>
-            付款方类型（枚举：下单方｜服务方）
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.AllowPerson">
-            <summary>
-            是否允许个人开展业务
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.Icon">
-            <summary>
-            图标
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.OrderNo">
-            <summary>
-            排序值
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.TagStatus">
-            <summary>
-            标记状态（枚举以2的N次方定义，多个状态时累加）
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheModel.BusinessServiceCacheModel.CreateTime">
-            <summary>
-            数据创建时间
-            </summary>
-        </member>
         <member name="T:Td.Kylin.DataCache.CacheModel.ForumCategoryCacheModel">
             <summary>
             圈子分类数据缓存模型
@@ -1144,6 +976,76 @@
         <member name="P:Td.Kylin.DataCache.CacheModel.LegworkGoodsCategoryCacheModel.SortOrder">
             <summary>
             排列顺序。
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.CacheModel.LifeServiceSystemCategoryCacheModel">
+            <summary>
+            生活服务系统分类缓存模型
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.LifeServiceSystemCategoryCacheModel.HashField">
+            <summary>
+            HashField（CategoryID）
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.LifeServiceSystemCategoryCacheModel.CategoryID">
+            <summary>
+            分类ID
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.LifeServiceSystemCategoryCacheModel.Name">
+            <summary>
+            分类名称
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.LifeServiceSystemCategoryCacheModel.ParentCategoryID">
+            <summary>
+            父级分类ID（顶级分类时为0）
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.LifeServiceSystemCategoryCacheModel.CategoryPath">
+            <summary>
+            分类层级路径（如：1|2|3）
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.LifeServiceSystemCategoryCacheModel.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.LifeServiceSystemCategoryCacheModel.OrderNo">
+            <summary>
+            排序值
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.CacheModel.MerchantCustomCategoryCacheModel">
+            <summary>
+            商家自定义分类
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.MerchantCustomCategoryCacheModel.HashField">
+            <summary>
+            HashField（CategoryID）
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.MerchantCustomCategoryCacheModel.CategoryID">
+            <summary>
+            自定义分类ID
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.MerchantCustomCategoryCacheModel.Name">
+            <summary>
+            自定义分类名称
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.MerchantCustomCategoryCacheModel.MerchantID">
+            <summary>
+            商家ID
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.CacheModel.MerchantCustomCategoryCacheModel.OrderNo">
+            <summary>
+            排序值
             </summary>
         </member>
         <member name="T:Td.Kylin.DataCache.CacheModel.MerchantIndustryCacheModel">
@@ -1506,6 +1408,16 @@
             跑腿业务物品分类。
             </summary>
         </member>
+        <member name="P:Td.Kylin.DataCache.Context.DataContext.Service_SystemCategory">
+            <summary>
+            生活服务系统分类
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.Context.DataContext.MerchGoods_Category">
+            <summary>
+            商家自定义分类
+            </summary>
+        </member>
         <member name="T:Td.Kylin.DataCache.CacheItemType">
             <summary>
             缓存项类型
@@ -1536,14 +1448,19 @@
             区域行业推荐
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.CacheItemType.BusinessServices">
-            <summary>
-            上门预约业务
-            </summary>
-        </member>
         <member name="F:Td.Kylin.DataCache.CacheItemType.MerchantProductSystemCategory">
             <summary>
             商家商品系统分类
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.DataCache.CacheItemType.MerchantCustomCategory">
+            <summary>
+            商家自定义分类
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.DataCache.CacheItemType.LifeServiceSystemCategory">
+            <summary>
+            生活服务系统分类
             </summary>
         </member>
         <member name="F:Td.Kylin.DataCache.CacheItemType.B2CProductCategory">
@@ -1583,7 +1500,7 @@
         </member>
         <member name="F:Td.Kylin.DataCache.CacheItemType.ForumCircle">
             <summary>
-            圈子
+            系统圈子
             </summary>
         </member>
         <member name="F:Td.Kylin.DataCache.CacheItemType.AreaForum">
@@ -1727,17 +1644,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Td.Kylin.DataCache.IServices.IBusinessService">
-            <summary>
-            上门预约服务业务数据服务接口
-            </summary>
-        </member>
-        <member name="M:Td.Kylin.DataCache.IServices.IBusinessService.GetEnabledAll">
-            <summary>
-            获取所有有效上门预约服务业务数据集合
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Td.Kylin.DataCache.IServices.IForumCategoryService.GetEnabledAll">
             <summary>
             获取所有有效的圈子分类
@@ -1770,6 +1676,23 @@
         <member name="M:Td.Kylin.DataCache.IServices.ILegworkGoodsCategoryService.GetAll">
             <summary>
             获取所有跑腿业务物品类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Td.Kylin.DataCache.IServices.ILifeServiceSystemCategoryService.GetEnabledAll">
+            <summary>
+            获取所有有效的生活服务分类集合
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Td.Kylin.DataCache.IServices.IMerchantCustomCategoryService">
+            <summary>
+            商家自定义分类数据服务接口
+            </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.IServices.IMerchantCustomCategoryService.GetEnabledAll">
+            <summary>
+            获取所有有效的分类集合
             </summary>
             <returns></returns>
         </member>
@@ -2031,34 +1954,11 @@
             <param name="tagID">标签ID</param>
             <returns></returns>
         </member>
-        <member name="T:Td.Kylin.DataCache.Provider.BusinessServiceCache">
-            <summary>
-            上门预约业务缓存
-            </summary>
-        </member>
-        <member name="M:Td.Kylin.DataCache.Provider.BusinessServiceCache.#ctor">
-            <summary>
-            初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.BusinessServiceCache"/>实例
-            </summary>
-        </member>
-        <member name="M:Td.Kylin.DataCache.Provider.BusinessServiceCache.ReadDataFromDB">
-            <summary>
-            从数据库中读取数据
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Td.Kylin.DataCache.Provider.BusinessServiceCache.Get(System.Int64)">
-            <summary>
-            获取缓存
-            </summary>
-            <param name="businessID">业务ID</param>
-            <returns></returns>
-        </member>
         <member name="T:Td.Kylin.DataCache.Provider.CacheItem`1">
             <summary>
             缓存抽象类
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="T"><seealso cref="T:Td.Kylin.DataCache.CacheModel.BaseCacheModel"/></typeparam>
         </member>
         <member name="F:Td.Kylin.DataCache.Provider.CacheItem`1._config">
             <summary>
@@ -2108,21 +2008,6 @@
             当前缓存操作的Redis数据库
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.Provider.CacheItem`1._updateLock">
-            <summary>
-            更新锁
-            </summary>
-        </member>
-        <member name="F:Td.Kylin.DataCache.Provider.CacheItem`1._updating">
-            <summary>
-            是否正在更新
-            </summary>
-        </member>
-        <member name="F:Td.Kylin.DataCache.Provider.CacheItem`1._tempData">
-            <summary>
-            一般在更新时使用
-            </summary>
-        </member>
         <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.Value">
             <summary>
             获取缓存数据
@@ -2130,7 +2015,7 @@
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.GetCache">
             <summary>
-            获取缓存
+            获取缓存数据
             </summary>
             <returns></returns>
         </member>
@@ -2168,19 +2053,21 @@
             </summary>
             <param name="entity"></param>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.Get(System.String)">
+        <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.Get(System.String,System.Boolean)">
             <summary>
             获取指定字段的数据项
             </summary>
             <param name="hashField"></param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.Get(System.String[],System.Boolean)">
+        <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.Get(System.String[],System.Boolean,System.Boolean)">
             <summary>
             获取指定字段集的数据项集合
             </summary>
             <param name="hashFields"></param>
             <param name="removeNullOrEmpty">是否移除null或empty的数据对象</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.ResetLevel(Td.Kylin.DataCache.CacheLevel)">
@@ -2189,11 +2076,32 @@
             </summary>
             <param name="level"></param>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.GetCacheData">
+        <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.Td#Kylin#DataCache#Provider#ICache#GetCacheData">
             <summary>
-            获取缓存数据
+            获取缓存数据（缓存源）
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.Td#Kylin#DataCache#Provider#ICache#GetLevel2CacheData">
+            <summary>
+            获取二级缓存数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Td.Kylin.DataCache.Provider.CacheItem`1._secondLevelCacheLastUpdateTime">
+            <summary>
+            二级缓存最后更新时间
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.DataCache.Provider.CacheItem`1._secondLevelCacheData">
+            <summary>
+            二级缓存数据
+            </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.CacheItem`1.GetSecondLevelCacheData">
+            <summary>
+            获取二级缓存数据
+            </summary>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.ForumCategoryCache">
             <summary>
@@ -2274,8 +2182,14 @@
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.ICache.GetCacheData">
             <summary>
-            获取缓存原数据
+            获取缓存源数据
             </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.ICache.GetLevel2CacheData">
+            <summary>
+            获取二级缓存数据
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.JobCategoryCache">
             <summary>
@@ -2367,6 +2281,52 @@
             <summary>
             从数据库中读取数据
             </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Td.Kylin.DataCache.Provider.LifeServiceSystemCategoryCache">
+            <summary>
+            生活服务缓存
+            </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.LifeServiceSystemCategoryCache.#ctor">
+            <summary>
+            初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.AreaForumCache"/>实例
+            </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.LifeServiceSystemCategoryCache.Get(System.Int64)">
+            <summary>
+            获取缓存
+            </summary>
+            <param name="categoryID">分类ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.LifeServiceSystemCategoryCache.ReadDataFromDB">
+            <summary>
+            从数据库中读取数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Td.Kylin.DataCache.Provider.MerchantCustomCategoryCache">
+            <summary>
+            商家自定义分类缓存
+            </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.MerchantCustomCategoryCache.#ctor">
+            <summary>
+            初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.MerchantCustomCategoryCache"/>实例
+            </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.MerchantCustomCategoryCache.ReadDataFromDB">
+            <summary>
+            从数据库中读取数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Provider.MerchantCustomCategoryCache.Get(System.Int64)">
+            <summary>
+            获取缓存
+            </summary>
+            <param name="categoryID">商品分类ID</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.MerchantIndustryCache">
@@ -2673,161 +2633,160 @@
             <param name="redisKey">Redis缓存中的Key</param>
             <returns></returns>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.AreaDefaultCommissionService`1">
+        <member name="T:Td.Kylin.DataCache.Services.AreaDefaultCommissionService">
             <summary>
             区域默认抽成数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.AreaForMerchantCommissionService`1">
+        <member name="T:Td.Kylin.DataCache.Services.AreaForMerchantCommissionService">
             <summary>
             区域针对商家抽成配置服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.AreaForPersonalWorkerCommissionService`1">
+        <member name="T:Td.Kylin.DataCache.Services.AreaForPersonalWorkerCommissionService">
             <summary>
             区域针对个人工作人员抽成配置服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.AreaForumService`1">
+        <member name="T:Td.Kylin.DataCache.Services.AreaForumService">
             <summary>
             区域圈子数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.AreaRecommendIndustryService`1">
+        <member name="T:Td.Kylin.DataCache.Services.AreaRecommendIndustryService">
             <summary>
             区域行业推荐数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="M:Td.Kylin.DataCache.Services.AreaRecommendIndustryService`1.GetAll">
+        <member name="M:Td.Kylin.DataCache.Services.AreaRecommendIndustryService.GetAll">
             <summary>
             获取所有区域推荐行业集合
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.B2CProductCategoryService`1">
+        <member name="T:Td.Kylin.DataCache.Services.B2CProductCategoryService">
             <summary>
             精品汇商品分类数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.B2CProductCategoryTagService`1">
+        <member name="T:Td.Kylin.DataCache.Services.B2CProductCategoryTagService">
             <summary>
             精品汇商品分类标签数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.BusinessService`1">
-            <summary>
-            上门预约服务业务数据服务
-            </summary>
-            <typeparam name="DbContext"></typeparam>
-        </member>
-        <member name="M:Td.Kylin.DataCache.Services.BusinessService`1.GetEnabledAll">
-            <summary>
-            获取所有有效上门预约服务业务数据集合
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Td.Kylin.DataCache.Services.ForumCategoryService`1">
+        <member name="T:Td.Kylin.DataCache.Services.ForumCategoryService">
             <summary>
             圈子分类数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.ForumCircleService`1">
+        <member name="T:Td.Kylin.DataCache.Services.ForumCircleService">
             <summary>
             系统圈子数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.JobCategoryService`1">
+        <member name="T:Td.Kylin.DataCache.Services.JobCategoryService">
             <summary>
             职位类别数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.MerchantIndustryService`1">
+        <member name="T:Td.Kylin.DataCache.Services.LegworkAreaConfigService">
+            <summary>
+            跑腿区域配置数据服务
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.Services.LegworkGlobalConfigService">
+            <summary>
+            跑腿全局配置服务
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.Services.LegworkGoodsCategoryService">
+            <summary>
+            跑腿物品类型数据服务
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.Services.LifeServiceSystemCategoryService">
+            <summary>
+            生活服务系统分类
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.Services.MerchantCustomCategoryService">
+            <summary>
+            商家自定义分类数据服务
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.Services.MerchantIndustryService">
             <summary>
             商家行业数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="M:Td.Kylin.DataCache.Services.MerchantIndustryService`1.GetEnabledAll">
+        <member name="M:Td.Kylin.DataCache.Services.MerchantIndustryService.GetEnabledAll">
             <summary>
             获取所有有效的商家行业集合
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.MerchantProductSystemCategoryService`1">
+        <member name="T:Td.Kylin.DataCache.Services.MerchantProductSystemCategoryService">
             <summary>
             商家商品系统分类数据服务s
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.OpenAreaService`1">
+        <member name="T:Td.Kylin.DataCache.Services.ModuleAuthorizeService">
+            <summary>
+            模块服务授权数据服务
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.Services.OpenAreaService">
             <summary>
             开通区域数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="M:Td.Kylin.DataCache.Services.OpenAreaService`1.GetAll">
+        <member name="M:Td.Kylin.DataCache.Services.OpenAreaService.GetAll">
             <summary>
             获取所有开通区域
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.PlatformCommissionService`1">
+        <member name="T:Td.Kylin.DataCache.Services.PlatformCommissionService">
             <summary>
             平台针对区域抽成服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="M:Td.Kylin.DataCache.Services.PlatformCommissionService`1.GetAll">
+        <member name="M:Td.Kylin.DataCache.Services.PlatformCommissionService.GetAll">
             <summary>
             获取所有配置
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.SystemAreaService`1">
+        <member name="T:Td.Kylin.DataCache.Services.SystemAreaService">
             <summary>
             区域数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.SystemGolbalConfigService`1">
+        <member name="T:Td.Kylin.DataCache.Services.SystemGolbalConfigService">
             <summary>
             系统全局配置数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.UserEmpiricalConfigService`1">
+        <member name="T:Td.Kylin.DataCache.Services.UserEmpiricalConfigService">
             <summary>
             用户经验值规则配置数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.UserLevelConfigService`1">
+        <member name="T:Td.Kylin.DataCache.Services.UserLevelConfigService">
             <summary>
             用户等级规则配置数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
-        <member name="M:Td.Kylin.DataCache.Services.UserLevelConfigService`1.GetEnabledAll">
+        <member name="M:Td.Kylin.DataCache.Services.UserLevelConfigService.GetEnabledAll">
             <summary>
             获取所有有效的用户等级配置
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Td.Kylin.DataCache.Services.UserPointsConfigService`1">
+        <member name="T:Td.Kylin.DataCache.Services.UserPointsConfigService">
             <summary>
             用户积分规则配置数据服务
             </summary>
-            <typeparam name="DbContext"></typeparam>
         </member>
     </members>
 </doc>

@@ -160,7 +160,8 @@ namespace KylinService
                 InitIfNull = true,
                 RedisConnectionString = DataCacheRedisConnectionString,
                 SqlConnectionString = KylinDBConnectionString,
-                SqlType = SqlType
+                SqlType = SqlType,
+                KeepAlive = true
             });
 
             if (isreset)

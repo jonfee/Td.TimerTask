@@ -1866,6 +1866,28 @@
             满减
             </summary>
         </member>
+        <member name="F:Td.Kylin.EnumLibrary.B2C.DistributionType.Legworker">
+            <summary>
+            跑腿配送
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.EnumLibrary.B2C.DistributionType.Logistics">
+            <summary>
+            物流配送
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.EnumLibrary.B2C.MallDistributionMethod.Legwork">
+            <summary>
+            同城配送
+            系统指派所获得的。
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.EnumLibrary.B2C.MallDistributionMethod.Express">
+             <summary>
+             快递物流
+            手动抢单所获得的。 
+             </summary>
+        </member>
         <member name="T:Td.Kylin.EnumLibrary.PromotionUnitType">
             <summary>
             促销配置单位
@@ -2036,6 +2058,18 @@
             非常满意
             </summary>
         </member>
+        <member name="F:Td.Kylin.EnumLibrary.Legwork.LegworkOrderObtainedMethod.Appointed">
+            <summary>
+            系统指派
+            系统指派所获得的。
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.EnumLibrary.Legwork.LegworkOrderObtainedMethod.Requested">
+             <summary>
+             手动抢单
+            手动抢单所获得的。 
+             </summary>
+        </member>
         <member name="T:Td.Kylin.EnumLibrary.LegworkOrderStatus">
             <summary>
             跑腿订单状态。
@@ -2086,6 +2120,11 @@
             已失效。
             </summary>
         </member>
+        <member name="F:Td.Kylin.EnumLibrary.LegworkOrderStatus.WaitingWorkerConfirm">
+            <summary>
+            待确认-精品会订单使用跑腿业务
+            </summary>
+        </member>
         <member name="T:Td.Kylin.EnumLibrary.LegworkOrderType">
             <summary>
             跑腿订单类型。
@@ -2101,6 +2140,11 @@
             取送物品。
             </summary>
         </member>
+        <member name="F:Td.Kylin.EnumLibrary.LegworkOrderType.MallOrder">
+            <summary>
+            精品汇订单
+            </summary>
+        </member>
         <member name="T:Td.Kylin.EnumLibrary.LegworkPaymentMethod">
             <summary>
             跑腿订单支付方式。
@@ -2114,6 +2158,21 @@
         <member name="F:Td.Kylin.EnumLibrary.LegworkPaymentMethod.Offline">
             <summary>
             线下支付。
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.EnumLibrary.Luckydraw_TicketGivingRules.PaymentAmount">
+            <summary>
+            实付金额满XX元
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.EnumLibrary.Luckydraw_TicketType.GlobalTicket">
+            <summary>
+            通用券
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.EnumLibrary.Luckydraw_TicketType.PrizeTicket">
+            <summary>
+            奖品券
             </summary>
         </member>
         <member name="T:Td.Kylin.EnumLibrary.MerchantAccountStatus">

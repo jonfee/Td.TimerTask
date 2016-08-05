@@ -2444,6 +2444,11 @@
         </member>
         <member name="P:Td.Kylin.Entity.Legwork_Order.RequiredPickAddressID">
             <summary>
+            用户要求取货地址ID。
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Legwork_Order.RequiredPickAddress">
+            <summary>
             用户要求取货地址。
             </summary>
         </member>
@@ -2453,6 +2458,11 @@
             </summary>
         </member>
         <member name="P:Td.Kylin.Entity.Legwork_Order.RequiredDeliveryAddressID">
+            <summary>
+            用户要求收货地址。
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Legwork_Order.RequiredDeliveryAddress">
             <summary>
             用户要求收货地址。
             </summary>
@@ -2575,6 +2585,21 @@
         <member name="P:Td.Kylin.Entity.Legwork_Order.UserID">
             <summary>
             用户ID下单者
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Legwork_Order.ObtainedMethod">
+            <summary>
+            获得方式，引用 LegworkOrderObtainedMethod 枚举
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Legwork_Order.ExtraData">
+            <summary>
+            扩展数据
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Legwork_Order.WorkerConfirmTime">
+            <summary>
+            订单确认时间
             </summary>
         </member>
         <member name="T:Td.Kylin.Entity.Library_Category">
@@ -3217,6 +3242,46 @@
             标签创建时间
             </summary>
         </member>
+        <member name="T:Td.Kylin.Entity.Mall_Config">
+            <summary>
+            精品汇配置
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Config.AreaID">
+            <summary>
+            所属区域，主键
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Config.DistributionMethod">
+            <summary>
+            配送方式，引用 MallDistributionMethod 枚举
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Config.WarehouseLongitude">
+            <summary>
+            仓库所在经度
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Config.WarehouseLatitude">
+            <summary>
+            仓库所在纬度
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Config.WarehouseAddress">
+            <summary>
+            仓库所在详细地址
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Config.WarehousePhone">
+            <summary>
+            仓库电话
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Config.DeliveryTimeLimit">
+            <summary>
+            送达限定时间（默认24）
+            </summary>
+        </member>
         <member name="T:Td.Kylin.Entity.Mall_Evaluate">
             <summary>
             订单商品评价
@@ -3430,6 +3495,21 @@
         <member name="P:Td.Kylin.Entity.Mall_Order.Remark">
             <summary>
             买家备注
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Order.ReceivedLongitude">
+            <summary>
+            收货地经度
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Order.ReceivedLatitude">
+            <summary>
+            收获地纬度。
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.Mall_Order.DistributionType">
+            <summary>
+            配送类型
             </summary>
         </member>
         <member name="T:Td.Kylin.Entity.Mall_OrderProductSnapshot">
@@ -6697,9 +6777,14 @@
             职位名称
             </summary>
         </member>
-        <member name="P:Td.Kylin.Entity.User_Resume.HopeSalary">
+        <member name="P:Td.Kylin.Entity.User_Resume.MinHopeSalary">
             <summary>
-            期望薪资
+            最小期望薪资
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.Entity.User_Resume.MaxHopeSalary">
+            <summary>
+            最大期望薪资
             </summary>
         </member>
         <member name="P:Td.Kylin.Entity.User_Resume.JoinTime">
