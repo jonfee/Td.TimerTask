@@ -1195,46 +1195,6 @@
             <param name="enumItem">要检测的<seealso cref="T:System.Enum"/>枚举中的成员是否存在</param>
             <returns></returns>
         </member>
-        <member name="T:Td.Common.RandomGenerator">
-            <summary>
-            随机数生成器类。
-            </summary>
-        </member>
-        <member name="M:Td.Common.RandomGenerator.GenerateNumber(System.Int32)">
-            <summary>
-            生成一个指定长度的随机整数字符串。
-            </summary>
-            <param name="length">长度。</param>
-            <returns>返回指定长度的随机字符串。</returns>
-        </member>
-        <member name="M:Td.Common.RandomGenerator.GenerateMixinCode(System.Int32)">
-            <summary>
-            生成一个指定长度的随机混合(字母和数字)字符串。
-            </summary>
-            <param name="length">长度。</param>
-            <returns>返回指定长度的随机字符串。</returns>
-        </member>
-        <member name="M:Td.Common.RandomGenerator.GenerateChinese(System.Int32)">
-            <summary>
-            生成一个指定长度的随机中文字符串。
-            </summary>
-            <param name="length">长度。</param>
-            <returns>返回指定长度的随机字符串。</returns>
-        </member>
-        <member name="M:Td.Common.RandomGenerator.GenerateRegionCode(System.Int32)">
-            <summary>
-            此函数在汉字编码范围内随机创建含两个元素的十六进制字节数组，每个字节数组代表一个汉字。
-            </summary>
-            <param name="length">指定要生成的汉字个数。</param>
-            <returns>返回生成指定长度的汉字字节数组。</returns>
-        </member>
-        <member name="M:Td.Common.RandomGenerator.GenerateSalt(System.Int32)">
-            <summary>
-            生成随机的Salt值。
-            </summary>
-            <param name="length">指定要生成的Salt字节数组的长度，如果长度小于4则为4。</param>
-            <returns>返回生成字节数组的Salt值。</returns>
-        </member>
         <member name="T:Td.Common.TypeExtension">
             <summary>
             基于 <see cref="T:System.Type"/> 的实用扩展类。

@@ -114,3 +114,8 @@ D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\Microsoft.Extensions.L
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\Microsoft.AspNetCore.Mvc.DataAnnotations.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\Microsoft.Extensions.Localization.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\Microsoft.Extensions.Localization.Abstractions.xml
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.Linq.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.Linq.Expressions.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.Runtime.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.Runtime.Extensions.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Release\System.IO.dll

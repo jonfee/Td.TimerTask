@@ -1376,6 +1376,16 @@
             充退回款
             </summary>
         </member>
+        <member name="F:Td.Kylin.EnumLibrary.PlatformTransactionType.DistributionExpenditure">
+            <summary>
+            配送支出
+            </summary>
+        </member>
+        <member name="F:Td.Kylin.EnumLibrary.PlatformTransactionType.DistributionIncome">
+            <summary>
+            配送收入
+            </summary>
+        </member>
         <member name="T:Td.Kylin.EnumLibrary.RecommendDataType">
             <summary>
             此刻推荐类型

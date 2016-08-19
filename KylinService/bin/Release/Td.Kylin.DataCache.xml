@@ -201,51 +201,6 @@
             <param name="itemType"></param>
             <param name="level"></param>
         </member>
-        <member name="T:Td.Kylin.DataCache.CacheInjectionConfig">
-            <summary>
-            数据缓存(Redis)注入配置类
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.Options">
-            <summary>
-            Redis-ConfigurationOptions
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.RedisConnectionString">
-            <summary>
-            Redis-连接字符串
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.KeepAlive">
-            <summary>
-            是否保持长连接
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.CacheItems">
-            <summary>
-            需要缓存的数据类型集合
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.InitIfNull">
-            <summary>
-            缓存对象为null时是否实始化
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.SqlType">
-            <summary>
-            缓存数据来源数据库类型
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.SqlConnectionString">
-            <summary>
-            缓存数据来源数据库连接字符串
-            </summary>
-        </member>
-        <member name="P:Td.Kylin.DataCache.CacheInjectionConfig.Level2CacheSeconds">
-            <summary>
-            二级缓存的时间（单位：秒）
-            </summary>
-        </member>
         <member name="T:Td.Kylin.DataCache.CacheRedisContext">
             <summary>
             缓存Redis上下文对象
@@ -265,13 +220,19 @@
             <summary>
             初始化加载
             </summary>
-            <param name="options">缓存Redis配置信息</param>
+            <param name="options"><seealso cref="T:StackExchange.Redis.ConfigurationOptions"/>缓存Redis配置信息</param>
             <param name="keepAlive">是否长连接</param>
             <param name="initIfNull">缓存为null时是否初始化</param>
             <param name="sqlType">缓存的源数据库类型</param>
             <param name="sqlConnection">缓存的源数据库连接</param>
             <param name="types">需要缓存的对象类型集合</param>
             <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
+        </member>
+        <member name="M:Td.Kylin.DataCache.Startup.Start(Td.Kylin.DataCache.DataCacheServerOptions)">
+            <summary>
+            初始化加载
+            </summary>
+            <param name="options"><seealso cref="T:Td.Kylin.DataCache.DataCacheServerOptions"/>数据缓存服务参数</param>
         </member>
         <member name="M:Td.Kylin.DataCache.Startup.InjectCacheItems(System.Collections.Generic.IEnumerable{Td.Kylin.DataCache.CacheItemType})">
             <summary>
@@ -314,55 +275,19 @@
             二级缓存时间（秒）
             </summary>
         </member>
-        <member name="T:Td.Kylin.DataCache.DataCacheInjection">
+        <member name="T:Td.Kylin.DataCache.DataCacheExtensions">
             <summary>
             缓存注入
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Microsoft.AspNetCore.Builder.IApplicationBuilder,Td.Kylin.DataCache.CacheInjectionConfig)">
-            <summary>
-            以ConfigurationOptions形式注入
-            </summary>
-            <param name="builder"></param>
-            <param name="config"><seealso cref="T:Td.Kylin.DataCache.CacheInjectionConfig"/>缓存注入配置类实例</param>
-            <returns></returns>
-        </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Microsoft.AspNetCore.Builder.IApplicationBuilder,StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
-            <summary>
-            以ConfigurationOptions形式注入
-            </summary>
-            <param name="builder"></param>
-            <param name="options">Redis Connections</param>
-            <param name="keepAlive">是否长连接</param>
-            <param name="sqlType">数据库类型</param>
-            <param name="sqlConnection">数据库连接字符串</param>
-            <param name="cacheItems">缓存类型</param>
-            <param name="initIfNull">缓存数据为空时是否初始化</param>
-            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
-            <summary>
-            以连接字符串形式注入
-            </summary>
-            <param name="builder"></param>
-            <param name="redisConnectionString">Redis的连接字符串</param>
-            <param name="keepAlive">是否长连接</param>
-            <param name="sqlType">数据库类型</param>
-            <param name="sqlConnection">数据库连接字符串</param>
-            <param name="cacheItems">缓存类型</param>
-            <param name="initIfNull">缓存数据为空时是否初始化</param>
-            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(Td.Kylin.DataCache.CacheInjectionConfig)">
+        <member name="M:Td.Kylin.DataCache.DataCacheExtensions.UseDataCache(Td.Kylin.DataCache.DataCacheServerOptions)">
             <summary>
             以CacheInjectionConfig形式注入
             </summary>
-            <param name="config"><seealso cref="T:Td.Kylin.DataCache.CacheInjectionConfig"/>类实例</param>
+            <param name="option"><seealso cref="T:Td.Kylin.DataCache.DataCacheServerOptions"/>类实例</param>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
+        <member name="M:Td.Kylin.DataCache.DataCacheExtensions.UseDataCache(StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
             <summary>
             以ConfigurationOptions形式注入
             </summary>
@@ -375,7 +300,7 @@
             <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheInjection.UseDataCache(System.String,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
+        <member name="M:Td.Kylin.DataCache.DataCacheExtensions.UseDataCache(System.String,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
             <summary>
             以连接字符串形式注入
             </summary>
@@ -388,70 +313,92 @@
             <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
             <returns></returns>
         </member>
-        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._next">
+        <member name="T:Td.Kylin.DataCache.DataCacheServer">
             <summary>
-            Http Request
+            数据缓存服务
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._options">
+        <member name="M:Td.Kylin.DataCache.DataCacheServer.#ctor(Microsoft.Extensions.Options.IOptions{Td.Kylin.DataCache.DataCacheServerOptions})">
             <summary>
-            The options relevant to a set of redis connections
+            数据缓存服务实例
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:Td.Kylin.DataCache.DataCacheServer.#ctor(Td.Kylin.DataCache.DataCacheServerOptions)">
+            <summary>
+            数据缓存服务实例
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="P:Td.Kylin.DataCache.DataCacheServer.Options">
+            <summary>
+            数据缓存服务参数
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._keepAlive">
+        <member name="M:Td.Kylin.DataCache.DataCacheServer.Start">
+            <summary>
+            启动服务
+            </summary>
+        </member>
+        <member name="M:Td.Kylin.DataCache.DataCacheServer.ValidateOptions">
+            <summary>
+            验证参数
+            </summary>
+        </member>
+        <member name="T:Td.Kylin.DataCache.DataCacheServerOptions">
+            <summary>
+            数据缓存服务参数
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.DataCacheServerOptions.RedisOptions">
+            <summary>
+            Redis-ConfigurationOptions
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.DataCacheServerOptions.RedisConnectionString">
+            <summary>
+            Redis-连接字符串
+            </summary>
+        </member>
+        <member name="P:Td.Kylin.DataCache.DataCacheServerOptions.KeepAlive">
             <summary>
             是否保持长连接
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._sqlProviderType">
+        <member name="P:Td.Kylin.DataCache.DataCacheServerOptions.SqlType">
             <summary>
             数据库类型
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._sqlconnectionString">
+        <member name="P:Td.Kylin.DataCache.DataCacheServerOptions.SqlConnection">
             <summary>
             数据库连接字符串
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._cacheItems">
+        <member name="P:Td.Kylin.DataCache.DataCacheServerOptions.CacheItems">
             <summary>
-            需要注入的缓存类型
+            缓存项类型
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._initIfNull">
+        <member name="P:Td.Kylin.DataCache.DataCacheServerOptions.InitIfNull">
             <summary>
-            缓存数据为null时是否初始化
+            缓存值为null时是否初始化
             </summary>
         </member>
-        <member name="F:Td.Kylin.DataCache.DataCacheMiddleware._level2CacheSeconds">
+        <member name="P:Td.Kylin.DataCache.DataCacheServerOptions.Level2CacheSeconds">
             <summary>
-            二级缓存的时间（单位：秒）
+            二级缓存缓存时间（单位：秒）
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
+        <member name="T:Td.Kylin.DataCache.IDataCacheServer">
             <summary>
-            实例化
+            数据缓存服务接口
             </summary>
-            <param name="next"></param>
-            <param name="redisOptions">Redis Connections</param>
-            <param name="keepAlive">是否保持长连接</param>
-            <param name="sqlType">数据库类型</param>
-            <param name="sqlConnection">数据库连接字符串</param>
-            <param name="cacheItems">缓存类型</param>
-            <param name="initIfNull">缓存数据为空时是否初始化</param>
-            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
         </member>
-        <member name="M:Td.Kylin.DataCache.DataCacheMiddleware.#ctor(StackExchange.Redis.ConfigurationOptions,System.Boolean,Td.Kylin.EnumLibrary.SqlProviderType,System.String,Td.Kylin.DataCache.CacheItemType[],System.Boolean,System.Int32)">
+        <member name="M:Td.Kylin.DataCache.IDataCacheServer.Start">
             <summary>
-            实例化（非Web程序中使用）
+            启动服务
             </summary>
-            <param name="redisOptions"></param>
-            <param name="keepAlive">是否保持长连接</param>
-            <param name="sqlType">数据库类型</param>
-            <param name="sqlConnection">数据库连接字符串</param>
-            <param name="cacheItems">缓存类型</param>
-            <param name="initIfNull">缓存数据为空时是否初始化</param>
-            <param name="level2CacheSeconds">二级缓存的时间（单位：秒）</param>
         </member>
         <member name="T:Td.Kylin.DataCache.CacheModel.ApiModuleAuthorizeCacheModel">
             <summary>
@@ -1773,12 +1720,13 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.ApiModuleAuthorizeCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.ApiModuleAuthorizeCache.Get(System.String,System.String)">
+        <member name="M:Td.Kylin.DataCache.Provider.ApiModuleAuthorizeCache.Get(System.String,System.String,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="serverID">接口服务ID</param>
             <param name="moduleID">模块ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.ApiModuleAuthorizeCache.ReadDataFromDB">
@@ -1797,12 +1745,13 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.AreaDefaultCommissionCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.AreaDefaultCommissionCache.Get(System.Int32,System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.AreaDefaultCommissionCache.Get(System.Int32,System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="areaID">区域ID</param>
             <param name="commissionItem">抽成项（枚举：AreaDefaultCommissionOption，如：商家商品订单抽成|商家上门预约订单抽成）</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.AreaDefaultCommissionCache.ReadDataFromDB">
@@ -1821,13 +1770,14 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.AreaForMerchantCommissionCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.AreaForMerchantCommissionCache.Get(System.Int32,System.Int64,System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.AreaForMerchantCommissionCache.Get(System.Int32,System.Int64,System.Int32,System.Boolean)">
             <summary>
             获取
             </summary>
             <param name="areaID">区域ID</param>
             <param name="merchantID">商家ID</param>
             <param name="commissionItem">抽成项（枚举：AreaMerchantCommissionOption，如：商家商品订单抽成|商家上门预约订单抽成）</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.AreaForMerchantCommissionCache.ReadDataFromDB">
@@ -1846,13 +1796,14 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.AreaForPersonalWorkerCommissionCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.AreaForPersonalWorkerCommissionCache.Get(System.Int32,System.Int64,System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.AreaForPersonalWorkerCommissionCache.Get(System.Int32,System.Int64,System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="areaID">区域ID</param>
             <param name="userID">用户ID</param>
             <param name="commissionItem">抽成项（枚举：AreaWorkerCommissionOption，如：上门预约订单抽成）</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.AreaForPersonalWorkerCommissionCache.ReadDataFromDB">
@@ -1871,11 +1822,12 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.AreaForumCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.AreaForumCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.AreaForumCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="areaForumID">区域圈子ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.AreaForumCache.ReadDataFromDB">
@@ -1900,12 +1852,13 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.AreaRecommendIndustryCache.Get(System.Int32,System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.AreaRecommendIndustryCache.Get(System.Int32,System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="areaID">区域ID</param>
             <param name="industryID">行业ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.B2CProductCategoryCache">
@@ -1924,11 +1877,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.B2CProductCategoryCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.B2CProductCategoryCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="categoryID">商品分类ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.B2CProductCategoryTagCache">
@@ -1947,11 +1901,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.B2CProductCategoryTagCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.B2CProductCategoryTagCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="tagID">标签ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.CacheItem`1">
@@ -2119,11 +2074,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.ForumCategoryCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.ForumCategoryCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="categoryID">圈子分类ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.ForumCircleCache">
@@ -2142,11 +2098,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.ForumCircleCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.ForumCircleCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="forumID">圈子ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.ICache">
@@ -2201,11 +2158,12 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.JobCategoryCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.JobCategoryCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.JobCategoryCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="categoryID">分类ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.JobCategoryCache.ReadDataFromDB">
@@ -2224,11 +2182,12 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.LegworkAreaConfigCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.LegworkAreaConfigCache.Get(System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.LegworkAreaConfigCache.Get(System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="areaID">区域ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.LegworkAreaConfigCache.ReadDataFromDB">
@@ -2247,11 +2206,12 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.LegworkGlobalConfigCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.LegworkGlobalConfigCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.LegworkGlobalConfigCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="globalConfigID">配置ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.LegworkGlobalConfigCache.ReadDataFromDB">
@@ -2270,11 +2230,12 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.LegworkGoodsCategoryCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.LegworkGoodsCategoryCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.LegworkGoodsCategoryCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="categoryID">分类ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.LegworkGoodsCategoryCache.ReadDataFromDB">
@@ -2293,11 +2254,12 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.AreaForumCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.LifeServiceSystemCategoryCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.LifeServiceSystemCategoryCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="categoryID">分类ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.LifeServiceSystemCategoryCache.ReadDataFromDB">
@@ -2322,11 +2284,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.MerchantCustomCategoryCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.MerchantCustomCategoryCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="categoryID">商品分类ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.MerchantIndustryCache">
@@ -2345,11 +2308,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.MerchantIndustryCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.MerchantIndustryCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="industryID">行业ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.MerchantProductSystemCategoryCache">
@@ -2368,11 +2332,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.MerchantProductSystemCategoryCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.MerchantProductSystemCategoryCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="categoryID">商品分类ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.OpenAreaCache">
@@ -2391,11 +2356,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.OpenAreaCache.Get(System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.OpenAreaCache.Get(System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="areaID">区域ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.PlatformCommissionCache">
@@ -2408,12 +2374,13 @@
             初始化一个<seealso cref="T:Td.Kylin.DataCache.Provider.PlatformCommissionCache"/>实例
             </summary>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.PlatformCommissionCache.Get(System.Int32,System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.PlatformCommissionCache.Get(System.Int32,System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="areaID">区域ID</param>
             <param name="commissionItem">抽成项（如：B2C订单金额抽成|商家订单交易佣金抽成）</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="M:Td.Kylin.DataCache.Provider.PlatformCommissionCache.ReadDataFromDB">
@@ -2438,11 +2405,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.SystemAreaCache.Get(System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.SystemAreaCache.Get(System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="areaID">区域ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.SystemGolbalConfigCache">
@@ -2461,12 +2429,13 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.SystemGolbalConfigCache.Get(System.Int32,System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.SystemGolbalConfigCache.Get(System.Int32,System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="resourceType">资源类型</param>
             <param name="resourceKey">资源类型子项</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.UserEmpiricalConfigCache">
@@ -2485,11 +2454,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.UserEmpiricalConfigCache.Get(System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.UserEmpiricalConfigCache.Get(System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="activityType">用户业务活动类型</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.UserLevelConfigCache">
@@ -2508,11 +2478,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.UserLevelConfigCache.Get(System.Int64)">
+        <member name="M:Td.Kylin.DataCache.Provider.UserLevelConfigCache.Get(System.Int64,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="levelID">等级ID</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.Provider.UserPointsConfigCache">
@@ -2531,11 +2502,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Td.Kylin.DataCache.Provider.UserPointsConfigCache.Get(System.Int32)">
+        <member name="M:Td.Kylin.DataCache.Provider.UserPointsConfigCache.Get(System.Int32,System.Boolean)">
             <summary>
             获取缓存
             </summary>
             <param name="activityType">用户业务活动类型</param>
+            <param name="allScope">是否查找所有缓存域</param>
             <returns></returns>
         </member>
         <member name="T:Td.Kylin.DataCache.CacheConfig">

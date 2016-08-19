@@ -60,7 +60,6 @@ D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Security.Cryptogr
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Security.Cryptography.X509Certificates.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Text.Encodings.Web.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.AspNet.Utils.dll
-D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.CoreLibrary.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.DataCache.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.Entity.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.EnumLibrary.dll
@@ -100,7 +99,6 @@ D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Collections.Immut
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Interactive.Async.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Text.Encodings.Web.xml
-D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.CoreLibrary.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.Entity.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.EnumLibrary.xml
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.Kylin.Redis.xml
@@ -119,3 +117,5 @@ D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Linq.Expressions.
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Linq.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.Runtime.Extensions.dll
 D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\System.IO.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.CoreLibrary.dll
+D:\Work\01-Projects\Td.TimerTask\KylinService\bin\Debug\Td.CoreLibrary.xml

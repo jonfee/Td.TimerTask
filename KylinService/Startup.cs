@@ -154,12 +154,12 @@ namespace KylinService
         public static void InjectionDataCache(bool isreset = false)
         {
             //注入数据缓存组件
-            DataCacheInjection.UseDataCache(new CacheInjectionConfig
+            DataCacheExtensions.UseDataCache(new DataCacheServerOptions
             {
                 CacheItems = null,
                 InitIfNull = true,
                 RedisConnectionString = DataCacheRedisConnectionString,
-                SqlConnectionString = KylinDBConnectionString,
+                SqlConnection = KylinDBConnectionString,
                 SqlType = SqlType,
                 KeepAlive = true
             });
