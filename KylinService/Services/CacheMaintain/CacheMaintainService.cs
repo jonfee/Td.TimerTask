@@ -85,30 +85,21 @@ namespace KylinService.Services.CacheMaintain
                     //获取本次需要更新的缓存
                     var list = CacheCollection.GetCacheList(level);
 
-                    bool updateSuccess = false;
-
                     lock (Startup.uploadCacheObjectLock)
                     {
                         //更新当前级别的缓存
-                        updateSuccess = CacheCollection.Update(level).Result;
+                        CacheCollection.Update(level);
                     }
 
                     if (null != list && list.Count > 0)
                     {
-                        if (updateSuccess)
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var item in list)
                         {
-                            StringBuilder sb = new StringBuilder();
-                            foreach (var item in list)
-                            {
-                                sb.AppendLine(string.Format("{0}缓存“{1}”已更新！", levelName,
-                                    EnumExtensions.GetDescription<CacheItemType>(item.ItemType)));
-                            }
-                            message = sb.ToString();
+                            sb.AppendLine(string.Format("{0}缓存“{1}”已更新！", levelName,
+                                EnumExtensions.GetDescription<CacheItemType>(item.ItemType)));
                         }
-                        else
-                        {
-                            message = string.Format(@"{0}缓存更新失败！", levelName);
-                        }
+                        message = sb.ToString();
                     }
                     else
                     {
